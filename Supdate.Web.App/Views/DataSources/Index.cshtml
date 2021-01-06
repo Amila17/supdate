@@ -1,0 +1,63 @@
+﻿@using Supdate.Model
+@using Supdate.Web.App.Models
+@model IEnumerable<Supdate.Model.ExternalApiAuth>
+@{
+  ViewBag.Title = "Data Sources";
+
+}
+
+<section class="panel">
+  <header class="panel-heading panel-heading-main">
+    <div class="pull-right">
+      <a class="btn btn-md btn-white" href="@Url.Action("Intro")"><i class="fa fa-graduation-cap"></i> Learn</a>
+  </div>
+    @ViewBag.Title
+  </header>
+  <div class="panel-body">
+    @if (ViewBag.UnconvertedTrial)
+    {
+      <p style="margin-bottom: 24px;">
+        @Html.Partial("_PremiumFeature_Banner")
+      </p>
+    }
+    @if (!ViewBag.IsSubscriptionActive){
+    <div class="alert alert-block alert-danger fade in">
+      <button data-dismiss="alert" class="close close-sm" type="button">
+        <i class="fa fa-times"></i>
+      </button>
+      <strong>Look out!</strong> You wont be able to import data from these Data Sources without a subscription. <a class="link" href="@Url.Action("Index", "Billing")">Learn more</a>.
+    </div>
+    }
+    <p>Connect to one or more of the data sources below and you can automatically fill in your Metric values when completing Reports.</p>
+    <p>You'll also be able to import data in bulk, including historic data, by clicking the 'Edit Metric Data' button on the <a href="@Url.Action("Index", "Metrics")" class="link">Metrics page</a>.</p>
+  </div>
+</section>
+
+<div class="alert alert-block alert-info fade in" style="display: none;" id="map-metrics-guide">
+  <button data-dismiss="alert" class="close close-sm" type="button">
+    <i class="fa fa-times"></i>
+  </button>
+  <strong>Map Your Metrics</strong>
+   Now that you've connected a Data Source,
+  you need to <a class="link" href="@Url.Action("Index", "Metrics", new{ guide = "mapmetrics"})">map your metrics</a>.
+</div>
+
+<div class="row">
+  @Html.Partial("_panel", new DataSourcePanelViewModel { ExternalApiAuths = Model, ExternalApi = ExternalApi.GoogleAnalytics })
+  @Html.Partial("_panel", new DataSourcePanelViewModel { ExternalApiAuths = Model, ExternalApi = ExternalApi.ChartMogul })
+</div>
+<input type="hidden" id="MappedMetricsCount" value="@ViewBag.MappedMetricsCount" />
+@section scripts{
+  <script>
+    $(function() {
+      setTimeout(function () {
+        var doNext = getUrlVars()["donext"];
+        if (doNext != undefined && doNext.replace("#", "") === "set-google-analytics-siteid") {
+          $("#api-config-btn-@ExternalApi.GoogleAnalytics.Id").trigger("click");
+        }
+      }, 500);
+    })
+    toggleMetricsGuideNotification();
+  </script>
+}
+

@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>Supdate.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{f6cfba52-792f-4ab8-bf4b-ad15a3b0cbd5}</ProjectGuid>
+    <DSP Condition=" '$(Configuration)' == 'Debug' ">Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP Condition=" '$(Configuration)' == 'Release' ">Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <DSP Condition=" '$(Configuration)' == 'Dev' ">Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP Condition=" '$(Configuration)' == 'Dev-CC' ">Microsoft.Data.Tools.Schema.Sql.Sql110DatabaseSchemaProvider</DSP>
+    <DSP Condition=" '$(Configuration)' == 'Prod' ">Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <DSP Condition=" '$(Configuration)' == 'Prod-CC' ">Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Supdate.Database</RootNamespace>
+    <AssemblyName>Supdate.Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <IncludeSchemaNameInFileName>True</IncludeSchemaNameInFileName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatTSqlWarningsAsErrors>False</TreatTSqlWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Dev|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Prod|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Dev-CC|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Prod-CC|AnyCPU' ">
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Schema Objects" />
+    <Folder Include="Schema Objects\Tables" />
+    <Folder Include="Publish\" />
+    <Folder Include="Schema Objects\StoredProcedures" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\Post-Deployment" />
+    <Folder Include="Scripts\Post-Deployment\ReferenceData" />
+    <Folder Include="Scripts\Pre-Deployment" />
+    <Folder Include="Scripts\Post-Deployment\Logins" />
+    <Folder Include="Scripts\Post-Deployment\Users" />
+    <Folder Include="Scripts\Post-Deployment\Migration" />
+    <Folder Include="Schema Objects\UserDefinedTypes" />
+    <Folder Include="Scripts\OneOff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Schema Objects\Tables\dbo.AppUser.sql" />
+    <Build Include="Schema Objects\Tables\dbo.AppRole.sql" />
+    <Build Include="Schema Objects\Tables\dbo.UserRole.sql" />
+    <Build Include="Schema Objects\Tables\dbo.UserLogin.sql" />
+    <Build Include="Schema Objects\Tables\dbo.ReportGoal.sql" />
+    <Build Include="Schema Objects\Tables\dbo.ReportMetric.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Area.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Company.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Report.sql" />
+    <Build Include="Schema Objects\Tables\dbo.ReportArea.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Goal.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Metric.sql" />
+    <Build Include="Schema Objects\Tables\dbo.MetricForecast.sql" />
+    <Build Include="Schema Objects\Tables\dbo.UserClaim.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.GoalDeleteById.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.MetricDeleteById.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.AreaDeleteById.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Recipient.sql" />
+    <Build Include="Schema Objects\Tables\dbo.ReportEmail.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportGetByMonth.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportsSummaryGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportAreaGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportGoalsGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.MetricViewsGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.RecipientsGetByReportMonth.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportPermalinksGetByReportGuid.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.RecipientDeleteById.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportEmailDetailsGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.AreaCreate.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportIdGetByMonth.sql" />
+    <None Include="Scripts\AreaUniqueNumberScript.sql" />
+    <PostDeploy Include="Scripts\Post-Deployment.sql" />
+    <None Include="Scripts\Pre-Deployment.sql" />
+    <None Include="Scripts\Post-Deployment\Logins\dev-webapp.sql" />
+    <None Include="Scripts\Post-Deployment\Users\dev-webapp.sql" />
+    <None Include="Scripts\Post-Deployment\Users\prod-supdate.sql" />
+    <None Include="Scripts\Post-Deployment\Logins\prod-webapp.sql" />
+    <None Include="Scripts\Exceptional-Schema.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserGetByUniqueId.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UsersGetRegistered.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UsersGetRegistrationStats.sql" />
+    <Build Include="Schema Objects\Tables\dbo.AdminUser.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserGetIsAdmin.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserGetAttributes.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportEmailPreviewDetailsGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.MetricUpdateMetadata.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportGuidGetById.sql" />
+    <Build Include="Schema Objects\Tables\dbo.ReportAttachment.sql" />
+    <Build Include="Schema Objects\Tables\dbo.CompanyUser.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyAssociateUser.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyDisassociateUser.sql" />
+    <Build Include="Schema Objects\Tables\dbo.UserConfirmation.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UsersGetUnconfirmed.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserIncrementConfirmationReminder.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserGetDetailsByUniqueId.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UsersGetRecentReports.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyGetListForUser.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserGetDefaultCompanyId.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserChangeDefaultCompany.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportPermalinksGetByCompanyId.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserGetMarketingData.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UsersGetNew.sql" />
+    <Build Include="Schema Objects\Tables\dbo.UserEmail.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserUpdateFeedbackEmailSent.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyAddTeamMember.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyListTeamMembers.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyTeamMemberRemove.sql" />
+    <Build Include="Schema Objects\Tables\dbo.CompanyUserInvite.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyInviteUser.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyGetTeamMemberInvite.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyTeamMemberAcceptInvite.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyListTeamMemberInvites.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyUpdateStats.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompaniesGetRegistered.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyGetForAdmin.sql" />
+    <Build Include="Schema Objects\UserDefinedTypes\dbo.EntityDisplayOrder.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.MetricsSaveOrder.sql" />
+    <Build Include="Schema Objects\Tables\dbo.CompanyStats.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyListGetModified.sql" />
+    <Build Include="Schema Objects\Tables\dbo.UtmInfo.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportDeleteByGuid.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyGetOwner.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserDeleteById.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.AreasSaveOrder.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyTeamMemberInviteDelete.sql" />
+    <Build Include="Schema Objects\Tables\dbo.CompanyUserInviteAreaPermission.sql" />
+    <Build Include="Schema Objects\UserDefinedTypes\dbo.IntegerList.sql" />
+    <Build Include="Schema Objects\Tables\dbo.CompanyUserAreaPermission.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyTeamMemberPermissionsUpdate.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyTeamMemberAreaPermissionsList.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyTeamMemberGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.MetricGuidToId.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.MetricGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.AreaGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.GoalGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.RecipientGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.MetricsGraphData.sql" />
+    <None Include="Scripts\Post-Deployment\Migration\InitialiseMemberAreaPermissions.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Discussion.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Comment.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.DiscussionGet.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.UserProfileUpdate.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportEmailDetailsGetByAddress.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Webhook.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportIsViewableByUser.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportGuidToCompanyGuid.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ReportEmailGetByGuid.sql" />
+    <Build Include="Schema Objects\Tables\dbo.Subscription.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyGetLapsedListForUser.sql" />
+    <Build Include="Schema Objects\Tables\dbo.MetricDataPoint.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.MetricDataPointsGetForPeriod.sql" />
+    <Build Include="Schema Objects\Tables\dbo.ExternalApiAuth.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.ExternalApiAuthGetByCompanyGuid.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.MetricDataPointSave.sql" />
+    <None Include="Scripts\OneOff\MigrateMetricData.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.AdminSearch.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.CompanyDelete.sql" />
+    <None Include="Scripts\Post-Deployment\Logins\prod-cc-webapp.sql" />
+    <None Include="Scripts\Post-Deployment\Users\prod-exceptional.sql" />
+    <Build Include="Schema Objects\Tables\dbo.TermsAndConditions.sql" />
+    <Build Include="Schema Objects\Tables\dbo.UserTermsAndConditions.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.TermsAndConditionsAcceptLatest.sql" />
+    <Build Include="Schema Objects\StoredProcedures\dbo.TermsAndConditionsHasPending.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Publish\Supdate.Database.JP.Publish.xml" />
+    <None Include="Publish\Supdate.Database.Dev.publish.xml" />
+    <None Include="Publish\Supdate.Database.Chai.publish.xml" />
+    <None Include="Publish\Supdate.Database.Prod.publish.xml" />
+    <None Include="Publish\Supdate.Database.DJ.Publish.xml" />
+    <None Include="Publish\Supdate.Database.Dev-CC.publish.xml" />
+    <None Include="Publish\Supdate.Database.Prod-CC.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Post-Deployment\Migration\SplitRecipientName.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Post-Deployment\Migration\UpdateReportStatusColumn.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Supdate.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Post-Deployment\Migration\InitialiseCanViewReports.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Post-Deployment\ReferenceData\TermsAndConditions.sql" />
+  </ItemGroup>
+</Project>

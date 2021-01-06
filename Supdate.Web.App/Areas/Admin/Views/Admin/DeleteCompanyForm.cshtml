@@ -1,0 +1,57 @@
+﻿@using System.Globalization
+@using Microsoft.Ajax.Utilities
+@using Supdate.Model.Admin
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@model CompanyEx
+@{
+  ViewBag.Title = Model.Name;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <section class="panel">
+            <header class="panel-heading panel-heading-main">
+                <a href="javascript:history.back();" title=" back"><i class="fa fa fa-angle-double-left"></i></a> Delete @Model.Name
+            </header>
+        </section>
+    </div>
+
+    <div class="col-xs-6">
+        <section class="panel">
+            <header class="panel-heading">
+                Confirm Deletion
+            </header>
+            <div class="panel-body">
+                @using (Html.BeginForm("DeleteCompany", "Admin", FormMethod.Post, new { role = "form" }))
+                {
+                    <p>To delete this company, please enter the company name ("@Model.Name") in the box below and click delete</p>
+                    <input type="hidden" name="uniqueid" value="@Model.UniqueId"/>
+                    <div class="form-group">
+                        <input type="text" name="name" class="form-control" />
+                    </div>
+                    <input type="submit" value="Delete" class="btn"/>
+                }
+            </div>
+        </section>
+    </div>
+
+   <div class="col-md-6 col-sm-9 col-xs-12">
+    <section class="panel">
+      <header class="panel-heading">
+       Details
+      </header>
+      <div class="panel-body">
+        <div class="labels-w-75">
+          <label>Owner:</label> @Html.GravatarWithDefault(Model.Owner.Email, 16) <a href="@Url.Action("ViewUser", "Admin", new { Model.Owner.UniqueId })">@Model.Owner.Email</a><br/>
+          <label>Created:</label>@ConversionUtil.DateTimeToFriendly(Model.CreatedDate)<br/>
+          <label>Last Login:</label>
+          @ConversionUtil.DateTimeToFriendly(Model.Owner.LastLogin, "-")
+
+          <br/>
+          <label>Logins:</label> @Model.Owner.LoginCount
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

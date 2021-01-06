@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="0d7de302-af1f-4d76-ad05-4b8c641db471" ChangeDateTime="03/05/2016 23:18:41">
+    <Property Name="ElementName" Value="[dbo].[Report].[Month]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Report]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Date]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1f012903-233b-499f-a22b-8673f3d56647" ChangeDateTime="04/03/2016 11:58:18">
+    <Property Name="ElementName" Value="[dbo].[CompanyPermalinksGetById]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[ReportPermalinksGetByCompanyId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0a5fba02-70d8-4aee-8af8-1ddeb6557d05" ChangeDateTime="06/05/2016 18:51:55">
+    <Property Name="ElementName" Value="[dbo].[Subscription].[SubscriptionType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Subscription]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Status]" />
+  </Operation>
+</Operations>

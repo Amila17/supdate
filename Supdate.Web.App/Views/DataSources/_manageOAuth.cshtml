@@ -1,0 +1,58 @@
+﻿@using Supdate.Util
+@using Supdate.Web.App.Models
+@model GoogleOAuthConfigView
+@{
+  Layout = null;
+}
+@using (Html.BeginForm("SetGoogleAnalyticsSiteId", "DataSources", FormMethod.Post, new { role = "form", id = "credentialsForm", @class = "ajax-form" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 id="metricDetailsHeader" class="modal-title">@Model.ExternalApi.Name</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-12">
+          <p>Select which Analytics profile you want to report on</p>
+          <table class="table table-striped table-hover table-sm">
+            @foreach (var item in Model.Accounts.items)
+            {
+              foreach (var webProperty in item.webProperties)
+              {
+                foreach (var profile in webProperty.profiles)
+                {
+                  <tr class="select-radio row-clickable">
+                    <td class="w36 text-center">
+                      @if (Model.ExternalApiAuth.ConfigData == profile.id)
+                      {
+                        <input type="radio" name="siteid" value="@profile.id" checked/>
+                      }
+                      else
+                      {
+                        <input type="radio" name="siteid" value="@profile.id"/>
+                      }
+                    </td>
+                    <td> @webProperty.name</td>
+                    <td>@profile.name</td>
+                  </tr>
+                }
+              }
+            }
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    @if (Model.ExternalApiAuth.UniqueId != Guid.Empty)
+    {
+      <div class="pull-left" id="trash-icon">
+        <button class="btn btn-delete" type="button" data-delete-entity="externalapiauth" data-delete-entity-id="@Model.ExternalApiAuth.UniqueId" data-delete-entity-cb="deleteExternalApiAuth_cb"><i class="fa fa-trash-o"></i></button>
+      </div>
+    }
+    <button class="btn btn-save ladda-button ajax-submit" data-success-callback="googleAnalyticsSetSiteId_cb" data-style="expand-left" type="button"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+  </div>
+}

@@ -1,0 +1,209 @@
+﻿@using System.Globalization
+@using System.Web.Mvc.Html
+@using Supdate.Model
+@using Supdate.Util
+@using Supdate.Web.App.Models
+@model Supdate.Model.ReportArea
+
+@{
+  ViewBag.Title = "Reporting Area";
+  var reportEditUrl = Url.Action("Edit", "Reports", new { year = Model.ReportDate.Year, month = Model.ReportDate.Month });
+  var hasLastmonthVals = false;
+  var hasTargetVals = false;
+}
+@section footer{
+  <div class="pull-right">
+    <button type="submit" id="saveReportArea" class="btn btn-save ladda-button" data-style="expand-left" onclick="return validateReportAreaDetails();"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    <a href="@Url.Action("Edit", "Reports", new { year = Model.ReportDate.Year, month = Model.ReportDate.Month })" class="btn btn-default">Cancel</a>
+  </div>
+}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      <header class="panel-heading panel-heading-main">
+        <a href="@reportEditUrl" title="Back"><i class="fa fa fa-angle-double-left"></i></a>  @Model.ReportDate.ToString("MMMM", CultureInfo.InvariantCulture) @Model.ReportDate.Year - @Model.AreaName
+      </header>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  @if (Model.MetricList.Count > 0)
+  {
+    <div class="col-lg-12">
+      <div class="panel">
+        <header class="panel-heading">
+          Related Metrics
+        </header>
+        <div class="panel-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th class="text-right">Value</th>
+                <th class="w45"></th>
+                <th colspan="2" class="text-center cell-last-month">Last Month</th>
+                <th colspan="2" class="text-center cell-target">Target</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (var metricView in Model.MetricList)
+              {
+                var lastMonthCaretClass = "fa fa-caret-right";
+                var lastMonthTextClass = "text-primary";
+                var targetCaretClass = "fa fa-caret-right";
+                var targetTextClass = "text-primary";
+
+                if (metricView.PercentageChangeFromLastMonth > 0)
+                {
+                  lastMonthCaretClass = "fa fa-caret-up";
+                  lastMonthTextClass = !metricView.LowerIsBetter ? "text-success" : "text-danger";
+                }
+                else if (metricView.PercentageChangeFromLastMonth < 0)
+                {
+                  lastMonthCaretClass = "fa fa-caret-down";
+                  lastMonthTextClass = !metricView.LowerIsBetter ? "text-danger" : "text-success";
+                }
+
+                if (metricView.PercentageChangeFromTarget > 0)
+                {
+                  targetCaretClass = "fa fa-caret-up";
+                  targetTextClass = !metricView.LowerIsBetter ? "text-success" : "text-danger";
+                }
+                else if (metricView.PercentageChangeFromTarget < 0)
+                {
+                  targetCaretClass = "fa fa-caret-down";
+                  targetTextClass = !metricView.LowerIsBetter ? "text-danger" : "text-success";
+                }
+                <tr>
+                  <td>
+                    @metricView.Name
+                  </td>
+
+                  <td class="text-right">
+                    @metricView.ValueFormatted
+                  </td>
+                  <td class="w45 noThumbnail">@Html.Partial("_reportMetricGraphIcon", metricView)</td>
+                  <td class="text-right b-left cell-last-month">
+                    @if (@metricView.LastMonthActual.HasValue)
+                    {
+                      hasLastmonthVals = true;
+                      @metricView.LastMonthActualFormatted
+                    }
+                  </td>
+                  <td class="@lastMonthTextClass cell-last-month">
+                    @if (@metricView.LastMonthActual.HasValue)
+                    {
+                      <i class="@lastMonthCaretClass"></i>
+                      <text>@(Math.Round(Math.Abs(metricView.PercentageChangeFromLastMonth), 2))%</text>
+                    }
+                  </td>
+
+                  <td class="text-right b-left cell-target">
+                    @if (@metricView.Target.HasValue)
+                    {
+                      hasTargetVals = true;
+                      @metricView.TargetFormatted
+                    }
+                  </td>
+                  <td class="@targetTextClass cell-target">
+                    @if (@metricView.Target.HasValue)
+                    {
+                      <i class="@targetCaretClass"></i>
+                      <text>@(Math.Round(Math.Abs(metricView.PercentageChangeFromTarget), 2))%</text>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+  @section scripts
+  {
+  @Scripts.Render("~/bundles/graphs")
+  <script type="text/javascript">
+
+    graphDataGetUrl = '@if (Model.MetricList.Count > 0)
+                       {
+                         @Url.Action("GraphData", "Metrics")
+                       }';
+  </script>
+    @if (!hasTargetVals)
+    {
+      <script>
+        $(".cell-target").hide();
+      </script>
+    }
+    @if (!hasLastmonthVals)
+    {
+      <script>
+        $(".cell-last-month").hide();
+      </script>
+    }
+  }
+  @if (Model.ReportGoalList.Count > 0)
+  {
+    <div class="col-lg-12">
+      <div class="panel">
+        <header class="panel-heading">
+          Related Goals
+        </header>
+        <div class="panel-body panel-body-striped">
+          @foreach (var reportGoal in Model.ReportGoalList)
+          {
+            var dueDate = "";
+
+            if (reportGoal.DueDate.HasValue)
+            {
+              dueDate = "Due " + reportGoal.DueDate.Value.ToString("dd MMM", CultureInfo.InvariantCulture) + " '" + reportGoal.DueDate.Value.ToString("yy", CultureInfo.InvariantCulture) + " - ";
+            }
+
+            <div>
+              <h4><span class="goal-status @reportGoal.StatusClass()">@reportGoal.Status.DisplayName()</span> @reportGoal.Title</h4>
+              <p class="pre-wrap"><em>@dueDate</em>@reportGoal.Summary</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    @using (Html.BeginForm("ReportArea", "Reports", FormMethod.Post, new { role = "form", id = "reportAreaForm" }))
+    {
+      <input type="hidden" name="ReportDate" id="ReportDate" value="@Model.ReportDate">
+      <div class="panel">
+        <header class="panel-heading">
+          Provide an Update
+        </header>
+        <div class="panel-body">
+          <div class="form-group">
+            @Html.ValidationSummary()
+            <textarea class="tinymce-basic" cols="20" id="Summary" name="Summary" placeholder="Type your update here. You may want to comment on the performance of related metrics, especially any discrepancy." rows="8" style="height: 250px;">@Html.Raw(Model.Summary)</textarea>
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.AreaId)
+            @Html.HiddenFor(m => m.ReportId)
+            @Html.HiddenFor(m => m.AreaName)
+            <input type="hidden" name="CreatedDate" value="@Model.CreatedDate">
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+<div class="row">
+  @{
+    var areaUniqueId = (Guid?) Model.AreaUniqueId;
+  }
+  @Html.Partial("_Attachments", new ReportAttachmentList
+          {
+            AreaUniqueId =  areaUniqueId,
+            ReportDate = Model.ReportDate,
+            AttachmentList = Model.Attachments
+          })
+</div>

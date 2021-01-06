@@ -1,0 +1,35 @@
+﻿@model Supdate.Web.App.Models.ReportSummary
+@{
+  var completedReportMetrics = 0;
+  var report = Model.Report;
+  var totalMetrics = Model.ListHelper.GetMetrics().Count();
+  if (totalMetrics != 0)
+  {
+    completedReportMetrics = (report.MetricCount * 100) / (totalMetrics);
+  }
+}
+@if (totalMetrics > 0)
+{
+<div class="col-lg-6">
+  <section class="panel">
+    <header class="panel-heading">
+      <div class="pull-right">
+        <ul class="icon-links">
+          <li>
+            <a title="" data-placement="left" data-toggle="tooltip" class="tooltips" href="@Url.Action("Metrics", "Reports", new { year = report.Date.Year, month = report.Date.Month })" data-original-title="Enter Metrics Data"><i class="fa fa-pencil"></i></a>
+          </li>
+        </ul>
+      </div>
+      Metrics
+    </header>
+    <div class="panel-body" data-match-neighbour-height="true">
+      <div class="progress progress-xs">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@report.MetricCount" aria-valuemin="0" aria-valuemax="@totalMetrics" style="width: @completedReportMetrics%">
+          @*<span class="sr-only">40% Complete (success)</span>*@
+        </div>
+      </div>
+      You have provided new values for @report.MetricCount out of @totalMetrics metrics.
+    </div>
+  </section>
+</div>
+}

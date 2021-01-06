@@ -1,0 +1,68 @@
+﻿@using Supdate.Model.Admin
+@model UserEx
+@{
+  ViewBag.Title = Model.Email;
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        <a href="javascript:history.back();" title=" back"><i class="fa fa fa-angle-double-left"></i></a> @Model.Email
+      </header>
+      <div class="panel-body">
+        <div class="labels-w-75">
+          <label>Created:</label> @Model.CreatedDate.ToString("dd MMM yyyy hh:mm")<br />
+          <label>Last Login:</label>
+          @if (Model.LastLogin.HasValue)
+          {
+            @Model.LastLogin.GetValueOrDefault(DateTime.Now).ToString("dd MMM yyyy hh:mm")
+          }
+          else
+          {
+            @("-")
+          }
+          <br />
+          <label>Logins:</label> @Model.LoginCount
+
+          <h4>Owned Companies</h4>
+          @if (Model.OwnCompanies.Any())
+          {
+            foreach (var c in Model.OwnCompanies)
+            {
+              <a href="@Url.Action("ViewCompany", "Admin", new { c.UniqueId })">@c.Name</a>
+              <br />
+            }
+          }
+          else
+          {
+            <em>None</em>
+          }
+          <br />
+
+          @if (Model.OtherCompanies.Any())
+          {
+            <h4>Other Companies</h4>
+            foreach (var c in Model.OtherCompanies)
+            {
+              <a href="@Url.Action("ViewCompany", "Admin", new { c.UniqueId })">@c.Name</a><br />
+            }
+          }
+
+          <br />
+          @if (!Model.OwnCompanies.Any())
+          {
+            <p>
+              @using (Html.BeginForm("DeleteMember", "User", new { area = "Admin" }, FormMethod.Post, new { id = "deleteMember" }))
+              {
+                @Html.Hidden("memberId", Model.Id)
+                <span>User will be removed from all non-owned companies and then deleted.</span>
+                <a class="btn btn-danger" href="javascript:document.getElementById('deleteMember').submit()">Delete User</a>
+              }
+            </p>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

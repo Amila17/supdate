@@ -1,0 +1,85 @@
+﻿@model Supdate.Web.App.Models.Dashboard
+@if (Model.ShowWizard || Model.PromoteTeams || Model.PromoteDataSources)
+{
+  // Determine how wide panels should be
+  var cols = 6;
+
+  // Count how many panels we're showing
+  var panelCount = (Model.ShowWizard) ? 1 : 0;
+  panelCount = (Model.PromoteTeams) ? panelCount + 1 : panelCount;
+  panelCount = (Model.PromoteDataSources) ? panelCount + 1 : panelCount;
+
+  if (panelCount == 1)
+  {
+    cols = 12;
+  }
+  <div class="row">
+    @if (Model.ShowWizard)
+    {
+      <div class="col-sm-12 col-md-@cols">
+        <section class="panel post-wrap pro-box wizard-panel">
+          <aside class="post-highlight terques v-align hidden-xxs ">
+            <div class="panel-body v-align text-center text-white ">
+              <i class="fa fa-magic"></i>
+            </div>
+          </aside>
+          <aside>
+            <div class="post-info">
+              <span class="arrow-pro left hidden-xxs"></span>
+              <div class="panel-body text-center">
+                <h1>Setup Wizard</h1>
+                <p>Get set up in less than 2 minutes with our wizard</p>
+                <a class="btn-lg btn-primary" href="@Url.Action("Wizard", "Settings")">Get Started</a>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </div>
+    }
+    @if (Model.PromoteTeams)
+    {
+      <div class="col-sm-12 col-md-@cols">
+        <section class="panel post-wrap pro-box wizard-panel">
+          <aside class="post-highlight yellow v-align hidden-xxs ">
+            <div class="panel-body v-align text-center text-white ">
+              <i class="fa fa-users"></i>
+            </div>
+          </aside>
+          <aside>
+            <div class="post-info">
+              <span class="arrow-pro left hidden-xxs"></span>
+              <div class="panel-body text-center">
+                <h1>Collaborate</h1>
+                <p>Learn how to make use of the Team Feature</p>
+                <a class="btn-lg btn-yellow" href="@Url.Action("Intro", "Team")">Show Me</a>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </div>
+    }
+    @if (Model.PromoteDataSources)
+    {
+      <div class="col-sm-12 col-md-@cols">
+        <section class="panel post-wrap pro-box wizard-panel">
+          <aside class="post-highlight green v-align hidden-xxs ">
+            <div class="panel-body v-align text-center text-white ">
+              <i class="fa fa-download"></i>
+            </div>
+          </aside>
+          <aside>
+            <div class="post-info">
+              <span class="arrow-pro left hidden-xxs"></span>
+              <div class="panel-body text-center">
+                <h1>Data Sources</h1>
+                <p>We can automatically retrieve your Metric values</p>
+                <a class="btn-lg btn-green" href="@Url.Action("Intro", "DataSources")">Show Me</a>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </div>
+    }
+  </div>
+}
+

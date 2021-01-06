@@ -1,0 +1,167 @@
+﻿@using System.Globalization
+@using Microsoft.Ajax.Utilities
+@using Supdate.Model.Admin
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@model CompanyEx
+@{
+  ViewBag.Title = Model.Name;
+}
+
+<div class="row">
+  <div class="col-md-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        <a href="javascript:history.back();" title=" back"><i class="fa fa fa-angle-double-left"></i></a> @Model.Name
+      </header>
+    </section>
+  </div>
+
+   <div class="col-md-6 col-sm-9 col-xs-12">
+    <section class="panel">
+      <header class="panel-heading">
+       Details
+      </header>
+        <div class="panel-body">
+            <div class="labels-w-75">
+                <label>Owner:</label> @Html.GravatarWithDefault(Model.Owner.Email, 16) <a href="@Url.Action("ViewUser", "Admin", new { Model.Owner.UniqueId })">@Model.Owner.Email</a><br/>
+                <label>Created:</label>@ConversionUtil.DateTimeToFriendly(Model.CreatedDate)<br/>
+                <label>Last Login:</label>
+                @ConversionUtil.DateTimeToFriendly(Model.Owner.LastLogin, "-")
+
+                <br/>
+                <label>Logins:</label> @Model.Owner.LoginCount
+            </div>
+        </div>
+        <div class="panel-footer text-right">
+            <a href="@Url.Action("DeleteCompanyForm", new { uniqueId = Model.UniqueId})">delete</a>
+        </div>
+    </section>
+  </div>
+   @if (!Model.LogoPath.IsNullOrWhiteSpace())
+  {
+  <div class="col-md-3 col-sm-3 col-xs-12">
+    <section class="panel">
+      <header class="panel-heading">
+      Logo
+      </header>
+      <div class="panel-body">
+        <img src="@Model.LogoPath" style="max-width: 100%;">
+      </div>
+    </section>
+  </div>
+  }
+  <div class="col-md-3 col-sm-3 col-xs-12">
+    <section class="panel">
+      <header class="panel-heading">
+        Counters
+      </header>
+      <div class="panel-body">
+        <div class="labels-w-60">
+          <label>Areas:</label> @Model.AreaCount <br/>
+          <label>Metrics:</label> @Model.MetricCount <br/>
+          <label>Goals: </label> @Model.GoalCount <br/>
+          <label>Reports:</label> @Model.ReportCount <br/>
+          <label>Users:</label> @Model.UserCount
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="col-md-6 col-sm-6 col-xs-12">
+    <section class="panel">
+      <header class="panel-heading">
+        Reports
+      </header>
+      <div class="panel-body">
+        @foreach (var reportPermaLink in Model.Permalinks)
+        {
+          <a href="@Url.Action("ReportView", "Reports", new { area = string.Empty, id = @reportPermaLink.UniqueId })" target="_blank">
+            <i class="fa fa-file-text-o"></i>
+            @reportPermaLink.Date.ToString("MMMM yyyy", CultureInfo.InvariantCulture)
+          </a><br/>
+        }
+      </div>
+    </section>
+  </div>
+  @if (Model.TeamMembers.Any()) {
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <section class="panel">
+        <header class="panel-heading">
+          Team Members
+        </header>
+        <div class="panel-body">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th class="w24"></th>
+                <th>User</th>
+                <th>Last Login</th>
+                <th>Logins</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+             @foreach (var teamMember in Model.TeamMembers)
+             {
+               <tr >
+                 <td>@Html.GravatarWithDefault(teamMember.Email, 24)</td>
+                 <td><a href="@Url.Action("ViewUser", "Admin", new { teamMember.UniqueId })">@teamMember.Email</a></td>
+                 <td>@ConversionUtil.DateTimeToFriendly(teamMember.LastLogin, "-")</td>
+                 <td>@teamMember.LoginCount.ToString(CultureInfo.InvariantCulture)</td>
+
+                 @using (Html.BeginForm("RemoveMember", "User", new { area = "Admin" }, FormMethod.Post, new { id = "removeMember" }))
+                 {
+                   @Html.Hidden("companyId", Model.Id)
+                   @Html.Hidden("companyUniqueId", Model.UniqueId)
+                   @Html.Hidden("userUniqueId", teamMember.UniqueId)
+                   <td><a href="javascript:document.getElementById('removeMember').submit();" class="btn btn-xs btn-danger">Remove</a></td>
+                 }
+               </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  }
+  @if (Model.PendingInvites.Any()) {
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <section class="panel">
+        <header class="panel-heading">
+          Pending Invitations
+        </header>
+        <div class="panel-body">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th class="w24"></th>
+                <th>User</th>
+                <th>Invitation Sent</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+             @foreach (var invite in Model.PendingInvites)
+             {
+               <tr>
+                 <td>@Html.GravatarWithDefault(invite.EmailAddress, 24)</td>
+                 <td>@invite.EmailAddress</td>
+                 <td>@ConversionUtil.DateTimeToFriendly(invite.CreatedDate, "-")</td>
+
+                 @using (Html.BeginForm("DeleteInvite", "User", new { area = "Admin" }, FormMethod.Post, new { id = "deleteInvite" }))
+                 {
+                   @Html.Hidden("companyId", Model.Id)
+                   @Html.Hidden("companyUniqueId", Model.UniqueId)
+                   @Html.Hidden("inviteId", invite.Id)
+                   <td><a href="javascript:document.getElementById('deleteInvite').submit();" class="btn btn-xs btn-danger">Delete</a></td>
+                 }
+               </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  }
+</div>

@@ -1,0 +1,15 @@
+﻿@{
+  Layout = "~/Views/Shared/_PreAuthLayout.cshtml";
+  ViewBag.Title = "Link Expired";
+}
+<form class="form-signin" role="form">
+  <h2 class="form-signin-heading form-error-heading">Link Expired</h2>
+  <div class="login-wrap">
+    <div class="form-group">
+      The link you have followed is to create an account with access to an existing company.<br /><br />
+      This invite link is no longer available or has already been used. Your administrator will have to issue a new invite before you can access their account.<br /><br />
+      You can however create your own account with no access to other businesses.
+    </div>
+    <a class="btn btn-login btn-block" href="@Url.Action("Register", "Account")">Create Account</a>
+  </div>
+</form>

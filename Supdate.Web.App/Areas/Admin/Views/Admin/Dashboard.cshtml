@@ -1,0 +1,79 @@
+﻿@using Supdate.Model.Admin
+@model RegistrationStatistics
+
+@{
+  ViewBag.Title = "Registration Dashboard";
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+        <header class="panel-heading panel-heading-main">
+            <div class="pull-right col-xs-4">
+                @using (Html.BeginForm("Search", "Admin", FormMethod.Post, new { role = "form" }))
+                {
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="query" placeholder="Search for email/company">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                }
+            </div>
+            Admin Dashboard
+        </header>
+      <div class="panel-body">
+
+        <div class="form-group col-sm-12">
+          <table class="display table table-striped">
+            <thead>
+              <tr>
+                <th>Window</th>
+                <th>Registered</th>
+                <th>Logins</th>
+                <th class="hidden-xs">Reports Created</th>
+                <th>Reports Emailed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Total</strong></td>
+                <td>@Model.Total</td>
+                <td>-</td>
+                <td class="hidden-xs">@Model.TotalReports</td>
+                <td><a href="@Url.Action("RecentReports", "Admin", new { records = 10})">@Model.TotalReportsEmailed</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <button data-toggle="dropdown" class="btn dropdown-toggle btn-white btn-xs" type="button"><strong>Last @Model.WindowInDays Days</strong> <span class="caret"></span></button>
+                  <ul role="menu" class="dropdown-menu" id="days-menu">
+                    @for (int i = 0; i <= 8; i++)
+                    {
+                      <li data-option="@i"><a href="@Url.Action("Dashboard", "Admin", new { windowInDays = i })">Last @i days</a></li>
+                    }
+                    @for (int i = 10; i <= 51; i = i + 5)
+                    {
+                      <li data-option="@i"><a href="@Url.Action("Dashboard", "Admin", new { windowInDays = i })">Last @i days</a></li>
+                    }
+                    @for (int i = 60; i <= 101; i = i + 10)
+                    {
+                      <li data-option="@i"><a href="@Url.Action("Dashboard", "Admin", new { windowInDays = i })">Last @i days</a></li>
+                    }
+                     </ul>
+
+                </td>
+                <td>@Model.TotalInWindow</td>
+                <td>@Model.LoginsInWindow</td>
+                <td class="hidden-xs">@Model.TotalReportsInWindow</td>
+                <td>@Model.TotalReportsEmailedInWindow</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        @Html.ActionLink("Registered Companies", "Companies", "Admin", new { area = "Admin", page = 1 }, null) |
+        @Html.ActionLink("Registered Users", "Users", "Admin", new { area = "Admin", page = 1 }, null) |
+        @Html.ActionLink(String.Format("Unconfirmed Users ({0})", Model.UnconfirmedAccounts), "Unconfirmed", "Admin", new { area = "Admin" }, null) |
+        <a href="/3b16938d-8df4-4645-905a-204fae493a9e.axd">Error Log</a>
+      </div>
+    </section>
+  </div>
+</div>
+

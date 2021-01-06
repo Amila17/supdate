@@ -1,0 +1,73 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@model Supdate.Web.App.Models.ReportSummary
+@{
+  ViewBag.Title = string.Format("Report Summary - {0} {1}", @Model.Report.Date.ToString("MMMM", CultureInfo.InvariantCulture), @Model.Report.Date.Year);
+  var currentUser = Model.CurrentUser;
+ }
+@section scripts{
+  <script type="text/javascript" src="/Scripts/app.reportEdit.js"> </script>
+  <script>
+   newlyComplete = @ViewBag.NewlyComplete;
+  </script>
+
+}
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      @using (Html.BeginForm("Status", "Reports", new{month=Model.Report.Date.Month, year = Model.Report.Date.Year}, FormMethod.Post, new { role = "form", id="form-status" }))
+      {
+        <header class="panel-heading panel-heading-main">
+          <a href="@Url.Action("Index", "Reports")" title="Back"><i class="fa fa fa-angle-double-left"></i></a> @Model.Report.Date.ToString("MMMM", CultureInfo.InvariantCulture) @Model.Report.Date.Year
+          <div class="btn-group pull-right">
+            <input type="hidden" name="statusId" id="statusId" value="@Model.Report.StatusId"/>
+            <input type="hidden" name="month" id="month" value="@Model.Report.Date.Month" />
+            <input type="hidden" name="year" id="year" value="@Model.Report.Date.Year" />
+            <input type="hidden" name="emailedTo" id="emailedTo" value="@Model.Report.RecipientCount" />
+            @if (Model.CurrentUser.IsCompanyAdmin) {
+              <input type="hidden" name="statusManual" id="statusManual" value="@Model.Report.IsStatusManual"/>
+              <button data-toggle="dropdown" class="btn dropdown-toggle btn-white btn-sm" type="button"><span id="report-status-text"></span><span class="caret"></span></button>
+              <ul role="menu" class="dropdown-menu" id="report-status-menu">
+                <li><a href="#" id="report-toggle-status" alt="Change Report Status" title="Change Report Status"></a></li>
+              </ul>
+            }
+          </div>
+        </header>
+      }
+      <div class="panel-body">
+        <div class="form-group col-sm-12" id="intro-text">
+          @Html.Partial("_Edit_IntroText")
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="row">
+  @Html.Partial("_MetricsSummary")
+
+  @Html.Partial("_GoalsSummary")
+
+  @Html.Partial("_AreasSummary")
+  @if (currentUser.CanWriteReportSummary)
+  {
+    @Html.Partial("_Summary", Model.Report)
+  }
+  @if (Model.CurrentUser.IsCompanyAdmin)
+  {
+    @Html.Partial("_Attachments", new ReportAttachmentList
+          {
+            AreaUniqueId = Guid.Empty,
+            ReportDate = Model.Report.Date,
+            AttachmentList = Model.Report.AttachmentList.Where(a=>  a.AreaId == null)
+          }
+    )
+  }
+</div>
+@Html.Partial("_NewlyComplete")
+@if (Model.CurrentUser.IsCompanyAdmin || Model.CurrentUser.CanViewReports)
+{
+  @section footer{
+    @Html.Partial("~/Views/Reports/_ReportFooter.cshtml")
+  }
+}

@@ -1,0 +1,20 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@model IEnumerable<Supdate.Model.ReportPermalink>
+
+  <div class="btn-group">
+    <button data-toggle="dropdown" class="btn dropdown-toggle btn-white btn-xs" type="button">Select a report... <span class="caret"></span></button>
+    <ul role="menu" class="dropdown-menu">
+      @{
+        foreach (var reportPermaLink in Model)
+        {
+          <li>
+            <a href="@Url.Action("ReportView", "Reports", new { id = @reportPermaLink.UniqueId })" target="_blank">
+              <i class="fa fa-file-text-o"></i>
+              @reportPermaLink.Date.ToString("MMMM yyyy", CultureInfo.InvariantCulture)
+            </a>
+          </li>
+        }
+      }
+    </ul>
+  </div>

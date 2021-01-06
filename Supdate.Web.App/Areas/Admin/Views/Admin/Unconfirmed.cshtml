@@ -1,0 +1,46 @@
+﻿@using Supdate.Web.App.Extensions
+@model IEnumerable<Supdate.Model.UserConfirmation>
+@{
+  ViewBag.Title = "Unconfirmed Users";
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        <a href="@Url.Action("Dashboard", "Admin")" title=" back"><i class="fa fa fa-angle-double-left"></i></a> Unconfirmed Users (@Model.Count())
+      </header>
+      <div class="panel-body">
+
+        <div class="form-group col-sm-12">
+          <table class="display table table-striped">
+            <thead>
+              <tr>
+                <th class="w24"></th>
+                <th>Email</th>
+                <th>Reminders Sent</th>
+                <th>Activation Link</th>
+                <th class="hidden-xs">Created Date</th>
+                <th class="hidden-xs">Updated Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (var user in Model)
+              {
+                <tr>
+                  <td>@Html.GravatarWithDefault(user.Email, 24)</td>
+                  <td><a href="@Url.Action("ViewUser", "Admin", new { user.UniqueId })">@user.Email</a></td>
+                  <td>@user.RemindersSent</td>
+                  <td><a href="@user.Url" class="btn btn-xs btn-success">Activate</a></td>
+                  <td class="hidden-xs">@user.CreatedDate</td>
+                  <td class="hidden-xs">@user.UpdatedDate</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+

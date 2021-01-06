@@ -1,0 +1,127 @@
+﻿@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@using Supdate.Web.App.Models
+@model TeamViewModel
+@{
+  ViewBag.Title = "Team";
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        Team
+        <div class="pull-right">
+          <a class="btn btn-md btn-white" href="@Url.Action("Intro")"><i class="fa fa-graduation-cap"></i> Learn</a>
+          <a class="btn-md btn-add-new" href="#" data-modal-url="@Url.Action("Details", new { uniqueId = Guid.Empty })"><i class="fa fa-plus"></i> Add New</a>
+        </div>
+      </header>
+      <div class="panel-body">
+        @if (ViewBag.UnconvertedTrial)
+        {
+          <p style="margin-bottom: 24px;">
+            @Html.Partial("_PremiumFeature_Banner")
+          </p>
+        }
+
+        <p>Don't do all of the work yourself. Delegate!</p>
+        <p>Team members can edit and update reports but not change or access any of your other settings.</p>
+
+        <div class="clearfix"></div>
+        @if (!Model.TeamMembers.Any() && !Model.Invites.Any())
+        {
+          @Html.Partial("_blankSlate", new BlankSlateModel
+          {
+            Url = @Url.Action("Details", new { uniqueId = Guid.Empty }),
+            EntityName = "Team Member"
+          })
+        }
+        else
+        {
+          if (Model.TeamMembers.Any())
+          {
+            <div class="row">
+              <div class="col-md-2 hidden-sm"></div>
+              <div class="col-md-8 col-sm-12">
+                <table class="table table-striped table-hover">
+                  <thead>
+                  <tr>
+                    <th class="w24"></th>
+                    <th>Email Address</th>
+                    <th class="hidden-xs">Reporting Areas</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  @foreach (var t in Model.TeamMembers.OrderBy(r => r.CreatedDate))
+                  {
+                    <tr class="row-clickable" data-teammember-id="@t.UniqueId" data-modal-url="@Url.Action("Details", new { uniqueId = t.UniqueId })">
+                      <td>@Html.GravatarWithDefault(t.Email, 24)</td>
+                      <td><a href="#" class="helper">@t.Email</a></td>
+                      <td class="hidden-xs" id="@(t.UniqueId)_AreaList">
+                        @Html.Raw(Model.ListHelper.AreaIdsToString(t.AccessibleAreaIds, ConfigUtil.AreaListMaxCharsForTableDisplay))
+                      </td>
+                    </tr>
+                  }
+
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-md-2 hidden-sm"></div>
+            </div>
+          }
+          if (Model.Invites.Any())
+          {
+
+            <div class="row">
+
+              <div class="col-md-2 hidden-sm"></div>
+              <div class="col-md-8 col-sm-12">
+                @if (Model.TeamMembers.Any())
+                {
+                  <hr/>
+                }
+                These people have been invited but haven't yet created accounts:
+                <table class="table table-striped ">
+                  <thead>
+                  <tr>
+                    <th class="w24"></th>
+                    <th>Invited Email Address</th>
+                    <th class="hidden-xs">Reporting Areas</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  @foreach (var i in Model.Invites.OrderBy(r => r.CreatedDate))
+                  {
+                    <tr data-invite-id="@i.UniqueId">
+                      <td>@Html.GravatarWithDefault(i.EmailAddress, 24)</td>
+                      <td>@i.EmailAddress</td>
+                      <td class="hidden-xs" id="@(i.UniqueId)_AreaList">
+                        @Html.Raw(Model.ListHelper.AreaIdsToString(i.AccessibleAreaIds, ConfigUtil.AreaListMaxCharsForTableDisplay))
+                      </td>
+                      <td class="text-right">
+                        <button class="btn btn-xs btn-delete show-on-hover" type="button" data-delete-entity="invite" data-delete-entity-id="@i.UniqueId"><i class="fa fa-trash-o"></i></button>
+                      </td>
+                    </tr>
+                  }
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-md-2 hidden-sm"></div>
+            </div>
+          }
+        }
+      </div>
+    </section>
+  </div>
+</div>
+@section scripts{
+  <script>
+    $('#teamMemberInvitation').on('shown.bs.modal', function () {
+      $('#EmailAddress').val("");
+      $('#EmailAddress').focus();
+    });
+
+
+  </script>
+}

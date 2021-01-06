@@ -1,0 +1,129 @@
+﻿@using System.Web.Mvc.Html
+@model Supdate.Web.App.Models.CompaniesViewModel
+@{
+  ViewBag.Title = "Your Companies";
+}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.9/datatables.min.css" />
+@if (Model.OwnCompanies.Any())
+{
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        Your Companies
+        <div class="pull-right">
+            <a class="btn-md btn-add-new" data-toggle="modal" href="#companyDetails"><i class="fa fa-plus"></i> Add New</a>
+        </div>
+      </header>
+      <div class="panel-body">
+        <div class="form-group col-sm-12 hidden-xs">
+          <p class="help-block">
+            Listed below are your companies. Each company has its own Reports, Metrics and so on.
+            <br /><br />
+            Use the 'Add New' button above to add another company that you would like to report on.
+          </p>
+        </div>
+
+          <div class="form-group col-sm-12">
+            @Html.Partial("_CompaniesTable", Model.OwnCompanies)
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+                  }
+@if (Model.OtherCompanies.Any())
+                      {
+  ViewBag.postSwitchUrl = Url.Action("Index", "Home") + "?splash=1";
+  <div class="row">
+    <div class="col-lg-12">
+      <section class="panel">
+        <header class="panel-heading panel-heading-main">
+          @if (Model.OwnCompanies.Any())
+                      {
+            @("Other")
+                      }
+          Companies
+        </header>
+        <div class="panel-body">
+          <div class="form-group col-sm-12">
+            @Html.Partial("_CompaniesTable", Model.OtherCompanies)
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+                      }
+@if (!Model.OwnCompanies.Any())
+                      {
+
+  <div class="row">
+    <div class="col-lg-12">
+      <section class="panel">
+        <header class="panel-heading panel-heading-main">
+          Manage Your Own Companies
+        </header>
+        <div class="panel-body">
+          <div class="form-group col-sm-12 col-md-6">
+            <p class="help-block">You can add your own company to produce reports for. </p>
+            <p class="help-block">You'll be able to define your own Reporting Areas, Metrics, etc.</p>
+            <p class="help-block">It will be totally separate from any other companies you have access to.</p>
+          </div>
+          <div class="form-group col-sm-12 col-md-6">
+            <div class="blank-slate" style="margin-top:25px;">
+              <div class="text-center">
+                <a class="btn-lg btn-blank-slate" data-toggle="modal" href="#companyDetails">Create a Company</a>
+              </div>
+            </div>
+          </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+}
+
+@Html.Partial("~/Views/Company/_details.cshtml")
+
+@section scripts{
+  <script type="text/javascript" src="https://cdn.datatables.net/r/dt/dt-1.10.9/datatables.min.js"></script>
+
+  @if (Model.OwnCompanies.Count() > 3 || Model.OtherCompanies.Count() > 3)
+  {
+    <script>
+      $(".companiesList").DataTable({
+        searching: false,
+        paging: false,
+        info: false,
+        "columnDefs": [
+          { "orderable": false, "targets": [0, 3, 4] },
+          { 'orderData': [3], 'targets': [2] },
+          { 'targets': [3], 'visible': false, 'searchable': false },
+          { "width": "24px", "targets": 0 }
+        ],
+        "order": [[1, 'asc']]
+      });
+
+      setTimeout(function() {
+        var table = $('.companiesList').DataTable();
+        table.columns.adjust().draw();
+      }, 1000);
+    </script>
+  }
+  else
+  {
+    <script>
+      $(".dt-hidden").hide();
+    </script>
+  }
+  <script>
+    $('#companyDetails').on('shown.bs.modal', function() {
+      $('#Name').focus();
+    });
+
+    if (getUrlVars()["company-added"] === "1") {
+      displaySuccess('The new company has been created.');
+      flashTip("#user-dd", "left", "Use this menu to switch to your newly created company ", 1500, 12000);
+    };
+  </script>
+}

@@ -1,0 +1,59 @@
+﻿@using System.Web.Mvc.Html
+@using Supdate.Model
+@using Supdate.Util
+@using Supdate.Web.App.Models
+
+@model Supdate.Web.App.Models.ReportListSummary
+@{
+  ViewBag.Title = "Reports";
+}
+
+@if (Model.CompanyMetadata.AreaCount == 0 && ViewBag.IsCompanyAdmin)
+{
+  @Html.Partial("_Index_NoAreas")
+}
+else
+{
+  <section class="panel">
+    <header class="panel-heading panel-heading-main">
+      Reports
+      @Html.Partial("_Index_FilterMenu")
+    </header>
+    @if (!Model.Reports.Any())
+    {
+      <div class="panel-body">
+        There are no reports to show. Try changing the filter.
+      </div>
+    }
+  </section>
+  if (Model.Reports.Count() < 3 && Model.CurrentUser.IsCompanyAdmin)
+  {
+    <div class="alert alert-block alert-success fade in">
+      <strong>Pro Tip!</strong> Do you want to add reports for earlier months?
+      Just change the Start Month in <a href="@Url.Action("Index", "Settings")">Settings</a> to an earlier date.
+    </div>
+  }
+  if (Model.Reports.Any())
+  {
+    <div class="directory-info-row">
+      <div class="row">
+        @foreach (var report in Model.Reports)
+        {
+          @Html.Partial("_ReportTile", new ReportSummary { Report = report, CompanyMetadata = Model.CompanyMetadata, CurrentUser = Model.CurrentUser })
+        }
+      </div>
+    </div>
+  }
+}
+@section scripts{
+  <script>
+    $('#filter-menu>li[data-option="@ViewBag.filter"]').addClass('active');
+  </script>
+  @if (!Model.Reports.Any())
+  {
+    <script>
+      flashTip("#filter-menu-flash", "left", "Try a different filter", 1500, 12000);
+    </script>
+  }
+}
+

@@ -1,0 +1,89 @@
+﻿@using System.Globalization
+@using Stripe
+@model Supdate.Web.App.Models.InvoiceViewModel
+@{
+  Layout = null;
+}
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Invoice @Model.StripeInvoice.ReceiptNumber</title>
+  <link rel="stylesheet" href="/Content/app.invoice.css">
+  <link rel="license" href="http://www.opensource.org/licenses/mit-license/">
+</head>
+<body>
+  <header>
+    <address>
+      <p>Sassola Limited t/a Supdate</p>
+      <p>
+        Amelia House,<br> Crescent Rd,<br>Worthing, BN11 1QR
+      </p>
+    </address>
+    <span><img alt="" src="/Assets/SUPDATE-LOGO.png"></span>
+  </header>
+  <h1>Invoice</h1>
+  <article>
+    <h1>Recipient</h1>
+    <address>
+      <p style="white-space: pre;">@Model.Company.BillingAddress</p>
+    </address>
+    <table class="meta">
+      <tr>
+        <th>Invoice #</th>
+        <td>@Model.StripeInvoice.ReceiptNumber</td>
+      </tr>
+      <tr>
+        <th>Date</th>
+        <td>@Model.StripeInvoice.Date.Value.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)</td>
+      </tr>
+    </table>
+    <table class="inventory">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (StripeInvoiceLineItem line in Model.StripeInvoice.StripeInvoiceLineItems.Data)
+        {
+          <tr>
+            <td>
+              @line.Plan.Name, @line.Plan.IntervalCount @line.Plan.Interval from
+
+              @Model.StripeInvoice.PeriodStart.ToString("dd MMMM yyyy", CultureInfo.InvariantCulture)
+
+            </td>
+            <td>$@((line.Amount / 100).ToString("F"))</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <table class="balance">
+      @if (Model.StripeInvoice.Tax > 0)
+      {
+        <tr>
+          <th>Sub Total</th>
+          <td>$@((Model.StripeInvoice.Subtotal / 100).ToString("f"))</td>
+        </tr>
+        <tr>
+          <th>Tax @("@") @Model.StripeInvoice.TaxPercent%</th>
+          <td>$@((Model.StripeInvoice.Tax.Value / 100).ToString("f"))</td>
+        </tr>
+      }
+      <tr>
+        <th>Total</th>
+        <td>$@((Model.StripeInvoice.Total / 100).ToString("f"))</td>
+      </tr>
+    </table>
+  </article>
+  @if (Model.StripeInvoice.Tax > 0)
+  {
+    <footer>
+      Registered for VAT in the United Kingdom. No. 233 5053 38
+    </footer>
+  }
+</body>
+</html>

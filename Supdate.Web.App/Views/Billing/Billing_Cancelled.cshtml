@@ -1,0 +1,31 @@
+﻿@model Supdate.Model.Subscription
+@{
+  ViewBag.Title = "Subscription Cancelled";
+}
+<div class="row">
+  <div class="col-md-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        @ViewBag.Title
+      </header>
+      <div class="panel-body">
+        <p>Your subscription has now been cancelled. Your card will not be charged</p>
+        @if (Model.IsActive())
+        {
+          <p>You will still be able to use the premium features for @Model.DaysLeft() days, after which they will be disabled.</p>
+        }
+        else
+        {
+          <p>You will not be able to use any of the premium features until you re-start a subscription.</p>
+        }
+        <p>It may take a couple of minutes for the subscription page to reflect the fact that you have cancelled.</p>
+        <p>
+          In the unlikley event that this hasn't happened within an hour then please <a href="@Url.Action("Index", "Help")" class="link">do get in touch</a>.
+        </p>
+      </div>
+      <div class="panel-footer text-center">
+        <a class="btn btn-default" href="@Url.Action("Index","Home")">Continue</a>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+﻿@using Supdate.Web.App.Models
+@model LoginViewModel
+@{
+  Layout = "~/Views/Shared/_PreAuthLayout.cshtml";
+  ViewBag.Title = "Supdate - Log in";
+}
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form" }))
+{
+  @Html.AntiForgeryToken()
+
+  <h2 class="form-signin-heading">Log in to your account</h2>
+  <div class="login-wrap">
+    <div class="form-group">
+      @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", @autofocus = "autofocus" })
+      @Html.ValidationMessageFor(m => m.Email)
+    </div>
+    <div class="form-group">
+      @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+      @Html.ValidationMessageFor(m => m.Password)
+    </div>
+    <div class="checkbox">
+      @Html.CheckBoxFor(m => m.RememberMe)
+      @Html.LabelFor(m => m.RememberMe)
+    </div>
+    <input type="submit" value="Log in" class="btn btn-login btn-block" />
+    <div>
+      Don't have an account yet? @Html.ActionLink("Create an account", "Register", "Account")
+    </div>
+    <div>
+      @Html.ActionLink("Forgot your password?", "ForgotPassword")
+    </div>
+  </div>
+}
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+  <script>
+    $(".menu-login").addClass("active");
+    if ($("#Email").val() != "") {
+      $("#Password").focus();
+    }
+  </script>
+}

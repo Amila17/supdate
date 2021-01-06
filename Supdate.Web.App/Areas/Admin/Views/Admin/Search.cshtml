@@ -1,0 +1,48 @@
+﻿@using Supdate.Model.Admin
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@model SearchResults
+@{
+  ViewBag.Title = "User Administration";
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        <a href="@Url.Action("Dashboard", "Admin")" title=" back"><i class="fa fa fa-angle-double-left"></i></a> Search Results
+        <div class="clearfix"></div>
+      </header>
+      <div class="panel-body">
+        <div class="form-group col-sm-12">
+            <table class="display table table-striped">
+                <thead><tr><td colspan="2">Users</td></tr></thead>
+                <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>@Html.GravatarWithDefault(user.Email, 24)</td>
+                        <td><a href="@Url.Action("ViewUser", "Admin", new { user.UniqueId })">@user.Email</a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <hr/>
+            <table class="display table table-striped">
+                <thead><tr><td colspan="1">Companies</td></tr></thead>
+                <tbody>
+                    @foreach (var c in Model.Companies)
+                    {
+                    <tr>
+                        <td><a href="@Url.Action("ViewCompany", "Admin", new { c.UniqueId })">@c.Name</a></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+      </div>
+    
+    </section>
+  </div>
+</div>
+

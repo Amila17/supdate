@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Supdate.Model.ReportAttachment>
+<table class="table table-striped">
+  <tbody>
+    @foreach (var attachment in Model)
+    {
+      <tr>
+        <td class="w16 text-center"><i class="fa fa-auto-mimetype" data-mimetype="@attachment.MimeType"></i></td>
+        <td nowrap>
+          @if (attachment.MimeType.Substring(0, 5) == "image")
+          {
+            <a data-toggle="modal" href="#attachment-@attachment.UniqueId">@attachment.FileName</a>
+            @Html.Partial("_ReportPreview_Attachment_Modal", attachment)
+          }
+          else
+          {
+            <a href="@attachment.FilePath" target="_blank">@attachment.FileName</a>
+          }
+        </td>
+        <td width="95%">
+          <i>@attachment.Description</i>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

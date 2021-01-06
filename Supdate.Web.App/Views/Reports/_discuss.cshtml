@@ -1,0 +1,31 @@
+﻿@using Supdate.Model
+@using Supdate.Util
+@model Supdate.Model.Discussion
+@{
+    Layout = null;
+}
+
+<div class="side-comment no-propagation" id="marker-@Model.DiscussionName" data-discussion-name="@Model.DiscussionName">
+  <a data-toggle="modal" href="#modal-@Model.DiscussionName" class=" marker" id="marker-link-@Model.DiscussionName">
+    <span>+</span>
+  </a>
+  <div class="modal fade full-width-modal-right modal-discussion" id="modal-@Model.DiscussionName" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content-wrap">
+        <div class="modal-content">
+          @{
+            var comment = new Comment
+            {
+              AuthorName = ViewBag.CommenterName,
+              AuthorEmail = ViewBag.CommenterEmail
+            };
+          }
+          <input type="hidden" name="CommenterEmail" value="@comment.AuthorEmail"/>
+          <input type="hidden" name="CommenterName" value="@comment.AuthorName"/>
+          <input type="hidden" name="CommenterHash" value="@ConversionUtil.CommentToHashString(comment)"/>
+          @{Html.RenderAction("Details", "Discussion", new { reportGuid = Model.ReportGuId, targetType = Model.TargetType, targetGuid = Model.Target });}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

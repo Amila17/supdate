@@ -1,0 +1,81 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@using Supdate.Util
+@model Supdate.Web.App.Models.BillingViewModel
+@{
+  ViewBag.Title = "Subscription";
+}
+
+@section footer{
+  @if (Model.Subscription.StripeSubscriptionId != null)
+  {
+    @*<div class="pull-right">
+      <button id="stripe-btn" type="button" class="btn btn-default btn-sm">Update Card Details</button>
+      <button id="stripe-cancel-btn" type="button" class="btn btn-white btn-sm">Cancel Subscription</button>
+    </div>*@
+  }
+  @*<a href="#" class="btn btn-sm btn-default " data-modal-url="@Url.Action("BillingAddress")">Set Billing Address</a>*@
+  @if (Model.Subscription.StripeCustomerId != null)
+  {
+    <a href="#" class="btn btn-sm btn-default " data-modal-url="@Url.Action("ListInvoices")">Subscription Invoices</a>
+  }
+}
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-9">
+    <div class="panel">
+      <header class="panel-heading panel-heading-main">
+        Your Subscription for @Model.Company.Name
+      </header>
+      <div class="panel-body" data-match-neighbour-height="true">
+        @if (Model.Subscription.IsActive() && Model.HasValidSubscription)
+        {
+          <div class="text-center is-subscribed">
+            <i class="fa fa-check"></i> You are subscribed.
+          </div>
+        }
+
+        @if (Model.HasValidSubscription)
+        {
+          <p>The Supdate Premium features are now free to use! Your invoice history has been preserved and is accessible via the 'Subscription Invoices' button below</p>
+        }
+        else
+        {
+          <p>The Supdate Premium features are now free to use! You do not have any past invoices that you can access on this page.</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="stripe-checkout-form">
+    <form action="@Model.StripeCardPostTarget" method="POST">
+      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+              data-key="@ConfigUtil.StripePublicKey"
+              data-amount="0"
+              data-name="Supdate"
+              data-email="@Model.Owner.Email"
+              data-description="Enter your card details"
+              data-image="/Assets/supdate-icon-64-inverted.png"
+              data-locale="auto"
+              data-zip-code="false"
+              data-label="Enter Card Details"
+              data-panel-label="@Model.StripeCardLabel"
+              data-allow-remember-me=false
+              data-currency="usd">
+      </script>
+    </form>
+    @using (Html.BeginForm("CancelSubscription", "Billing", FormMethod.Post, new { @id = "stripe-cancel-subscription-form" }))
+    {
+      @Html.AntiForgeryToken()
+    }
+  </div>
+</div>
+
+@section Scripts {
+  <script>
+    $(function () {
+      setTimeout(function () {
+
+      }, 2000);
+    });
+  </script>
+}

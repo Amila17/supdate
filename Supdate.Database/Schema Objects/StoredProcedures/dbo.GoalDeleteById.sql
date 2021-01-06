@@ -1,0 +1,21 @@
+﻿CREATE PROCEDURE [dbo].[GoalDeleteById]
+  @goalId INT
+AS
+BEGIN
+  --Isolation levels?
+
+  BEGIN TRY
+    BEGIN TRANSACTION GOALDELETE
+
+    DELETE FROM [dbo].[ReportGoal] WHERE GoalId = @goalId
+    DELETE FROM [dbo].[Goal] WHERE Id = @goalId
+
+    COMMIT TRANSACTION GOALDELETE 
+    RETURN 1
+  END TRY
+  BEGIN CATCH
+    IF(@@TRANCOUNT > 0)
+      ROLLBACK TRAN
+      RETURN 0
+  END CATCH
+END

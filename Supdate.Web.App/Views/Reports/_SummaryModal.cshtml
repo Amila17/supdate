@@ -1,0 +1,31 @@
+﻿@model Supdate.Model.Report
+@using (Html.BeginForm("ReportSummary", "Reports", FormMethod.Post, new { role = "form", id = "edit-summary-form", name = "edit-summary-form" }))
+{
+  <input id="Month" name="Month" type="hidden" value="@Model.Date.Month">
+  <input id="Year" name="Year" type="hidden" value="@Model.Date.Year">
+  <div class="modal fade" id="reportSummaryEntry" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Report Summary</h4>
+        </div>
+        <div class="modal-body">
+          <form role="form" id="goalDetailsForm">
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-sm-12">
+                    <textarea class="tinymce-basic" cols="20" id="Summary" name="Summary" rows="8" style="height: 250px;">@Html.Raw(Model.Summary)</textarea>
+</div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button id="saveSummaryButton" class="btn btn-save ladda-button" data-style="expand-left" type="submit"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+          <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

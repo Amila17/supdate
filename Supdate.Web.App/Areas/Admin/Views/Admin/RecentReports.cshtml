@@ -1,0 +1,67 @@
+﻿@using Supdate.Model
+@using System.Globalization
+@model IEnumerable<ReportEmailDetails>
+@{
+  ViewBag.Title = "Recent Reports";
+  int records = ViewBag.records;
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        <div class="pull-right">
+          <select class="input-sm dd-goto-url" id="records_per_page_selector">
+            <option value="10" data-url="@Url.Action("RecentReports", "Admin", new { records = 10 })">10 records / page</option>
+            <option value="20" data-url="@Url.Action("RecentReports", "Admin", new { records = 20 })">20 records / page</option>
+            <option value="40" data-url="@Url.Action("RecentReports", "Admin", new { records = 40 })">40 records / page</option>
+            <option value="60" data-url="@Url.Action("RecentReports", "Admin", new { records = 60 })">50 records / page</option>
+            <option value="80" data-url="@Url.Action("RecentReports", "Admin", new { records = 80 })">80 records / page</option>
+            <option value="100" data-url="@Url.Action("RecentReports", "Admin", new { records = 100 })">100 records / page</option>
+          </select>
+        </div>
+        <a href="@Url.Action("Dashboard", "Admin")" title=" back"><i class="fa fa fa-angle-double-left"></i></a>
+        Recent Reports
+        <div class="clearfix"></div>
+      </header>
+      <div class="panel-body">
+
+        <div class="form-group col-sm-12">
+          <table class="display table table-striped">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Month</th>
+                <th class="hidden-xs">Company</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (var r in Model)
+              {
+                <tr>
+                  <td><a target="_blank" class="admin-report-link" href="@Url.Action("ReportView", "Reports", new { area = string.Empty, id = r.ReportUniqueId.ToString() })">@r.ReportTitle</a></td>
+                  <td>@r.ReportDate.ToString("MMM", CultureInfo.InvariantCulture) @r.ReportDate.Year</td>
+                  <td class="hidden-xs">@r.CompanyName</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel-footer">
+
+      </div>
+    </section>
+  </div>
+</div>
+<style>
+  .admin-report-link:visited {
+    color: #aaa;
+  }
+</style>
+@section scripts{
+  <script>
+    $("#records_per_page_selector").val("@records");
+  </script>
+
+}

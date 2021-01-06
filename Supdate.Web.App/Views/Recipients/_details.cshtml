@@ -1,0 +1,50 @@
+﻿@model Supdate.Model.Recipient
+@{
+  Layout = null;
+  var modalTitle = (Model.UniqueId == Guid.Empty) ? "Add a Recipient" : "Edit Recipient";
+}
+@using (Html.BeginForm("Details", "Recipients", FormMethod.Post, new { role = "form", @class = "ajax-form" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 id="recipDetailsHeader" class="modal-title">@modalTitle</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group ">
+      <div class="row">
+        <div class="col-sm-6">
+          @Html.HiddenFor(m => m.Id)
+          @Html.HiddenFor(m => m.UniqueId)
+          @Html.LabelFor(m => m.FirstName)
+          @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+          @Html.ValidationMessageFor(m => m.FirstName)
+        </div>
+        <div class="col-sm-6">
+          @Html.LabelFor(m => m.LastName)
+          @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+          @Html.ValidationMessageFor(m => m.LastName)
+        </div>
+      </div>
+    </div>
+    <div class="form-group ">
+      <div class="row">
+        <div class="col-sm-12">
+          @Html.LabelFor(m => m.Email, "Email Address")
+          @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+          @Html.ValidationMessageFor(m => m.Email)
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    @if (Model.UniqueId != Guid.Empty)
+    {
+      <div class="pull-left" id="trash-icon">
+        <button class="btn btn-delete" type="button" data-delete-entity="recipient" data-delete-entity-id="@Model.UniqueId"><i class="fa fa-trash-o"></i></button>
+      </div>
+    }
+    <button class="btn btn-save ladda-button ajax-submit" data-success-callback="reloadPage" data-style="expand-left" type="button" id="saveRecipientDetails"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+  </div>
+}
+

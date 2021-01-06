@@ -1,0 +1,128 @@
+﻿@using Supdate.Model.Admin
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@model IEnumerable<UserEx>
+@{
+  ViewBag.Title = "User Administration";
+  int records = ViewBag.records;
+  int page = ViewBag.page;
+  int sortOption = ViewBag.sortOption;
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        <div class="pull-right">
+          <select class="input-sm dd-goto-url" id="sortoption_selector">
+            <option value="0" data-url="@Url.Action("Users", "Admin", new { page = 1, records, sortOption = 0 })">Sort by ID</option>
+            <option value="1" data-url="@Url.Action("Users", "Admin", new { page = 1, records, sortOption = 1 })">Sort by Logins</option>
+            <option value="2" data-url="@Url.Action("Users", "Admin", new { page = 1, records, sortOption = 2 })">Sort by Last Login</option>
+          </select>
+          <select class="input-sm dd-goto-url" id="records_per_page_selector">
+            <option value="10" data-url="@Url.Action("Users", "Admin", new { page = 1, records = 10, sortOption })">10 records / page</option>
+            <option value="20" data-url="@Url.Action("Users", "Admin", new { page = 1, records = 20, sortOption })">20 records / page</option>
+            <option value="40" data-url="@Url.Action("Users", "Admin", new { page = 1, records = 40, sortOption })">40 records / page</option>
+            <option value="60" data-url="@Url.Action("Users", "Admin", new { page = 1, records = 60, sortOption })">50 records / page</option>
+            <option value="80" data-url="@Url.Action("Users", "Admin", new { page = 1, records = 80, sortOption })">80 records / page</option>
+            <option value="100" data-url="@Url.Action("Users", "Admin", new { page = 1, records = 100, sortOption })">100 records / page</option>
+          </select>
+        </div>
+        <a href="@Url.Action("Dashboard", "Admin")" title=" back"><i class="fa fa fa-angle-double-left"></i></a> Users
+        <div class="clearfix"></div>
+      </header>
+      <div class="panel-body">
+
+        <div class="form-group col-sm-12">
+          <table class="display table table-striped">
+            <thead>
+              <tr>
+                <th class="w24"></th>
+                <th>Email</th>
+                <th class="hidden-xs">
+                  @{
+                    switch (sortOption)
+                    {
+                      case 0:
+                        <text>Created</text>
+                        break;
+                      case 1:
+                      <text>Logins</text>
+                        break;
+                      case 2:
+                      <text>Last Login</text>
+                        break;
+                    }
+                  }
+                </th>
+                <th>Company</th>
+                <th class="hidden-xs">Companies</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              @foreach (var appUser in Model)
+              {
+                <tr>
+                  <td>@Html.GravatarWithDefault(appUser.Email, 24)</td>
+                  <td><a href="@Url.Action("ViewUser", "Admin", new { appUser.UniqueId })">@appUser.Email</a></td>
+                  <td class="hidden-xs">
+                    @{
+                      switch (sortOption)
+                      {
+                        case 0:
+                          @ConversionUtil.DateTimeToFriendly(appUser.CreatedDate)
+                          break;
+                        case 1:
+                          @appUser.LoginCount
+                          break;
+                        case 2:
+                          @ConversionUtil.DateTimeToFriendly(appUser.LastLogin, "-")
+                          break;
+                      }
+                    }
+                  </td>
+                  <td>
+                    @if (appUser.IsCompanyAdmin)
+                    {
+                      <a class="link" href="@Url.Action("ViewCompany", "Admin", new { uniqueId = appUser.CompanyUniqueId })">@appUser.CompanyName</a>
+                    }
+                    else
+                    {
+                      <a href="@Url.Action("ViewCompany", "Admin", new { uniqueId = appUser.CompanyUniqueId })">@appUser.CompanyName</a>
+                    }
+
+                    @if (appUser.CompanyCount > 1)
+                    {
+                      <em>(+ @(appUser.CompanyCount - 1))</em>
+                    }
+                  </td>
+                  <td class="hidden-xs">@appUser.CompanyCount</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <div class="pull-right">
+          @if (page > 1)
+          {
+            <a href="@Url.Action("Users", "Admin", new { page = page - 1, records = records })">&lt;&lt; Prev</a>
+            @Html.Raw(" || ")
+          }
+          <a href="@Url.Action("Users", "Admin", new { page = page + 1, records = records })">Next &gt;&gt;</a>
+        </div>
+        <i>Page @page</i>
+        <div class="clearfix"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+@section scripts{
+  <script type="text/javascript">
+    $("#records_per_page_selector").val("@records");
+    $("#sortoption_selector").val("@sortOption");
+  </script>
+}

@@ -1,0 +1,144 @@
+﻿@using Supdate.Util
+@using Supdate.Web.App.Models
+@model MetricSettings
+@{
+  ViewBag.Title = String.Format("{0} Metrics", ViewBag.SelectAreaName ?? String.Empty);
+  var isCompanyOwner = ViewBag.IsCompanyAdmin;
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        @ViewBag.Title
+        <div class="pull-right">
+          @if (Model.Metrics.Any())
+          {
+            <a class="btn btn-md btn-white" id="edit-data-btn" href="@Url.Action("Data")"><i class="fa fa-database"></i> Edit Metric Data</a>
+            <a class="btn btn-md btn-white" id="" href="@Url.Action("Index", "DataSources")"><i class="fa fa-download"></i> Data Sources</a>
+
+          }
+
+          @if (ViewBag.FilterListShow)
+          {
+            <div class="btn-group">
+              <button data-toggle="dropdown" class="btn dropdown-toggle btn-white btn-sm" type="button">@ViewBag.FilterListTitle <span class="caret"></span></button>
+              <ul role="menu" class="dropdown-menu" id="filter-menu">
+                <li data-option=""><a href="@Url.Action("Index", "Metrics", new { areaUniqueId = String.Empty })">All Metrics</a></li>
+                <li class="divider"></li>
+                @foreach (var area in Model.ListHelper.GetAreas())
+                {
+                  if (Model.Metrics.Any(m => m.AreaId.HasValue && m.AreaId.Value == area.Id)) {
+                    <li data-option="@area.UniqueId"><a href="@Url.Action("Index", "Metrics", new { areaUniqueId = area.UniqueId })">@area.Name Metrics</a></li>
+                  }
+                }
+              </ul>
+            </div>
+          }
+          <a class="btn-md btn-add-new" data-modal-url="@Url.Action("details", new { uniqueid = Guid.Empty, areauniqueid = ViewBag.FilterListIndex })" href="#"><i class="fa fa-plus"></i> Add New</a>
+        </div>
+      </header>
+      <div class="panel-body">
+        <div class="form-group col-sm-12 hidden-xs">
+          <p class="help-block">Metrics are numbers that you want to report on. For example: Revenue, Users, Site Visitors.</p>
+          <p class="help-block">Define your Metrics and when you create a report you'll be prompted to provide the latest values.</p>
+        </div>
+        @if (Model.Metrics.Any())
+        {
+          <div class="form-group col-sm-12">
+            <table id="metricsList" class="table table-striped table-hover remove-empty-columns" data-sortable-entity="metric">
+              <thead class="hidden-xs">
+                <tr>
+                  @if (isCompanyOwner)
+                  {
+                    <th class="w16"></th>
+                  }
+                  <th>Name</th>
+                  <th class="text-right">Value</th>
+                  <th colspan="2">Chart Type</th>
+                  <th class="hidden-xs">Reporting Area</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+
+                @foreach (var metric in Model.Metrics.OrderBy(x => x.DisplayOrder))
+                {
+                  var editUrl = Url.Action("Details", new { uniqueId = metric.UniqueId });
+
+                  <tr data-metric-id="@metric.UniqueId" data-modal-url="@editUrl">
+                    @if (isCompanyOwner)
+                    {
+                      <td class="vertical-align-middle w36 mover"><span class="fa fa-bars"></span></td>
+                    }
+                    <td class="row-clickable"><a href="#" class="helper">@metric.Name</a></td>
+                    <td class="row-clickable text-right">@metric.LatestValueFormatted</td>
+                    @if (metric.DataPoints > 1)
+                    {
+                      <td class="w45 noThumbnail">@Html.Partial("_ReportMetricGraphIcon", metric)</td>
+                    }
+                    <td @if (metric.DataPoints < 2) { @: colspan="2"
+                                                                                              }
+                        class="row-clickable hidden-xs">
+                      @metric.GraphType.DisplayName()
+                    </td>
+                    <td class="row-clickable hidden-xs">@Model.ListHelper.GetAreaName(metric.AreaId ?? -1)</td>
+                    <td class="text-right">
+                      <a class="btn btn-xs btn-white no-propagation show-on-tr-hover" href="@Url.Action("Data", new { metric = metric.UniqueId })">Actuals</a>
+                      <a class="btn btn-xs btn-white no-propagation show-on-tr-hover" href="@Url.Action("Data", new { metric=metric.UniqueId, show="targets" })">Targets</a>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+
+          </div>
+        }
+        else
+        {
+          if (!isCompanyOwner && Model.ListHelper.AreaList.Count == 0)
+          {
+            @Html.Partial("_NoReportingAreas")
+          }
+          else
+          {
+            @Html.Partial("_blankSlate", new BlankSlateModel
+            {
+              Url = @Url.Action("Details", new { uniqueId = Guid.Empty, areaUniqueId = ViewBag.FilterListIndex }),
+              EntityName = String.Format("{0} Metric", ViewBag.SelectAreaName ?? String.Empty)
+            })
+          }
+        }
+      </div>
+    </section>
+  </div>
+</div>
+
+
+@section scripts{
+  <script>
+    $('#filter-menu>li[data-option="@ViewBag.FilterListIndex"]').addClass('active');
+  </script>
+
+  @Scripts.Render("~/bundles/graphs")
+  <script type="text/javascript">
+
+    graphDataGetUrl = '@if (Model.Metrics.Count > 0)
+                       {
+                         @Url.Action("GraphData")
+                       }';
+
+    if (@Model.Metrics.Count() === 1 && getUrlVars()["guide"] == undefined) {
+      flashTip("#edit-data-btn", "left", "Use this button to edit data for your metrics, including Targets", 1500, 12000);
+
+    }
+    if (getUrlVars()["guide"] == "mapmetrics") {
+
+      if (@Model.Metrics.Count() > 0) {
+        flashTip("#metricsList", "top", "Click on a Metric to edit it. You'll then be able to set its Data Source", 500, 12000);
+      } else {
+        flashTip(".btn-add-new", "left", "Add a Metric. You'll then be able to set the Data Source for it", 500, 12000);
+      }
+    }
+  </script>
+}

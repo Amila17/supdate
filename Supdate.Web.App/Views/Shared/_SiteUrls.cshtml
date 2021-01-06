@@ -1,0 +1,55 @@
+﻿@using System.Globalization
+<script type="text/javascript">
+  var clientDateFormat = 'dd M yyyy';
+  var lineChart = @((int)Supdate.Model.GraphType.LineChart);
+
+  var deleteUrls = {
+    area: '@Url.Action("Delete", "ReportingAreas")',
+    goal: '@Url.Action("Delete", "Goals")',
+    metric: '@Url.Action("Delete", "Metrics")',
+    recipient: '@Url.Action("Delete", "Recipients")',
+    teammember: '@Url.Action("Delete", "Team")',
+    invite: '@Url.Action("DeleteInvite","Team")',
+    attachment: '@Url.Action("DeleteAttachment","Reports")',
+    webhook: '@Url.Action("DeleteWebhook","Settings")',
+    externalapiauth: '@Url.Action("DeleteCredentials","DataSources")'
+  }
+  var getUrls = {
+    area: '@Url.Action("Details", "ReportingAreas")',
+    goal: '@Url.Action("Details", "Goals")',
+    metric: '@Url.Action("Details", "Metrics")',
+    recipient: '@Url.Action("Details", "Recipients")',
+    teamMember: null
+  }
+  var listUrls = {
+    area: '@Url.Action("Index", "ReportingAreas")',
+    goal: '@Url.Action("Index", "Goals")',
+    metric: '@Url.Action("Index", "Metrics")',
+    recipient: '@Url.Action("Index", "Recipients")',
+    teamMember: '@Url.Action("Index", "Team")'
+  }
+  var createUrls = {
+    area: '@Url.Action("Details", "ReportingAreas", new{ uniqueId = Guid.Empty})',
+    goal: '@Url.Action("Details", "Goals", new{ uniqueId = Guid.Empty})',
+    metric: '@Url.Action("Details", "Metrics", new { uniqueId = Guid.Empty })',
+    recipient: '@Url.Action("Details", "Recipients", new { uniqueId = Guid.Empty })',
+    teamMember: '@Url.Action("Details", "Team", new { uniqueId = Guid.Empty })',
+    company: '@Url.Action("AddCompany", "Company")'
+  }
+  var displayOrderUrls = {
+    metric: '@Url.Action("SaveMetricDisplayOrder", "Metrics")',
+    area: '@Url.Action("SaveAreaDisplayOrder", "ReportingAreas")'
+  }
+  var miscUrls = {
+    switchCompany: '@Url.Action("ChangeCompany", "Account")',
+    showDashboard: '@Url.Action("Index", "Home")',
+    showReports: '@Url.Action("Index", "Reports")',
+    reportSendThanks: '@Url.Action("SendThanks", "Reports")',
+    emailReport: '@Url.Action("SendEmail", "Reports")',
+    emailReportBodyPreview: '@Url.Action("ReportEmailBodyPreview","Reports")',
+    deleteAttachment: '@Url.Action("DeleteAttachment", "Reports")'
+  }
+
+  var graphDataGetUrl = '@Url.Action("MetricGraphData", "Reports")';
+  var permalinkGraphDataGetUrl = '@Url.Action("MetricGraphData", "Reports")';
+</script>

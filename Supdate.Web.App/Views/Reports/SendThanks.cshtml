@@ -1,0 +1,53 @@
+﻿@{
+  ViewBag.Title = "Report Sent";
+}
+@section footer{
+  <div class="pull-right">
+    <a class="btn btn-default" href="@Url.Action("Index")">Reports Home</a>
+  </div>
+}
+
+<section class="panel">
+  <header class="panel-heading panel-heading-main">
+    A Quick Ask?
+  </header>
+  <div class="panel-body">
+    <p>Your report is now winging its way across the interwebs to your shareholders.</p>
+    <p>
+      <strong>Can we ask a quick favour in return for all this free awesomeness?</strong>
+    </p>
+    <p>Help spread the word about Supdate by posting one of these tweets:</p>
+  </div>
+</section>
+<div class="row">
+  <div class="col-sm-4 col-xs-12">
+    <section class="panel">
+      <div class="panel-body" id="tweet-1">
+        Just used @("@")supdateapp to update my shareholders - awesome free tool all founders should be aware of
+      </div>
+      <div class="panel-footer clearfix">
+        <a class="btn btn-save pull-right" data-tweet-src="#tweet-1" href="#"><i class="fa fa-twitter"></i> Tweet This</a>
+      </div>
+    </section>
+  </div>
+  <div class="col-sm-4 col-xs-12">
+    <section class="panel">
+      <div class="panel-body" id="tweet-2">
+        If you're a founder of a funded company, do the right thing and use @("@")supdateapp to update your investors.
+      </div>
+      <div class="panel-footer clearfix">
+        <a class="btn btn-save pull-right" data-tweet-src="#tweet-2" href="#"><i class="fa fa-twitter"></i> Tweet This</a>
+      </div>
+    </section>
+  </div>
+  <div class="col-sm-4 col-xs-12">
+    <section class="panel">
+      <div class="panel-body" id="tweet-3">
+        Using @("@")supdateapp makes keeping my investors up-to-date so easy. And it's free!
+      </div>
+      <div class="panel-footer clearfix">
+        <a class="btn btn-save pull-right" data-tweet-src="#tweet-3" href="#"><i class="fa fa-twitter"></i> Tweet This</a>
+      </div>
+    </section>
+  </div>
+</div>

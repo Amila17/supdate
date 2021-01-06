@@ -1,0 +1,9 @@
+﻿{
+  "$schema": "http://schemastore.org/schemas/json/webjob-publish-settings.json",
+  "webJobName": "ActivationReminder",
+  "startTime": "2015-10-21T00:00:00+00:00",
+  "endTime": null,
+  "jobRecurrenceFrequency": "Hour",
+  "interval": 1,
+  "runMode": "Scheduled"
+}

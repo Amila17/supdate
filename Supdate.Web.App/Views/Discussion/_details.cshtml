@@ -1,0 +1,39 @@
+﻿@using Supdate.Model
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@model Supdate.Model.Discussion
+@{
+  Layout = null;
+  if (String.IsNullOrEmpty(Model.Title))
+  {
+    Model.Title = "Discuss";}
+}
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  <h4 class="modal-title">@Model.Title</h4>
+</div>
+<div class="modal-body row" id="@Model.DiscussionName">
+  <div class="">
+    <ul class="commentList" data-discussion-url="@Url.Action("Details", "Discussion", new { reportGuId = Model.ReportGuId, targetType = Model.TargetType, targetGuid = Model.Target })">
+      @if (Model.Comments.Any())
+      {
+        @Html.Partial("_comments", Model.Comments)
+      }
+    </ul>
+  </div>
+</div>
+<div class="modal-footer">
+  @using (Html.BeginForm("Details", "Discussion", FormMethod.Post, new { role = "form", id = "metricsForm", @class = "ajax-form", data_processing=false }))
+  {
+
+    <input type="hidden" name="CommentCount" value="@Model.CommentCount" />
+    <input type="hidden" name="Comment.AuthorEmail" value="" />
+    <input type="hidden" name="Comment.AuthorName" value="" />
+    <input type="hidden" name="Comment.AuthorHash" value=""/>
+  <div class="input-group col-xs-12 col-lg-12">
+  <textarea class="form-control" rows="1" name="Comment.Text" id="comment-@Model.DiscussionName"  placeholder="Type your comments and press enter"></textarea>
+  </div>
+  <button class="btn btn-default ajax-submit hidden" id="submit-@Model.DiscussionName" data-success-callback="discussionUpdate_cb">Add</button>
+
+  }
+</div>

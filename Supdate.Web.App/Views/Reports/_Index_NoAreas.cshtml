@@ -1,0 +1,42 @@
+﻿@using Supdate.Util
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        @ViewBag.Title
+      </header>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-8" data-match-neighbour-height="true">
+            <h2 class="text-heading">Let's get you set up.</h2>
+            <p>
+              Before you can create a report you need to list the areas of your business that you want to report on.
+            </p>
+            <p>
+              We recommend doing this via the <a href="@Url.Action("Wizard", "Settings")" class="link">Setup Wizard</a> but if you want to explore things
+              on your own then head to the <a href="@Url.Action("Index", "ReportingAreas")" class="link">Reporting Areas section</a> and create them there.
+            </p>
+            <p>Everything else (Metrics, Goals, etc) is optional. Once you've created a Reporting Area then you'll be able to create a report.</p>
+            <p>
+              Impatient? Take a look at an <a href="@ConfigUtil.ExampleReportUrl" class="link" target="_blank">example report</a>.
+            </p>
+          </div>
+          <div class="hidden-xs hidden-sm col-md-4 text-center" data-match-neighbour-height="true">
+            <section class="panel panel-plug" data-vertical-center="true">
+              <div class="panel-body">
+                <i class="fa fa-area-chart"></i>
+              </div>
+              <div class="panel-footer">
+                <a href="@ConfigUtil.ExampleReportUrl" class="no-propagation" target="_blank">View Example Report</a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer text-center">
+        <a class="btn btn-save" href="@Url.Action("Wizard", "Settings")">Setup Wizard</a>
+        <a class="btn btn-white" href="@Url.Action("Index","ReportingAreas")">Reporting Areas</a>
+      </div>
+    </section>
+  </div>
+</div>

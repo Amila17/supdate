@@ -1,0 +1,30 @@
+﻿@model Supdate.Model.Report
+@using (Html.BeginForm("SaveReportTitle", "Settings", FormMethod.Post, new { role = "form", name = "save-report-title", id = "save-report-title" }))
+{
+  <div class="modal fade" id="edit-title" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Report Title</h4>
+        </div>
+        <div class="modal-body">
+          <p>The report title is a global setting. So changing it here will change it for all reports.</p>
+          <form role="form">
+            <div class="form-group ">
+              <div class="row">
+                <div class="col-sm-12">
+                  <input type="text" name="reportTitle" id="Report_Title" class="form-control" value="@Model.Title" placeholder="Report Title"/>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-save ladda-button" data-style="expand-left" type="submit"><span class="ladda-label"><i class="fa fa-check"></i> Update</span></button>
+          <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,18 @@
+﻿<div class="modal fade" id="newlyComplete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Report Complete</h4>
+      </div>
+      <div class="modal-body">
+        <p>Your report is now complete.</p>
+        <p>You should now email it to your receipients.</p>
+        <p>Click the button below to prepare your email. </p>
+      </div>
+      <div class="modal-footer">
+        <a href="@Url.Action("Send", "Reports" , new { year = Model.Report.Date.Year, month = Model.Report.Date.Month })" class="btn btn-success"><i class="fa fa-envelope-o"></i> Prepare Email</a>
+      </div>
+    </div>
+  </div>
+</div>

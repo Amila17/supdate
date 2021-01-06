@@ -1,0 +1,41 @@
+﻿@model Supdate.Model.Webhook
+@{
+  Layout = null;
+  var webhook = Model;
+  var modalTitle = String.Format("{0} - {1}", webhook.ConfigInfo1, webhook.ConfigInfo2);
+}
+@using (Html.BeginForm("UpdateWebhookEvents", "Settings", new { webhook.UniqueId }, FormMethod.Post, new { role = "form", @class = "ajax-form", id = String.Format("form-webhook-{0}", webhook.UniqueId) }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 id="areaDetailsHeader" class="modal-title">@modalTitle</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group ">
+      <div class="row">
+        <div class="col-md-12">
+          <span class="help-block">Choose which events you'd like to result in a notification to this channel.</span>
+          <div class="col-md-12">
+            @Html.CheckBoxFor(m => webhook.EventReportComment)
+            @Html.LabelFor(m => webhook.EventReportComment, new { @class = "label-nobold" })
+          </div>
+          <div class="col-md-12">
+            @Html.CheckBoxFor(m => webhook.EventReportViewed)
+            @Html.LabelFor(m => webhook.EventReportViewed, new { @class = "label-nobold" })
+          </div>
+          <div class="col-md-12">
+            @Html.CheckBoxFor(m => webhook.EventReportingAreaUpdated)
+            @Html.LabelFor(m => webhook.EventReportingAreaUpdated, new { @class = "label-nobold" })
+          </div>
+        </div>
+       </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+      <div class="pull-left" id="trash-icon">
+        <button class="btn btn-delete" type="button" onclick="return promptDeleteEntity('webhook', '@webhook.UniqueId')"><i class="fa fa-trash-o"></i></button>
+      </div>
+    <button class="btn btn-save ladda-button ajax-submit" data-success-callback="webhook_cb" data-style="expand-left" type="button" id="saveMetricDetailx"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+  </div>
+}

@@ -1,0 +1,79 @@
+﻿<aside>
+  <div id="sidebar" class="nav-collapse">
+    <ul class="sidebar-menu" id="nav-accordion">
+      <li>
+        <a href="@Url.Action("Index", "Home", new { Area = string.Empty })">
+          <i class="fa fa-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      @if (ViewBag.IsCompanyAdmin != null && ViewBag.IsCompanyAdmin == true)
+      {
+        <li>
+          <a href="@Url.Action("Index", "Settings", new { Area = string.Empty })">
+            <i class="fa fa-cogs"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+      }
+      <li>
+        <a href="@Url.Action("Index", "ReportingAreas", new { Area = string.Empty })">
+          <i class="fa fa-sitemap"></i>
+          <span>Reporting Areas</span>
+        </a>
+      </li>
+      @if (ViewBag.IsCompanyAdmin != null && ViewBag.IsCompanyAdmin == true)
+      {
+        <li>
+          <a href="@Url.Action("Index", "Team", new { Area = string.Empty })">
+            <i class="fa fa-users"></i>
+            <span>Team</span>
+          </a>
+        </li>
+      }
+      <li>
+        <a href="@Url.Action("Index", "Metrics", new { Area = string.Empty })">
+          <i class="fa fa-bar-chart-o"></i>
+          <span>Metrics</span>
+        </a>
+      </li>
+
+      <li>
+        <a href="@Url.Action("Index", "Goals", new { Area = string.Empty })">
+          <i class="fa fa-bullseye"></i>
+          <span>Goals</span>
+        </a>
+      </li>
+      @if (ViewBag.IsCompanyAdmin != null && ViewBag.IsCompanyAdmin == true)
+      {
+        <li>
+          <a href="@Url.Action("Index", "Recipients", new { Area = string.Empty })">
+            <i class="fa fa-share-square-o"></i>
+            <span>Recipients</span>
+          </a>
+        </li>
+      }
+      <li>
+        <a href="@Url.Action("Index", "Reports", new { Area = string.Empty })">
+          <i class="fa fa-file-text-o"></i>
+          <span>Reports</span>
+        </a>
+      </li>
+      <li>
+        <a href="@Url.Action("Index", "Help", new { Area = string.Empty })">
+          <i class="fa fa-question-circle"></i>
+          <span>Help</span>
+        </a>
+      </li>
+      @if (ViewBag.IsAdmin != null && ViewBag.IsAdmin == true)
+      {
+        <li>
+          <a href="@Url.Action("Dashboard", "Admin", new { area = "Admin", windowInDays = 1 })">
+            <i class="fa fa-wrench"></i>
+            <span>Admin</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+</aside>

@@ -1,0 +1,49 @@
+﻿@using Supdate.Web.App.Models
+@model TeamMemberViewModel
+@{
+  Layout = null;
+}
+@using (Html.BeginForm("Details", "Team", new { uniqueId = Guid.Empty }, FormMethod.Post, new { role = "form", @class = "ajax-form" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="teamMemberDetailsHeader">Add a Team Member</h4>
+  </div>
+  <div class="modal-body">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+
+      @Html.LabelFor(m => m.TeamMember.Email)
+      @Html.TextBoxFor(m => m.TeamMember.Email, new { @class = "form-control" })
+    </div>
+    <div class="form-group ">
+      @Html.LabelFor(m => m.WelcomeMessage)
+      @Html.TextAreaFor(m => m.WelcomeMessage, new { @class = "form-control", @rows = 6 })
+    </div>
+    <div class="form-group ">
+      @Html.LabelFor(m => m.TeamMember.CanViewReports)
+      <div class="row">
+        <div class="col-md-12">
+          <input checked="checked" id="CanViewReports" name="TeamMember.CanViewReports" type="checkbox" value="True">
+          <label for="CanViewReports">Let this user view full company reports.</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group ">
+      @Html.LabelFor(m => m.TeamMember.AccessibleAreaIds) <span class="text-muted small">Tick the areas you'd like this person to be able to update.</span>
+      <div class="row">
+        @foreach (var area in Model.ListHelper.GetAreas())
+        {
+          <div class="col-md-6">
+            <input checked="checked" id="AccessibleAreaIds_@area.Id" name="TeamMember.AccessibleAreaIds" type="checkbox" value="@area.Id">
+            <label for="AccessibleAreaIds_@area.Id">@area.Name</label>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-save ladda-button ajax-submit" data-success-callback="reloadPage" type="button" data-style="expand-left"><span class="ladda-label"><i class="fa fa-check"></i> Send Invite</span></button>
+    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+  </div>
+}

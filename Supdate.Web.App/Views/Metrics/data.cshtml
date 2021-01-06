@@ -1,0 +1,103 @@
+﻿@using StackExchange.Exceptional.Extensions
+@using Supdate.Web.App.Models
+@model MetricDataViewModel
+@{
+  ViewBag.Title = " Metric Data";
+}
+@section footer{
+  <div class="pull-right">
+    <button class="btn btn-save ladda-button" data-success-callback="reloadPage" data-style="expand-left" type="button" id="save-metric-data"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+  </div>
+}
+<div class="row">
+  <div class="col-lg-12">
+
+    <section class="panel">
+      @using (Html.BeginForm("ImportMetricData", "Metrics", FormMethod.Post, new { role = "form", @id = "reportMetricDataForm", @class = "ajax-form inline-form" }))
+      {
+        <header class="panel-heading panel-heading-main">
+          @ViewBag.title
+
+          <div class="pull-right">
+            @if (ViewBag.ShowImportButton)
+            {
+              <button type="submit" class="btn btn-white btn-add-new ajax-submit ladda-button" data-style="expand-left"  id="import-metrics-data-btn" href="#" data-success-callback="importMetricData_cb">
+                <span class="ladda-label">
+                  <i class=" fa fa-download">
+                  </i> Import
+                </span>
+              </button>
+              <input type="hidden" name="year" value="@Model.Year" id="import-year"/>
+            }
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-bs-default" id="metric-data-toggle-targets">Targets</button>
+              <button type="button" class="active btn btn-bs-default" id="metric-data-toggle-actuals">Actuals</button>
+            </div>
+            <nav class="pagination-metric-data">
+              <ul class="pagination pagination-metric-data">
+                <li>
+                  <a href="#" id="year-minus" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                <li><a href="#" id="year-shown">@Model.Year</a></li>
+                <li>
+                  <a href="#" id="year-plus" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </header>
+      }
+      <div class="panel-body">
+        <div class="form-group col-sm-12 explainer">
+          <span id="explainer-target" style="display: none;">
+            <p class="help-block">Enter target values for your Metrics. Use the buttons above to switch between Targets and Actuals. </p>
+            <p class="help-block">These are displayed on your graphs alongside the actual values you acheive.</p>
+          </span>
+          <span id="explainer-actual">
+            <p class="help-block">Enter the values achieved for your Metrics.</p>
+            <p class="help-block">It's optional whether you edit them here as you are also prompted to provide them on a per-month basis when you create a report.</p>
+          </span>
+        </div>
+
+        @if (Model.Metrics.Any())
+        {
+          using (Html.BeginForm("Data", "Metrics", FormMethod.Post, new { role = "form", id = "metricsDataForm", @class = "ajax-form" }))
+          {
+            <div class="form-group col-sm-12" id="metricDataContainer">
+              @Html.Partial("_dataTable")
+            </div>
+            <input type="hidden" id="start-index" value="@Model.StartIndex"/>
+            <input type="hidden" class="ajax-submit" data-success-callback="saveMetricData_cb"/>
+            <input type="hidden" id="data-url" value="@Url.Action("AddData", new { year = 9999, startIndex = 8888 }) "/>
+          }
+        }
+
+      </div>
+    </section>
+  </div>
+</div>
+
+
+@section scripts{
+  @Scripts.Render("~/bundles/graphs")
+  <script type="text/javascript">
+
+    graphDataGetUrl = '@if (Model.Metrics.Count > 0)
+                       {
+                         @Url.Action("GraphData")
+                       }';
+  </script>
+  @if (ViewBag.ShowImportButton)
+  {
+    <script type="text/javascript">
+      if ($("#import-metrics-data-btn").is(":visible")) {
+        flashTip("#import-metrics-data-btn", "left", "Click here to import from your Data Sources", 1500, 12000);
+      }
+    </script>
+   }
+}

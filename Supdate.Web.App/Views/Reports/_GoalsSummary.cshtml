@@ -1,0 +1,30 @@
+﻿@model Supdate.Web.App.Models.ReportSummary
+@{
+  var completedReportGoalsPercentage = 0;
+  var report = Model.Report;
+  var totalGoals = Model.ListHelper.GetGoals().Count();
+  var completedReportGoals = report.GoalList.Where(g => g.ReportGoalId > 0).Count();
+  if (completedReportGoals > 0) { completedReportGoalsPercentage = 100;}
+}
+@if (totalGoals > 0){
+<div class="col-lg-6">
+  <section class="panel">
+    <header class="panel-heading">
+      <div class="pull-right">
+        <ul class="icon-links">
+          <li><a title="" data-placement="left" data-toggle="tooltip" class="tooltips" href="@Url.Action("Goals", "Reports", new { year = report.Date.Year, month = report.Date.Month })" data-original-title="Provide Goal Updates"><i class="fa fa-pencil"></i></a></li>
+        </ul>
+      </div>
+      Goals
+    </header>
+    <div class="panel-body" data-match-neighbour-height="true">
+      <div class="progress progress-xs">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@completedReportGoals" aria-valuemin="0" aria-valuemax="@Model.CompanyMetadata.GoalCount" style="width: @completedReportGoalsPercentage%">
+          @*<span class="sr-only">60% Complete (success)</span>*@
+        </div>
+      </div>
+      You have updated the progress of @completedReportGoals goals
+    </div>
+  </section>
+</div>
+}

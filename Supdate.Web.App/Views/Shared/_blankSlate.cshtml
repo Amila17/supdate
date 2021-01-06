@@ -1,0 +1,15 @@
+﻿@model Supdate.Web.App.Models.BlankSlateModel
+@{
+    Layout = null;
+}
+
+<div class="clearfix"></div>
+<div class="blank-slate">
+  <div class="text-center">
+    <a class="btn-lg btn-blank-slate" href="#" data-modal-url="@Model.Url">Add <span class="hidden-xs">Your First</span> @Model.EntityName</a>
+  </div>
+  <div class="text-center blank-slate-helper-text">
+    In future, you can add new @(Model.EntityName)s using<br />
+    the "Add New" button at the top-right of the page.
+  </div>
+</div>

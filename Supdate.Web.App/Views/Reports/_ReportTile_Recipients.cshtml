@@ -1,0 +1,35 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@model Supdate.Web.App.Models.ReportSummary
+@{
+  var emailsSentInfo = String.Format("Emailed to {0} {1}. ", Model.Report.RecipientCount, StringUtil.Pluralise("person", "people", Model.Report.RecipientCount));
+  var emailsViewedInfo = (Model.Report.RecipientViewedCount > 0) ? String.Format("Viewed by {0}.", Model.Report.RecipientViewedCount) : "Not viewed yet.";
+
+}
+<div>
+  @emailsSentInfo <br />
+  @emailsViewedInfo <br />
+  <a class="link view-report-recipients" href="#" data-hide-and-slide="report-recipients-@Model.Report.Date.ToString("yyyyMMdd", CultureInfo.InvariantCulture)">Show Details</a>.
+</div>
+<div class="report-recipients" id="report-recipients-@Model.Report.Date.ToString("yyyyMMdd", CultureInfo.InvariantCulture)">
+  <table class="table table-sm table-striped">
+    @foreach (var reportEmail in Model.Report.ReportEmails)
+    {
+      var recipient = reportEmail.Recipient;
+      var emailStatus = (reportEmail.Views > 0) ? "Viewed" : "Sent";
+      <tr>
+        <td class="gravatar-cell" data-visible-parent-width-min="300" data-parent-selector=".panel">@Html.GravatarWithDefault(recipient.Email, 20)</td>
+        <td style="
+                                    max-width: calc(100% - 50px);">
+          @recipient.DisplayName
+        </td>
+        <td class="text-center send-status">@emailStatus</td>
+      </tr>
+    }
+  </table>
+</div>
+
+
+

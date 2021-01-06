@@ -1,0 +1,51 @@
+﻿@model Supdate.Web.App.Models.ReportSummary
+@{
+  var completedReportAreas = 0;
+  var report = Model.Report;
+  if (Model.CompanyMetadata.AreaCount != 0)
+  {
+    completedReportAreas = (report.AreasCompleted * 100) / Model.CompanyMetadata.AreaCount;
+  }
+}
+<div class="col-lg-6">
+  <section class="panel">
+    <header class="panel-heading">
+      Reporting Areas
+    </header>
+    <div class="panel-body" data-match-neighbour-height="true">
+      <div class="progress progress-xs">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@report.AreaCount" aria-valuemin="0" aria-valuemax="@Model.CompanyMetadata.AreaCount" style="width: @completedReportAreas%">
+          @*<span class="sr-only">66% Complete (success)</span>*@
+        </div>
+      </div>
+      <table class="table table-striped">
+        <tbody>
+          @if (Model.CompanyMetadata.AreaCount > 0)
+          {
+            foreach (var area in Model.ListHelper.GetAreas())
+            {
+              var reportArea = report.AreaList != null ? report.AreaList.FirstOrDefault(ra => ra.AreaId == area.Id) : null;
+              bool reportAreaCompleted = reportArea != null && reportArea.Completed;
+              bool hasFiles = reportArea != null ? reportArea.Attachments.Any() : false;
+              int fileCount = hasFiles ? reportArea.Attachments.Count : 0;
+
+              <tr>
+                <td>@area.Name</td>
+                <td class="text-right">
+                  @if (hasFiles)
+                  {
+                    <i class="fa fa-paperclip" title="@fileCount files attached"></i>
+                    <text>&nbsp;</text>
+                  }
+                  <a class="btn @(reportAreaCompleted ? "btn-success" : "btn-default") btn-xs tooltips" data-placement="@(reportAreaCompleted ? "top" : "left")"
+                     data-toggle="tooltip" href="@Url.Action("ReportAreaInfo", "Reports", new { year = report.Date.Year, month = report.Date.Month, areaUniqueId = area.UniqueId })"
+                     data-original-title="Edit"><i class="@(reportAreaCompleted ? "fa fa-check" : "fa fa-pencil")"></i></a>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

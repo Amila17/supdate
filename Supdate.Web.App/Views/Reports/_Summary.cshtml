@@ -1,0 +1,33 @@
+﻿@using Supdate.Model
+@model Report
+<div class="col-lg-6">
+  <section class="panel">
+    <header class="panel-heading">
+      <div class="pull-right">
+        <ul class="icon-links">
+          <li data-placement="left" data-toggle="tooltip" class="tooltips" href="#" data-original-title="Write Summary">
+            <a title="" data-toggle="modal" href="#reportSummaryEntry"><i class="fa fa-pencil"></i></a>
+          </li>
+        </ul>
+      </div>
+      Summary
+    </header>
+    <div class="panel-body" id="viewSummary" data-match-neighbour-height="true">
+        <div class="report-summary-holder">
+            @if (String.IsNullOrEmpty(Model.Summary))
+            {
+                <p id="no-summary">
+                    <em>Provide a summary for the report.<br/>It might help to preview the report so far first.<br/></em>
+                </p>
+            }
+            <span id="reportSummary" class="bs-reset" data-vertical-center="true">@Html.Raw(Model.Summary)</span>
+        </div>
+      @if (!String.IsNullOrEmpty(Model.Summary))
+      {
+        <div class="report-summary-fade hidden-xs"></div>
+      }
+
+    </div>
+  </section>
+</div>
+@Html.Partial("_SummaryModal")

@@ -1,0 +1,43 @@
+﻿@model Supdate.Web.App.Models.ReportSummary
+@{
+  var currentUser = Model.CurrentUser;
+  var hasMetrics = Model.ListHelper.GetMetrics().Any();
+  var hasGoals = Model.ListHelper.GetGoals().Any();
+  var startSentence = (hasMetrics || hasGoals) ? "You'll then be able to provide" : "Provide";
+}
+@if (hasMetrics || hasGoals) {
+  <p class="help-block">
+    @if (hasMetrics)
+    {
+      <text>Start by providing updated values for each of your Metrics. </text>
+
+    }
+    @if (hasGoals)
+    {
+      if (hasMetrics)
+      {
+        <text>Then select which Goals you'd like to provide updates on.</text>
+      }
+      else
+      {
+        <text>Select which Goals you'd like to provide updates on.</text>
+      }
+    }
+  </p>
+}
+<p class="help-block">
+
+  @if (currentUser.CanWriteReportSummary)
+  {
+    <text>
+      @startSentence an update for each Reporting Area and finally write a short summary.
+    </text>
+  }
+  else
+  {
+    var eachOrYour = (currentUser.AccessibleAreaIds.Count() > 1) ? "each" : "your";
+    <text>
+     @startSentence an update for @eachOrYour Reporting Area.
+    </text>
+  }
+</p>

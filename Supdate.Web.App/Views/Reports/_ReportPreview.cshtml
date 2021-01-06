@@ -1,0 +1,166 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@using Supdate.Web.App.Extensions
+@model Supdate.Model.Report
+@{
+  bool canEdit = ViewBag.CanEdit ?? false;
+  bool canComment = ViewBag.CanComment ?? false;
+}
+<div class="report-header">
+
+  <div class="report-logo">
+    @if (!string.IsNullOrWhiteSpace(@Model.CompanyLogo))
+    {
+      <img src="@Url.Content(@Model.CompanyLogo)" alt="Logo">
+    }
+  </div>
+  <div class="report-titles">
+    <h1>@Model.CompanyName</h1>
+    <h2 class="@Html.ReportEditClass(canEdit)" @Html.ReportEditDataTags(canEdit, "modal", "edit-title") id="report-title-heading">@Model.Title</h2>
+    <h3>@Model.Date.ToString("MMMM \\'yy", CultureInfo.InvariantCulture)</h3>
+  </div>
+  <div class="clearfix"></div>
+</div>
+
+<div class="report-summary bs-reset clearfix @Html.ReportEditClass(canEdit) @Html.ReportCommentClass(canComment)" id="summary-container" @Html.ReportEditDataTags(canEdit, "js", "summary")>
+  <h1>Summary</h1>
+  <span id="summary-view">@Html.Raw(Model.Summary)</span>
+  @if (canEdit)
+  {
+    using (Html.BeginForm("ReportSummary", "Reports", FormMethod.Post, new { role = "form", @class = "edit-form" }))
+    {
+      <div id="summary-edit" style="display: none;">
+        <textarea class="form-control tinymce-basic" id="summary" name="Summary">@Model.Summary</textarea>
+        <input type="hidden" id="summary_vanilla" value="@Model.Summary" />
+        <input name="Month" type="hidden" value="@Model.Date.Month">
+        <input name="Year" type="hidden" value="@Model.Date.Year">
+        <div id="summary-edit-buttons" class="sup-edit-btns pull-right" style="display: none;">
+          <button type="submit" class="btn btn-save">Update</button>
+          <a class="btn btn-default edit-btn-cancel">Cancel</a>
+        </div>
+      </div>
+    }
+  }
+  @if (canComment)
+  {
+    @Html.Partial("_discuss", new Discussion { ReportGuId = Model.UniqueId, Target = Guid.Empty, TargetType = DiscussionTargetType.Summary })
+  }
+  <input type="hidden" name="reportId" id="reportId" value="@Model.Id">
+</div>
+
+
+@foreach (var reportArea in @Model.AreaList)
+{
+  var areaUniqueId = reportArea.AreaUniqueId.ToString();
+  var col_lg = 7;
+  var col_md = 6;
+  var displayLeftColumn = (canEdit || !String.IsNullOrWhiteSpace(reportArea.Summary) || reportArea.Attachments.Any() || reportArea.ReportGoalList.Any(g => g.ReportGoalId > 0));
+  if (!reportArea.MetricList.Any())
+  {
+    col_lg = 12;
+    col_md = 12;
+  }
+  <div class="reporting-area">
+    @if (!displayLeftColumn && canComment)
+    {
+      <div class="@Html.ReportCommentClass(canComment)">
+        <h2>@reportArea.AreaName</h2>
+        @Html.Partial("_discuss", new Discussion { ReportGuId = Model.UniqueId, Target = reportArea.AreaUniqueId, TargetType = DiscussionTargetType.Area })
+      </div>
+    }
+    else
+    {
+      <h2>@reportArea.AreaName</h2>
+    }
+    <div class="row bottom-border">
+      @if (displayLeftColumn)
+      {
+        <div class="col-lg-@col_lg col-md-@col_md col-sm-12 col-xs-12 report-area-left-col">
+          <div class="reporting-area-info  bs-reset @Html.ReportCommentClass(canComment)  @Html.ReportEditClass(canEdit)" @Html.ReportEditDataTags(canEdit, "js", "area-" + areaUniqueId)>
+            <span class="reporting-area-info-view" id="area-@areaUniqueId-view">@(Html.Raw(reportArea.Summary))</span>
+            @if (canEdit)
+            {
+              using (Html.BeginForm("UpdateAreaSummary", "Reports", new { year = Model.Date.Year, month = Model.Date.Month, areaUniqueId }, FormMethod.Post, new { role = "form", @class = "edit-form" }))
+              {
+                <div id="area-@areaUniqueId-edit" style="display: none;">
+                  <textarea class="tinymce-basic" id="area-@areaUniqueId" name="summary">@reportArea.Summary</textarea>
+                  <input type="hidden" id="area-@(areaUniqueId)_vanilla" value="@reportArea.Summary"/>
+                  <div id="area-@areaUniqueId-edit-buttons" class="sup-edit-btns pull-right" style="display: none;">
+                    <button type="submit" class="btn btn-save">Update</button>
+                    <a class="btn btn-default edit-btn-cancel">Cancel</a>
+                  </div>
+                </div>
+              }
+            }
+            @if (canComment)
+            {
+              @Html.Partial("_discuss", new Discussion { ReportGuId = Model.UniqueId, Target = reportArea.AreaUniqueId, TargetType = DiscussionTargetType.Area })
+            }
+          </div>
+
+          @if (reportArea.Attachments.Any())
+          {
+            @Html.Partial("_ReportPreview_Attachments", reportArea.Attachments)
+          }
+          @foreach (var reportGoal in @reportArea.ReportGoalList.Where(g => g.ReportGoalId > 0))
+          {
+            @Html.Partial("_ReportGoalPreview", reportGoal)
+          }
+        </div>
+      }
+      @foreach (var metricView in @reportArea.MetricList)
+      {
+        <div class="area-metric col-lg-5 col-md-6 col-sm-12 col-xs-12">
+          @Html.Partial("_ReportMetricGraph", metricView)
+        </div>
+      }
+
+    </div>
+  </div>
+}
+
+@if (Model.GoalList.Any(rg => rg.AreaId == null && rg.ReportGoalId > 0))
+{
+  <div class="reporting-area">
+    <h2>Other Goals</h2>
+    <div class="row bottom-border">
+      <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        @foreach (var otherGoal in @Model.GoalList.Where(rg => rg.AreaId == null && rg.ReportGoalId > 0))
+        {
+          @Html.Partial("_ReportGoalPreview", otherGoal)
+        }
+      </div>
+    </div>
+  </div>
+}
+
+@if (Model.MetricList.Any(rm => rm.AreaId == null))
+{
+  <div class="reporting-area">
+    <h2>Other Metrics</h2>
+    <div class="row bottom-border">
+        @foreach (var otherMetric in @Model.MetricList.Where(rm => rm.AreaId == null))
+        {
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            @Html.Partial("_ReportMetricGraph", otherMetric)
+          </div>
+        }
+    </div>
+  </div>
+}
+
+@if (Model.AttachmentList.Where(a => a.AreaId == null).Any())
+{
+  <div class="reporting-area">
+    <h2>Attachments</h2>
+    <div class="row bottom-border">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        @Html.Partial("_ReportPreview_Attachments", Model.AttachmentList.Where(a => a.AreaId == null))
+      </div>
+    </div>
+  </div>
+}
+@if (canEdit)
+{
+  @Html.Partial("_InlineEdit_Title")
+}

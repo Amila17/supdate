@@ -1,0 +1,163 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@using Supdate.Web.App.Extensions
+@model ReportEmailBuilder
+@{
+  ViewBag.Title = "Email Report";
+  var rowIndex = 0;
+  var reportEditUrl = Url.Action("Edit", "Reports", new { year = Model.ReportDate.Year, month = Model.ReportDate.Month });
+
+}
+@section footer{
+  <div class="pull-right">
+    <div class="btn-group dropup">
+      <button type="button" id="sendReport" class="btn btn-save ladda-button" data-style="expand-left">
+        <span class="ladda-label"><i class="fa fa-envelope-o"></i> Send Report</span>
+      </button>
+      <button type="button" class="btn btn-save dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a data-toggle="modal" href="#reportSendPreviewModal">Send Preview</a></li>
+        @if (Model.RecipientList.Any(e => e.ReportEmailSentDate != default(DateTime)))
+        {
+          <li><a data-toggle="modal" href="#previousSends">View Sent Log</a></li>
+
+        }
+        <li role="separator" class="divider"></li>
+        <li><a data-toggle="modal" href="#customizeEmail">Edit Email Template</a></li>
+        <li><a data-toggle="modal" href="#senderDetails">Edit Sender Address</a></li>
+      </ul>
+    </div>
+    <a href="@Url.Action("Index", "Reports")" class="btn btn-default">Cancel</a>
+  </div>
+}
+@section scripts{
+  <script type="text/javascript" src="/Scripts/app.reportEmail.js"> </script>
+}
+<div class="row">
+  <div class="col-xs-12">
+
+    @Html.Partial("_ReportIncompleteWarning")
+
+    @Html.Partial("_EnableCommentingPrompt")
+
+    <form role="form" id="reportEmailForm">
+      @Html.HiddenFor(m => m.ReportDate)
+      @Html.HiddenFor(m => m.DefaultReportEmailBody)
+      @Html.HiddenFor(m => m.DefaultReportEmailSubject)
+      @Html.HiddenFor(m => m.ReportTitle)
+      @Html.HiddenFor(m => m.ReportDisplayMonth)
+      @Html.HiddenFor(m => m.ReportDisplayYear)
+      @Html.HiddenFor(m => m.SendEmail)
+      <div class="panel">
+        <header class="panel-heading panel-heading-main">
+          <a href="@reportEditUrl" title="Back"><i class="fa fa fa-angle-double-left"></i></a> @Model.ReportDate.ToString("MMMM", CultureInfo.InvariantCulture) @Model.ReportDate.Year - Email Report
+          <input type="hidden" name="ReportDate" value="@Model.ReportDate" />
+          <input type="hidden" name="ReportId" id="ReportId" value="@Model.ReportId" />
+        </header>
+        <div class="panel-body">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>From</label>
+              <div class="iconic-input right">
+                <i class="fa fa-edit" style="cursor: pointer;"></i>
+                <input class="form-control" id="Sender_Preview" name="Sender_Preview" type="text"
+                       value="@Model.SenderPreview" style="cursor: pointer;" readonly="readonly">
+              </div>
+            </div>
+            <div class="pull-right">
+              <a href="#" class="link small" data-modal-url="@Url.Action("Details", "Recipients", new { uniqueId = Guid.Empty })">Add a Recipient</a>
+            </div>
+            <label>Recipients</label>
+            @if (Model.RecipientList.Count > 0)
+            {
+              <table class="table table-striped" id="recipients">
+                @if (Model.RecipientList.Count > 3)
+                {
+                  <thead>
+                    <tr>
+                      <th class="w24">
+                        <input type="checkbox" class='select-all' data-group="recipients" />
+                      </th>
+                      <th></th>
+                      <th></th>
+                      <th class="hidden-xs"></th>
+                    </tr>
+                  </thead>
+                }
+                <tbody>
+                  @foreach (var recipient in Model.RecipientList)
+                  {
+                    <tr>
+                      <td class="w16">
+                        <input type="checkbox" data-group="recipients" name='RecipientList[@rowIndex].IsSelected' value='true' />
+                        <input type="hidden" name='RecipientList[@rowIndex].Id' value='@recipient.Id' />
+                        <input type="hidden" name='RecipientList[@rowIndex].FirstName' value='@recipient.FirstName' />
+                        <input type="hidden" name='RecipientList[@rowIndex].LastName' value='@recipient.LastName' />
+                        <input type="hidden" name='RecipientList[@rowIndex].Email' value='@recipient.Email' />
+                      </td>
+                      <td class="w24">@Html.GravatarWithDefault(recipient.Email, 24)</td>
+                      <td>
+                        @recipient.FirstName @recipient.LastName
+                      </td>
+                      <td class="hidden-xs">
+                        @recipient.Email
+                      </td>
+                    </tr>
+                    rowIndex++;
+                  }
+                </tbody>
+              </table>
+
+            }
+            else
+            {
+
+              <p>It looks like you've not yet told us who you want your reports emailed to.</p>
+              <p>
+                <a href="#" class="link" data-modal-url="@Url.Action("Details","Recipients", new { uniqueId = Guid.Empty })">Click here</a> to add a recipient.
+              </p>
+            }
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Subject</label>
+              <div class="iconic-input right">
+                <i class="fa fa-edit" style="cursor: pointer;"></i>
+                <input class="form-control" id="ReportEmailSubject_Preview" name="ReportEmailSubject_Preview" type="text" value="" style="cursor: pointer;" readonly="readonly">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <div id="ReportEmailBody_Preview">
+                <iframe frameborder="0" id="ReportEmailBody_PreviewFrame" name="ReportEmailBody_PreviewFrame" width="100%" height="300"></iframe>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      @Html.Partial("~/Views/Reports/_ReportEditEmail.cshtml", Model)
+      @Html.Partial("~/Views/Reports/_ReportSenderDetails.cshtml", Model)
+      @Html.Partial("~/Views/Reports/_ReportSendPreview.cshtml", new Recipient { FirstName = Model.PreviewFirstName, LastName = Model.PreviewLastName, Email = Model.OwnerEmail })
+
+    </form>
+  </div>
+</div>
+<form method="POST" target="ReportEmailBody_PreviewFrame" name="bodyPreview" id="bodyPreview" action="@Url.Action("ReportEmailBodyPreview")">
+  <input type="hidden" name="month" value="@Model.ReportDate.Month" />
+  <input type="hidden" name="year" value="@Model.ReportDate.Year" />
+  <input type="hidden" name="userBody" id="userBody" />
+  @if (Model.RecipientList.Any(e => e.FirstName != ""))
+  {
+    var dummyRecipient = Model.RecipientList.Where(e => e.FirstName != "").FirstOrDefault();
+    <input type="hidden" name="firstName" id="firstName" value="@dummyRecipient.FirstName" />
+    <input type="hidden" name="lastName" id="lastName" value="@dummyRecipient.LastName" />
+  }
+</form>
+
+@Html.Partial("~/Views/Reports/_ReportPreviousSends.cshtml", Model.RecipientList)
+

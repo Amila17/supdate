@@ -1,0 +1,122 @@
+﻿@using Supdate.Web.App.Models
+@using Supdate.Util
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="~/img/favicon.png">
+
+  <title>@ViewBag.Title</title>
+  @Styles.Render("~/Content/css")
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic" rel="stylesheet" />
+  <link href="@Url.Content("~/Assets/font-awesome/css/font-awesome.min.css")" rel="stylesheet" />
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltips and media queries -->
+  <!--[if lt IE 9]>
+  @Scripts.Render("~/bundles/media-queries")
+  <![endif]-->
+</head>
+<body>
+  <section id="container" class="">
+    <!--header start-->
+    <header class="header white-bg">
+      <div class="sidebar-toggle-box">
+        <div id="sidebarToggle" class="fa fa-bars"></div>
+      </div>
+      <!--logo start-->
+      <a href="@Url.Action("Index", "Home", new { area = string.Empty })" class="logo">
+        <img src="@Url.Content("~/Assets/logo.png")" alt="Monthly Updates Made Easy">
+      </a>
+
+      <!--logo end-->
+      <div class="top-nav ">
+        <ul class="nav pull-right top-menu" id="user-dd">
+          @Html.Partial("_LoginPartial")
+        </ul>
+      </div>
+    </header>
+    <!--header end-->
+    <!--sidebar start-->
+    @Html.Partial("_Sidebar")
+    <!--sidebar end-->
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper site-min-height site-max-width @if (IsSectionDefined("footer"))
+                                                           {@("page-has-footer")}">
+        <!-- page start-->
+        <div id="content-holder">
+          @RenderBody()
+          <div class="text-center almost-hidden">@ConfigUtil.DataCentreLocation</div>
+          <span id="notificationType" style="display: none">@TempData["messageType"]</span>
+          <span id="notificationMessage" style="display: none">@TempData["messageText"]</span>
+        </div>
+        <!-- page end-->
+      </section>
+      @if (IsSectionDefined("footer"))
+      {
+        <div class="footer-fade hidden-xs"></div>
+        <footer class="footer">
+          @RenderSection("footer", required: false)
+        </footer>
+      }
+    </section>
+    <!--main content end-->
+  </section>
+
+  <div id="splash">
+    <div id="splash-content">
+      <img src="@ViewBag.LogoPath" />
+      <h1>@ViewBag.CompanyName</h1>
+    </div>
+  </div>
+  @Html.Partial("_SiteUrls")
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/jqueryval")
+  @Scripts.Render("~/bundles/bootstrap-plus")
+  @RenderSection("scripts", required: false)
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-50307149-3', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script type="text/javascript">
+    window.__lo_site_id = 67379;
+
+    try {
+      window.__wtw_lucky_no_chat_box = true; // Hide the chat box.
+    } catch (ex) { }
+
+    (function () {
+      var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+      wa.src = '//d10lpsik1i8c69.cloudfront.net/w.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+    })();
+
+    @if (!ViewBag.AcceptedLatestTerms)
+    {
+      <text>
+      $(function () {
+        modalUrl('@Url.Action("TermsAndConditions", "Account")', true);
+      });
+      </text>
+    }
+  </script>
+  <script id="confirmNotificationTemplate" type="text/html">
+    <h4><# =templateTitle #></h4>
+    <div class="toaster-msg"><# =templateMessage #></div>
+    <div class="text-center">
+      <button type="button" id="okBtn" onclick='<#= returnFunction #>' class="btn btn-confirm-delete">Confirm</button>
+      <button type="button" id="cancelBtn" onclick="return false;" class="btn btn-default">Cancel</button>
+    </div>
+  </script>
+
+  @StackExchange.Profiling.MiniProfiler.RenderIncludes()
+</body>
+</html>

@@ -1,0 +1,66 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@using Supdate.Util
+@model IEnumerable<Company>
+@{
+  ViewBag.Title = "Your Companies";
+  string defaultLogo = ConfigUtil.DefaultLogoUrl;
+  string postSwitchUrl = Url.Action("Index", "Company") + "?splash=1";
+
+}
+<table class="table table-striped table-hover companiesList remove-empty-columns">
+  <thead>
+    <tr>
+      <th class="w24"></th>
+      <th>Name</th>
+      <th class="hidden-xs">Last Report</th>
+      <th class="dt-hidden"></th>
+      <th><span class="hidden-xs">Completed </span>Reports</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var c in Model)
+    {
+      var rawDate = "";
+      if (string.IsNullOrEmpty(c.LogoPath))
+      {
+        c.LogoPath = defaultLogo;
+      }
+      var completedReportPermalinkList = c.Permalinks.Where(r => r.Status == ReportStatus.Completed).OrderByDescending(r => r.Date);
+
+      <tr class="row-clickable">
+        <td onclick="return changeCompany('@c.UniqueId','@postSwitchUrl')" class="w24 text-center"><img class="icon-company-logo" src="@c.LogoPath" /></td>
+        <td onclick="return changeCompany('@c.UniqueId', '@postSwitchUrl')">
+
+          @if (c.Id == ViewBag.CompanyId)
+          {
+            <a href="#" onclick="return changeCompany('@c.UniqueId', '@postSwitchUrl')"><strong>@c.Name</strong></a>
+            <span class="text-success">(<i>Current</i>)</span>
+          }
+          else
+          {
+            <a href="#" onclick="return changeCompany('@c.UniqueId', '@postSwitchUrl')">@c.Name</a>
+          }
+        </td>
+        <td class="hidden-xs">
+          @if (completedReportPermalinkList.Any())
+          {
+            var lastReport = completedReportPermalinkList.OrderByDescending(r => r.Date).First();
+            rawDate = lastReport.Date.ToString(CultureInfo.InvariantCulture);
+
+            <a href="@Url.Action("ReportView", "Reports", new { id = @lastReport.UniqueId })" target="_blank">
+              @lastReport.Date.ToString("MMMM \\'yy", CultureInfo.InvariantCulture)
+            </a>
+          }
+      </td>
+      <td class="dt-hidden">@rawDate</td>
+      <td>
+        @if (completedReportPermalinkList.Any())
+        {
+          @Html.Partial("_permalinkList", completedReportPermalinkList)
+        }
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>

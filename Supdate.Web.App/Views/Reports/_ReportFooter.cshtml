@@ -1,0 +1,33 @@
+﻿@using Supdate.Model
+@model Supdate.Web.App.Models.ReportSummary
+@{
+  string footerButtonViewText = "Preview";
+  if (Model.Report.Status == ReportStatus.Completed)
+  {
+    footerButtonViewText = "View<span class='hidden-xs'> Report</span>";
+  }
+}
+
+@if (Model.Report.UniqueId != Guid.Empty)
+{
+  if (Model.CurrentUser.IsCompanyAdmin) {
+  <div class="pull-left" id="trash-icon">
+    <a class="btn btn-delete" type="button" id="btn-delete-report"><i class="fa fa-trash-o"></i></a>
+  </div>
+    using (Html.BeginForm("Delete", "Reports", FormMethod.Post, new { id = "delete-report", name = "delete-report" }))
+    {
+      @Html.Hidden("UniqueId", Model.Report.UniqueId)
+    }
+  }
+  <div class="pull-right">
+    @if (Model.CurrentUser.IsCompanyAdmin)
+    {
+      <a id="ftr-btn-send" class="btn" href="@Url.Action("send", "Reports", new { year = Model.Report.Date.Year, month = Model.Report.Date.Month })"><i class="fa fa-envelope-o margin-r-6"></i> Email</a>
+    }
+    @if (Model.CurrentUser.CanViewReports)
+    {
+      <a id="ftr-btn-view" class="btn" href="@Url.Action("ReportView", "Reports", new { id = Model.Report.UniqueId.ToString() })" target="_blank"><i class="fa fa-eye margin-r-16"></i> <span id="ftr-btn-view-lbl">@Html.Raw(footerButtonViewText)</span></a>
+    }
+</div>
+
+}

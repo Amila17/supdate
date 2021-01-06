@@ -1,0 +1,15 @@
+﻿@using Supdate.Model
+@model Supdate.Model.ReportEmailBuilder
+@{
+  var reportEditUrl = Url.Action("Edit", "Reports", new { year = Model.ReportDate.Year, month = Model.ReportDate.Month });
+}
+
+@if (@Model.ReportStatus != ReportStatus.Completed)
+{
+  <div class="alert alert-block alert-danger fade in">
+    <button data-dismiss="alert" class="close close-sm" type="button">
+      <i class="fa fa-times"></i>
+    </button>
+    <strong>Look out!</strong> This report doesn't seem to have been fully completed yet. Are you sure you don't want to <a href="@reportEditUrl">edit it</a>?
+  </div>
+}

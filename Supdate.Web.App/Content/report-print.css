@@ -1,0 +1,94 @@
+﻿body {
+  background-color: #FFFFFF;
+}
+
+.report-main-content {
+  padding: 0;
+  width: 100%;
+}
+
+.header {
+  display: none;
+}
+
+.wrapper {
+  margin-top: 0px;
+}
+
+.report-top-buffer {
+  display: none;
+}
+
+.report-header {
+  padding-top: 0px;
+}
+
+.report-titles h1 {
+  font-size: 28px;
+}
+
+.report-titles h2 {
+  font-size: 24px;
+}
+
+.report-titles h3 {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.report-summary {
+  background-color: #FFFFFF;
+  border: 1px solid #eeeeee;
+}
+
+  .report-summary h1, .reporting-area h2 {
+    font-size: 22px;
+  }
+
+.goal-status {
+  background-color: #FFFFFF;
+  color: #000000;
+  font-size: 11px;
+  -webkit-border-radius: 3.75px;
+  -moz-border-radius: 3.75px;
+  border-radius: 3.75px;
+  padding: 3px 6px 3px 6px;
+  margin-right: 6px;
+  min-width: 90px;
+  display: inline-block;
+  text-align: center;
+  border: 1px solid;
+}
+
+.goal-status-not-started {
+  color: #aaaaaa;
+  border-color: #aaaaaa;
+}
+
+.goal-status-on-schedule {
+  color: #009900;
+  border-color: #009900;
+}
+
+.goal-status-delayed {
+  color: #CC3300;
+  border-color: #CC3300;
+}
+
+.goal-status-completed {
+  color: #0099FF;
+  border-color: #0099FF;
+}
+
+.goal-status-cancelled {
+  color: #999999;
+  border-color: #999999;
+}
+
+.panel-no-graph .morris-thumb .fa {
+  visibility: hidden;
+}
+.sup-edit-frame, .side-comment {
+  visibility: hidden;
+}

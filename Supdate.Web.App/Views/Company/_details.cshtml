@@ -1,0 +1,30 @@
+﻿@using (Html.BeginForm("AddCompany", "Company", FormMethod.Post, new { role = "form", id = "companyForm", @class = "ajax-form" }))
+{
+
+  <div class="modal fade" id="companyDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 id="areaDetailsHeader" class="modal-title">Add a New Company</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group ">
+            <div class="row">
+              <div class="col-sm-12">
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <label for="Name">Company Name</label>
+                <input autofocus="autofocus" class="form-control" id="Name" name="Name" type="text" value="" data-val="true" data-val-length="Name cannot be longer than 200 characters." data-val-length-max="200" data-val-required="The Name field is required.">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="saveCompany" class="btn btn-save ladda-button ajax-submit" data-success-callback="createCompany_cb" type="submit" data-style="expand-left"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+          <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+}

@@ -1,0 +1,25 @@
+﻿@model HandleErrorInfo
+
+@{
+  Layout = "~/Views/Shared/_PreAuthLayout.cshtml";
+  ViewBag.Title = "Error";
+
+  string errorTitle = "Dang!";
+  if (!String.IsNullOrEmpty(ViewBag.errorTitle))
+  {
+    errorTitle = ViewBag.errorTitle;
+  }
+
+  string errorMessage = "Well, this is embarrassing.\n\nAn error occurred while we were processing your request.";
+  if (!String.IsNullOrEmpty(ViewBag.errorMessage))
+  {
+    errorMessage = ViewBag.errorMessage;
+  }
+}
+<form action="" class="form-signin" method="get" role="form" novalidate="novalidate">
+  <h2 class="form-signin-heading form-error-heading">@errorTitle</h2>
+  <div class="login-wrap">
+    <div class="form-group pre-wrap">@errorMessage</div>
+    <div><a href="javascript:history.back(0);">&lt; &lt; Go Back</a></div>
+  </div>
+</form>

@@ -1,0 +1,107 @@
+﻿@using System.Globalization
+@using System.Web.Services.Description
+@using Supdate.Model
+@using Supdate.Web.App.Models
+@model ReportMetricInfo
+@{
+  ViewBag.Title = "Report Metrics";
+  var rowIndex = 0;
+  var reportEditUrl = Url.Action("Edit", "Reports", new { year = Model.ReportDate.Year, month = Model.ReportDate.Month });
+}
+@section footer{
+  <div class="pull-right">
+    @if (Model.MetricViews.Count > 0)
+    {
+      <button type="submit" onclick="return validateReportMetricsDetails();" class="btn btn-save ladda-button" data-style="expand-left"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    }
+    <a href="@Url.Action("Edit", "Reports" , new { year=Model.ReportDate.Year, month=Model.ReportDate.Month })" class="btn btn-default">Cancel</a>
+
+  </div>
+}
+<div class="row">
+  <div class="col-lg-12">
+
+    <div class="panel">
+      <header class="panel-heading panel-heading-main">
+        @if (ViewBag.ShowImportButton)
+        {
+          using (Html.BeginForm("ImportMetricData", "Metrics", FormMethod.Post, new { role = "form", @id = "reportMetricDataForm", @class = "ajax-form" }))
+          {
+            <div class="pull-right">
+              <button type="submit" class="btn btn-md btn-add-new ajax-submit ladda-button" data-style="expand-left" href="#" data-success-callback="importMetricData_cb">
+                <span class="ladda-label">
+                  <i class=" fa fa-download">
+                  </i> Import</span>
+              </button>
+            </div>
+            <input type="hidden" name="year" value="@Model.ReportDate.Year"/>
+            <input type="hidden" name="month" value="@Model.ReportDate.Month" />
+          }
+        }
+        <a href="@reportEditUrl" title="Back"><i class="fa fa fa-angle-double-left"></i></a> @Model.ReportDate.ToString("MMMM", CultureInfo.InvariantCulture) @Model.ReportDate.Year - Metrics
+        <input type="hidden" name="reportMetricInfo.ReportDate" value="@Model.ReportDate">
+      </header>
+      @using (Html.BeginForm("Metrics", "Reports", FormMethod.Post, new { role = "form", @id = "reportMetricsForm" }))
+      {
+        <div class="panel-body">
+          <table class="table table-striped remove-empty-columns" id="reportMetrics">
+            <thead>
+            <tr>
+              <th>Metric</th>
+              <th class="hidden-xs">Reporting Area</th>
+              <th class="text-center">Target</th>
+              <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var metric in Model.MetricViews)
+            {
+              <tr>
+                <td>@metric.Name</td>
+                <td classs="hidden-xs">
+                  @if (metric.AreaId.HasValue && Model.ListHelper.GetAreas().Count() > 1)
+                  {
+                    @Model.ListHelper.GetAreaName(metric.AreaId ?? -1)
+                  }
+                </td>
+                <td class="text-center">
+                  @if (metric.Target.HasValue)
+                  {
+                    @metric.Prefix
+                    @metric.Target.Value
+                    @metric.Suffix
+                  }
+                </td>
+                <td class="paddish">
+                  <div class="input-group w140">
+                    @if (!String.IsNullOrEmpty(metric.Prefix))
+                    {
+                      <span class="input-group-addon">@metric.Prefix</span>
+                    }
+                    <input type='text' name='reportMetricInfo.MetricViews[@rowIndex].Actual' value='@metric.Actual' class="form-control input-sm text-right" data-val="true" data-val-regex="Value for @metric.Name must be a number." data-val-regex-pattern="^-?[0-9]\d*(\.\d+)?$" data-metricdatapoint-locator="@Model.ReportDate.ToString("yyyy-MM-dd")-@metric.Id" />
+                    @if (!String.IsNullOrEmpty(metric.Suffix))
+                    {
+                      <span class="input-group-addon">@metric.Suffix</span>
+                    }
+                  </div>
+                  <input type='hidden' name='reportMetricInfo.MetricViews[@rowIndex].Id' value='@metric.Id' />
+                  <input type='hidden' name='reportMetricInfo.MetricViews[@rowIndex].Date' value='@metric.Date' />
+                  <input type='hidden' name='reportMetricInfo.MetricViews[@rowIndex].MetricDataPointId' value='@metric.MetricDataPointId' />
+                  <input type='hidden' name='reportMetricInfo.MetricViews[@rowIndex].ReportId' value='@metric.ReportId' />
+                  <input type='hidden' name='reportMetricInfo.MetricViews[@rowIndex].CreatedDate' value='@metric.CreatedDate'>
+                  <input type='hidden' name='reportMetricInfo.MetricViews[@rowIndex].Name' value='@metric.Name' />
+                  <input type='hidden' name='reportMetricInfo.MetricViews[@rowIndex].Target' value='@metric.Target' />
+                </td>
+              </tr>
+                    rowIndex = rowIndex + 1;
+            }
+            </tbody>
+          </table>
+          <input type="hidden" name="reportMetricInfo.ReportDate" value="@Model.ReportDate" />
+        </div>
+      }
+      </div>
+
+    </div>
+  </div>
+

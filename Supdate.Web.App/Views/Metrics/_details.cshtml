@@ -1,0 +1,105 @@
+﻿@using Supdate.Web.App.Models
+@model MetricViewModel
+@{
+  Layout = null;
+  var modalTitle = (Model.Metric.UniqueId == Guid.Empty) ? "Add a Metric" : "Edit Metric";
+}
+@using (Html.BeginForm("Details", "Metrics", FormMethod.Post, new { role = "form", id = "metricsForm", @class = "ajax-form" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 id="metricDetailsHeader" class="modal-title">@modalTitle</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-12">
+          @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+          @Html.HiddenFor(m => m.Metric.Id)
+          @Html.HiddenFor(m => m.Metric.UniqueId)
+          @Html.LabelFor(m => m.Metric.Name, "Metric Name")
+          @Html.TextBoxFor(m => m.Metric.Name, new { @class = "form-control", placeholder = "Enter the metric name" })
+          <input type="hidden" id="Metric_DisplayOrder" name="Metric.DisplayOrder" value="@Model.Metric.DisplayOrder" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group" >
+      <div class="row">
+        <div class="col-md-2 col-sm-6">
+          @Html.LabelFor(m => m.Metric.Prefix, "Prefix")
+          @Html.TextBoxFor(m => m.Metric.Prefix, new { @class = "form-control"})
+        </div>
+        <div class="col-md-2 col-sm-6">
+          @Html.LabelFor(m => m.Metric.Suffix, "Suffix")
+          @Html.TextBoxFor(m => m.Metric.Suffix, new { @class = "form-control" })
+        </div>
+        <div class="col-md-4 col-sm-6">
+          @Html.LabelFor(m => m.Metric.ThousandsSeparator, "Thousands Separator")
+          @Html.CheckBoxFor(m => m.Metric.ThousandsSeparator, new { @class = "form-control metric-thousands-separator" })
+        </div>
+        <div class="col-md-4 col-sm-6">
+          @Html.LabelFor(m => m.Metric.LowerIsBetter, "Lower Value Is Better")
+          @Html.CheckBoxFor(m => m.Metric.LowerIsBetter, new { @class = "form-control metric-thousands-separator" })
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-6">
+          @Html.LabelFor(m => m.Metric.AreaId, "Reporting Area")
+          @Html.DropDownListFor(m => m.Metric.AreaId, Model.ListHelper.AreaList, new { @class = "form-control" })
+        </div>
+        <div class="col-sm-6">
+          @Html.LabelFor(m => m.Metric.GraphType, "Chart Type")
+          @Html.DropDownListFor(m => m.Metric.GraphType, Model.ListHelper.GraphTypesList, new { @class = "form-control" })
+        </div>
+      </div>
+    </div>
+    @if (Model.ListHelper.GetMetricDataSources().Any()) {
+    <div class="form-group">
+      <div class="row">
+        <div class="col-sm-12">
+          @Html.LabelFor(m => m.Metric.DataSourceId, "Data Source")
+          @Html.DropDownListFor(m => m.Metric.DataSourceId, Model.ListHelper.MetricDataSourceList, new { @class = "form-control" })
+        </div>
+      </div>
+    </div>
+    }
+    else
+    {
+      <input name="Metric_DataSourceId" type="hidden" value="-1"/>
+      if (ViewBag.IsCompanyAdmin != null && ViewBag.IsCompanyAdmin == true)
+      {
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-12">
+              @Html.LabelFor(m => m.Metric.DataSourceId, "Data Source")
+              <p>
+                <a href="@Url.Action("Intro", "DataSources")" class="link check-form-change">Learn more about Data Sources</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+  <div class="modal-footer">
+    @if (Model.Metric.UniqueId != Guid.Empty)
+    {
+      <div class="pull-left" id="trash-icon">
+        <button class="btn btn-delete" type="button" data-delete-entity="metric" data-delete-entity-id="@Model.Metric.UniqueId"><i class="fa fa-trash-o"></i></button>
+      </div>
+    }
+    <button class="btn btn-save ladda-button ajax-submit" data-success-callback="reloadPage" data-style="expand-left" type="button" id="saveMetricDetails"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+  </div>
+}
+<script>
+  $('*').tooltip('destroy');
+  $('#Metric_Name').focus();
+  if (getUrlVars()["guide"] == "mapmetrics") {
+    flashTip("#Metric_DataSourceId", "left", "Set the relevant Data Source here.", 500, 12000);
+  }
+</script>
+
+

@@ -1,0 +1,72 @@
+﻿@using System.Globalization
+@using Supdate.Web.App.Models
+@model GoalSettings
+@{
+  Layout = null;
+  var modalTitle = (Model.Goal.UniqueId == Guid.Empty) ? "Add a Goal" : "Edit Goal";
+}
+@using (Html.BeginForm("Details", "Goals", FormMethod.Post, new { role = "form", @class = "ajax-form" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title" id="goalDetailsHeader">@modalTitle</h4>
+  </div>
+  <div class="modal-body">
+      @Html.AntiForgeryToken()
+      <div class="form-group">
+        @Html.HiddenFor(m => m.Goal.Id)
+        @Html.HiddenFor(m => m.Goal.UniqueId)
+        @Html.LabelFor(m => m.Goal.Title, "Goal Name")
+        @Html.TextBoxFor(m => m.Goal.Title, new { @class = "form-control", placeholder = "Enter the goal name" })
+      </div>
+      <div class="form-group ">
+        <div class="row">
+          <div class="col-sm-6">
+            @Html.LabelFor(m => m.Goal.AreaId, "Reporting Area")
+            @Html.DropDownListFor(m => m.Goal.AreaId, Model.ListHelper.AreaList, new { @class = "form-control" })
+          </div>
+          <div class="col-sm-6">
+            @Html.LabelFor(m => m.Goal.Status, "Status")
+            @Html.DropDownListFor(m => m.Goal.Status, Model.ListHelper.GoalStatusList, new { @class = "form-control" })
+          </div>
+        </div>
+      </div>
+      <div class="form-group ">
+        <div class="row">
+          <div class="col-sm-6">
+            @Html.LabelFor(m => m.Goal.DueDate, "Due Date") <span class="text-muted small">(optional)</span>
+            <div class="input-append date w120" id="goalDueDate">
+              @Html.TextBoxFor(m => m.Goal.DueDate, new { @class = "form-control cursor-pointer", size = "16", @readonly = "" })
+              <span class="input-group-btn add-on">
+                    <button class="btn btn-gray btn-date-trigger" type="button"><i class="fa fa-calendar"></i></button>
+                  </span>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    @if (Model.Goal.UniqueId != Guid.Empty) {
+    <div class="pull-left" id="trash-icon"><button class="btn btn-delete" type="button" onclick="return promptDeleteEntity('goal', document.getElementById('Goal_UniqueId').value, null, deleteGoalPromptMsg)"><i class="fa fa-trash-o"></i></button>
+    </div>
+    }
+    <button class="btn btn-save ladda-button ajax-submit" data-success-callback="reloadPage" type="button" data-style="expand-left"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+  </div>
+
+}
+<script>
+  $("#goalDueDate").datepicker({
+    format: clientDateFormat,
+    autoclose: true
+  });
+
+</script>
+@if (Model.Goal.DueDate.HasValue)
+  {
+    var displayDate = Model.Goal.DueDate.Value.ToString("dd MMM yyyy", CultureInfo.InvariantCulture);
+    <script>
+      $("#Goal_DueDate").val("@displayDate");
+    </script>
+  }
+

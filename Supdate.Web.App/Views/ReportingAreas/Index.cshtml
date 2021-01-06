@@ -1,0 +1,155 @@
+﻿@using Supdate.Model
+@using Supdate.Web.App.Models
+@model ReportingAreaViewModel
+@{
+  ViewBag.Title = "Reporting Areas";
+  var isCompanyOwner = ViewBag.IsCompanyAdmin;
+}
+@if (isCompanyOwner)
+{
+  <div class="row">
+    <div class="col-lg-12">
+      <section class="panel">
+        <header class="panel-heading panel-heading-main">
+          Reporting Areas
+          <div class="pull-right">
+
+            <span id="add-new-span" data-original-title="Click here to add more">
+              <a class="btn-md btn-add-new" href="#" data-modal-url="@Url.Action("Details", new { uniqueId = Guid.Empty })"><i class="fa fa-plus"></i> Add New</a>
+            </span>
+
+          </div>
+        </header>
+        <div class="panel-body">
+          <div class="form-group col-sm-12" id="intro-text">
+            <p class="help-block">Reporting Areas are simply areas of your business that you want to report on. Typically these would be things like Marketing, Product, Finance.</p>
+            <p class="help-block">Add each Reporting Area for your business using the "Add New" button above. When you create a report you'll be prompted to provide an update for each of these areas.</p>
+          </div>
+          @if (Model.Areas.Any())
+          {
+            <div class="form-group col-sm-12">
+              <table class="table table-striped table-hover remove-empty-columns" id="area-list" data-sortable-entity="area">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th class="text-center">Metrics</th>
+                    <th class="text-center">Goals</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach (var area in Model.Areas.OrderBy(x => x.DisplayOrder).ThenBy(i => i.Id))
+                  {
+                    var editUrl = Url.Action("Details", new { uniqueId = area.UniqueId });
+                    <tr class="row-clickable" data-modal-url="@editUrl" data-area-id="@area.UniqueId">
+                      <td class="vertical-align-middle w36 mover"><span class="fa fa-bars"></span></td>
+                      <td><a class="helper" href="#" id="@(area.UniqueId)_name">@area.Name</a></td>
+                      <td class="text-center">
+                        @if (Model.ListHelper.MetricCountForArea(area.Id) > 0)
+                        {
+                          <a href="@Url.Action("Index", "Metrics", new { areaUniqueId = area.UniqueId })" class="no-propagation link">
+                            <span class="badge">@Model.ListHelper.MetricCountForArea(area.Id)</span>
+                          </a>
+                        }
+                      </td>
+                      <td class="text-center">
+                        @if (@Model.ListHelper.GoalCountForArea(area.Id) > 0)
+                        {
+                          <a href="@Url.Action("Index", "Goals", new { areaUniqueId = area.UniqueId })" class="no-propagation link">
+                            <span class="badge">@Model.ListHelper.GoalCountForArea(area.Id)</span>
+                          </a>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+          else
+          {
+            @Html.Partial("_blankSlate", new BlankSlateModel
+            {
+              Url = @Url.Action("Details", new { uniqueId = Guid.Empty }),
+              EntityName = "Reporting Area"
+            })
+          }
+        </div>
+      </section>
+    </div>
+  </div>
+}
+else // is a team member
+{
+  <div class="row">
+    <div class="col-lg-12">
+      <section class="panel">
+        <header class="panel-heading panel-heading-main">
+          Reporting Areas
+
+        </header>
+        <div class="panel-body">
+          <div class="form-group col-sm-12" id="intro-text">
+            <p class="help-block">Listed below are the areas of the business you are able to report on.</p>
+            <p class="help-block">You can add and edit the <a href="@Url.Action("Index", "Metrics")" class="link">Metrics</a> and <a href="@Url.Action("Index", "Goals")" class="link">Goals</a> for these areas.</p>
+            <p class="help-block">You provide your monthly updates in the <a href="@Url.Action("Index", "Reports")" class="link">Reports Section</a>.</p>
+          </div>
+          @if (Model.Areas.Any())
+          {
+            <div class="form-group col-sm-12">
+              <table class="table table-striped" id="area-list">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th class="text-center">Metrics</th>
+                    <th class="text-center">Goals</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach (var area in Model.Areas.OrderBy(x => x.DisplayOrder).ThenBy(i => i.Id))
+                  {
+                    <tr data-area-id="@area.Id">
+                      <td>@area.Name</td>
+                      <td class="text-center">
+                        @if (Model.ListHelper.MetricCountForArea(area.Id) > 0)
+                        {
+                          <a href="@Url.Action("Index", "Metrics", new { areaUniqueId = area.UniqueId })" class="no-propagation link">
+                            <span class="badge">@Model.ListHelper.MetricCountForArea(area.Id)</span>
+                          </a>
+                        }
+                      </td>
+                      <td class="text-center">
+                        @if (@Model.ListHelper.GoalCountForArea(area.Id) > 0)
+                        {
+                          <a href="@Url.Action("Index", "Goals", new { areaUniqueId = area.UniqueId })" class="no-propagation link">
+                            <span class="badge">@Model.ListHelper.GoalCountForArea(area.Id)</span>
+                          </a>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+          else
+          {
+            @Html.Partial("_NoReportingAreas")
+          }
+        </div>
+      </section>
+    </div>
+  </div>
+
+}
+@section scripts
+{
+  <script type="text/javascript">
+
+    if (@Model.Areas.Count() === 1 && isCompanyOwner) {
+      flashTip("#add-new-span", "left", "'Click here to add more Reporting Areas", 1500, 12000);
+      flashTip("#area-list", "top", "Click on a Reporting Area in this list to edit or delete it", 3000, 14000);
+    }
+  </script>
+}
+

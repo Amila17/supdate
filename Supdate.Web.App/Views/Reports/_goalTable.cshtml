@@ -1,0 +1,46 @@
+﻿@model ReportGoalInfo
+@using System.Globalization
+@using Supdate.Model
+@using Supdate.Util
+@using Supdate.Web.App.Models
+@{
+  Layout = null;
+  var goals = Model.ReportGoalList;
+}
+
+<table class="table table-striped remove-empty-columns">
+
+  <tbody>
+    @foreach (var goal in goals)
+    {
+      var goalStatusClass = goal.StatusClass();
+      var dateClass = (goal.Overdue) ? "text-danger" : "";
+      <tr>
+        <td class="w24">
+          <input type="checkbox" checked="@(goal.ReportGoalId > 0)" onchange="onGoalChanged(this, '@goal.UniqueId', '@((int) goal.Status)');"/>
+        </td>
+        <td class="w100">
+          <span class="goal-status @goalStatusClass ">
+            @goal.Status.DisplayName()
+          </span>
+        </td>
+        <td>
+          @goal.Title
+        </td>
+        <td class="hidden-xs @dateClass">
+          @if (goal.DueDate.HasValue)
+          {
+            @goal.DueDate.Value.ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture)
+          }
+        </td>
+        <td class="hidden-xs">
+          @if (goal.AreaId.HasValue && Model.ListHelper.GetAreas().Count() > 1)
+          {
+            @Model.ListHelper.GetAreaName(goal.AreaId ?? -1)
+          }
+        </td>
+
+      </tr>
+    }
+  </tbody>
+</table>

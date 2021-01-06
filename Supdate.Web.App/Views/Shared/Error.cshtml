@@ -1,0 +1,32 @@
+﻿@model HandleErrorInfo
+
+@{
+  Layout = Request.IsAuthenticated ? "~/Views/Shared/_Layout.cshtml" : "~/Views/Shared/_PreAuthLayout.cshtml";
+  ViewBag.Title = "Error";
+
+  string errorTitle = "Dang!";
+  if (!String.IsNullOrEmpty(ViewBag.errorTitle))
+  {
+    errorTitle = ViewBag.errorTitle;
+  }
+
+  string errorMessage = "Well, this is embarrassing.\n\nAn error occurred while we were processing your request.";
+  if (!String.IsNullOrEmpty(ViewBag.errorMessage))
+  {
+    errorMessage = ViewBag.errorMessage;
+  }
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        @errorTitle
+      </header>
+      <div class="panel-body">
+        <div class="form-group pre-wrap">@errorMessage</div>
+        <div><a href="javascript:history.back(0);">&lt; &lt; Go Back</a></div>
+      </div>
+    </section>
+  </div>
+</div>

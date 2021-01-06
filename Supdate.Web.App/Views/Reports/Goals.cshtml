@@ -1,0 +1,129 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@using Supdate.Util
+@using Supdate.Web.App.Models
+@model ReportGoalInfo
+@{
+  ViewBag.Title = "Report Goals";
+  var rowIndex = 0;
+  var reportEditUrl = Url.Action("Edit", "Reports", new { year = Model.ReportDate.Year, month = Model.ReportDate.Month });
+  var showingTabs = false;
+}
+@section footer{
+  <div class="pull-right">
+    @if (Model.ReportGoalList.Count > 0)
+    {
+      <button type="submit" onclick="return validateReportGoalsDetails();" class="btn btn-save ladda-button" data-style="expand-left"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    }
+    <a href="@Url.Action("Edit", "Reports", new { year = Model.ReportDate.Year, month = Model.ReportDate.Month })" class="btn btn-default">Cancel</a>
+  </div>
+}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+        <header class="panel-heading  panel-heading-main">
+            <a href="@reportEditUrl" title="Back"><i class="fa fa fa-angle-double-left"></i></a>  @Model.ReportDate.ToString("MMMM", CultureInfo.InvariantCulture) @Model.ReportDate.Year - Goals
+        </header>
+      @if (Model.ReportGoalList.Count > 0)
+      {
+        <div class="panel-body">
+          <div class="form-group col-sm-12" id="intro-text">
+            <p class="help-block">Select which goals you want to provide updates on. Any you leave un-selected will not be included in the report.</p>
+          </div>
+          <ul class="nav nav-tabs">
+
+            @if (Model.ReportGoalList.Count(g => g.Status == GoalStatus.Completed) > 0)
+            {
+              showingTabs = true;
+              <li role="presentation"><a data-toggle="tab" href="#completed-goals">Completed Goals</a></li>
+            }
+            @if (Model.ReportGoalList.Count(g => g.Status == GoalStatus.Cancelled) > 0)
+            {
+              showingTabs = true;
+              <li role="presentation"><a data-toggle="tab" href="#cancelled-goals">Cancelled Goals</a></li>
+            }
+            @if (showingTabs){
+            <li role="presentation" class="active"><a data-toggle="tab" href="#active-goals">Other Goals</a></li>
+            }
+          </ul>
+          <div class="tab-content m-top-12">
+            <div id="completed-goals" class="tab-pane fade">
+              @Html.Partial("_goalTable", new ReportGoalInfo
+                {
+                  ReportGoalList = Model.ReportGoalList.Where(g => g.Status == GoalStatus.Completed).ToList(),
+                  ListHelper = Model.ListHelper
+                }
+              )
+
+            </div>
+            <div id="cancelled-goals" class="tab-pane fade">
+              @Html.Partial("_goalTable",new ReportGoalInfo
+                {
+                  ReportGoalList = Model.ReportGoalList.Where(g => g.Status == GoalStatus.Cancelled).ToList(),
+                  ListHelper = Model.ListHelper
+                }
+              )
+            </div>
+            <div id="active-goals" class="tab-pane fade in active">
+              @Html.Partial("_goalTable",
+             new ReportGoalInfo
+               {
+                 ReportGoalList = Model.ReportGoalList.Where(g => (g.Status != GoalStatus.Completed) && (g.Status != GoalStatus.Cancelled)).ToList(),
+                 ListHelper = Model.ListHelper
+               }
+             )
+            </div>
+          </div>
+        </div>
+      }
+      else
+      {
+        <div class="panel-body">
+          No goals exist
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel">
+      @using (Html.BeginForm("Goals", "Reports", FormMethod.Post, new { id="reportGoalsDetailsForm", role = "form" }))
+      {
+        rowIndex = 0;
+        <input type="hidden" name="reportGoalInfo.ReportDate" value="@Model.ReportDate">
+        if (Model.ReportGoalList.Count > 0)
+        {
+          foreach (var goal in Model.ReportGoalList)
+          {
+            var goalStatusList = Model.ListHelper.GoalStatusList.Select(g => { g.Selected = g.Text.Equals(goal.Status.DisplayName()); return g; }).ToList();
+
+            <div class="panel-body" id="panel_@goal.UniqueId" style="@(goal.ReportGoalId > 0 ? "display: block" : "display: none");">
+              <header class="panel-heading panel-heading-main">
+                @goal.Title
+                <div class="pull-right">
+                  @Html.DropDownList("reportGoalInfo.ReportGoalList[" + rowIndex + "].Status", goalStatusList, new { @class = "form-control", @id = "reportGoalInfo.ReportGoalList_" + goal.Id + "__.Status" })
+                </div>
+              </header>
+              <div class="form-group" id="reportGoal_@goal.UniqueId">
+
+                <textarea class="form-control" name='reportGoalInfo.ReportGoalList[@rowIndex].Summary' id="goalSummary_@goal.UniqueId" rows="6" style="width: 100%;"
+                          placeholder="Type your update for this goal here."
+                          data-val-required="Please enter @goal.Title summary." data-val="true">@goal.Summary</textarea>
+
+                <input type='hidden' name='reportGoalInfo.ReportGoalList[@rowIndex].Id' value='@goal.Id'/>
+                <input type='hidden' name='reportGoalInfo.ReportGoalList[@rowIndex].UniqueId' value='@goal.UniqueId' />
+                <input type='hidden' name='reportGoalInfo.ReportGoalList[@rowIndex].ReportGoalId' value='@goal.ReportGoalId' />
+                <input type='hidden' name='reportGoalInfo.ReportGoalList[@rowIndex].ReportId' value='@goal.ReportId'/>
+              </div>
+            </div>
+            rowIndex++;
+          }
+        }
+      }
+    </div>
+  </div>
+</div>

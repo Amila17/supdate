@@ -1,0 +1,78 @@
+﻿@using Supdate.Model
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@model Supdate.Model.MetricView
+@{
+  var lastMonthCaretClass = "fa fa-caret-right";
+  var lastMonthTextClass = "text-primary";
+  var targetCaretClass = "fa fa-caret-right";
+  var targetTextClass = "text-primary";
+
+  var chartId = "chart-" + Model.UniqueId;
+  var chartModalId = "chart-" + Model.UniqueId + "-modal";
+  var chartModalTitle = Model.Name + ": " + Model.ValueFormatted;
+  var chartFullId = "chart-" + Model.UniqueId + "-full";
+  var chartTypeId = "chart-type-" + Model.UniqueId;
+  var chartType = Model.GraphType.DisplayName();
+  var dataTarget = (chartType != "No Graph") ? "#" + chartModalId : "#";
+  var panelExtraClass = (chartType == "No Graph") ? "panel-no-graph" : "";
+
+  if (Model.PercentageChangeFromLastMonth > 0)
+  {
+    lastMonthCaretClass = "fa fa-caret-up";
+    lastMonthTextClass = !Model.LowerIsBetter ? "text-success" : "text-danger";
+  }
+  else if (Model.PercentageChangeFromLastMonth < 0)
+  {
+    lastMonthCaretClass = "fa fa-caret-down";
+    lastMonthTextClass = !Model.LowerIsBetter ? "text-danger" : "text-success";
+  }
+
+  if (Model.PercentageChangeFromTarget > 0)
+  {
+    targetCaretClass = "fa fa-caret-up";
+    targetTextClass = !Model.LowerIsBetter ? "text-success" : "text-danger";
+  }
+  else if (Model.PercentageChangeFromTarget < 0)
+  {
+    targetCaretClass = "fa fa-caret-down";
+    targetTextClass = !Model.LowerIsBetter ? "text-danger" : "text-success";
+  }
+
+  bool canComment = ViewBag.CanComment ?? false;
+}
+<input type="hidden" id="@chartTypeId" value="@chartType">
+<div class="metric hoverPanel @panelExtraClass @Html.ReportCommentClass(canComment)" data-toggle="modal" data-target="@dataTarget">
+  <div class="morris-thumb-outer">
+    <div id="@chartId" class="morris-thumb">
+      @if (chartType == "No Graph")
+      {
+        <i class="fa fa-asterisk"></i>
+      }
+    </div>
+  </div>
+  <div class="metric-title"><h4><a data-toggle="modal" href="#"><span>@Model.Name:</span> @(Model.ValueFormatted) </a></h4></div>
+  <div class="row">
+    @if (@Model.LastMonthActual.HasValue)
+    {
+      <div class="metric-compare">
+        <h5>Last Month</h5>
+        <span class="compare-value">@(Model.LastMonthActualFormatted) </span><span class="@lastMonthTextClass"><i class="@lastMonthCaretClass"></i> @(Math.Round(Math.Abs(Model.PercentageChangeFromLastMonth), 1))%</span>
+      </div>
+    }
+    @if (@Model.Target.HasValue)
+    {
+      <div class="metric-compare">
+        <h5>Target</h5>
+        <span class="compare-value">@(Model.TargetFormatted) </span><span class="@targetTextClass"><i class="@targetCaretClass"></i> @(Math.Round(Math.Abs(Model.PercentageChangeFromTarget), 1))%</span>
+      </div>
+    }
+    <div class="clearfix"></div>
+  </div>
+  @if (canComment)
+  {
+    @Html.Partial("../Reports/_discuss", new Discussion { ReportGuId = Model.ReportUniqueId, Target = Model.UniqueId, TargetType = DiscussionTargetType.Metric })
+  }
+</div>
+
+@Html.Partial("_ReportMetricGraphModal", new ViewDataDictionary { { "chartModalId", chartModalId }, { "chartFullId", chartFullId }, { "modalTitle", chartModalTitle } })

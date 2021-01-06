@@ -1,0 +1,20 @@
+﻿@using Supdate.Model
+@model Supdate.Web.App.Models.ReportSummary
+
+<ul class="social-links">
+  <li><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@ViewBag.EditUrl" data-original-title="@ViewBag.EditTooltip"><i class="fa fa-pencil"></i></a></li>
+  @if (Model.Report.Status != ReportStatus.NotStarted)
+  {
+    if (Model.CurrentUser.CanViewReports)
+    {
+      <li><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@ViewBag.ViewUrl" data-original-title="View" target="_blank"><i class="fa fa-eye"></i></a></li>
+    }
+    if (Model.CurrentUser.IsCompanyAdmin)
+    {
+      <li><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="@ViewBag.SendUrl" data-original-title="Send"><i class="fa fa-envelope-o"></i></a></li>
+    }
+  }
+</ul>
+
+
+

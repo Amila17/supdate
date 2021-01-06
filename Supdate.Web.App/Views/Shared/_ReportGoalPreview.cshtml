@@ -1,0 +1,40 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@using Supdate.Web.App.Models
+@model Supdate.Model.ReportGoalView
+@{
+  var dueDateDayMonth = Model.DueDate.HasValue ? Model.DueDate.Value.ToString("dd MMM", CultureInfo.InvariantCulture) : "";
+  var dueDateYear = Model.DueDate.HasValue ? Model.DueDate.Value.ToString("yy", CultureInfo.InvariantCulture) : "";
+  bool canEdit = ViewBag.CanEdit ?? false;
+  bool canComment = ViewBag.CanComment ?? false;
+}
+
+<div class="goal @Html.ReportEditClass(canEdit) @Html.ReportCommentClass(canComment)" @Html.ReportEditDataTags(canEdit, "js", "goal-" + Model.UniqueId)>
+  <h4><span class="goal-status @Model.StatusClass()">@Model.Status.DisplayName()</span> @Model.Title</h4>
+  <p class="pre-wrap goal-info" id="goal-@Model.UniqueId-view">
+    @if (Model.DueDate.HasValue)
+    {<em>Due @dueDateDayMonth '@dueDateYear</em>}
+    else
+    {<em>No Due Date</em>}@Model.Summary
+  </p>
+  @if (canEdit)
+  {
+    using (Html.BeginForm("UpdateGoalSummary", "Reports", new { year = Model.ReportDate.Year, month = Model.ReportDate.Month, goalUniqueId = Model.UniqueId }, FormMethod.Post, new { role = "form", @class = "edit-form" }))
+    {
+      <div id="goal-@Model.UniqueId-edit" style="display: none;">
+        <textarea class="form-control" id="area-@Model.UniqueId" name="summary">@Model.Summary</textarea>
+        <input type="hidden" id="goal-@(Model.UniqueId)_vanilla" value="@Model.Summary" />
+        <div id="goal-@Model.UniqueId-edit-buttons" class="sup-edit-btns pull-right" style="display: none;">
+          <button type="submit" class="btn btn-save">Update</button>
+          <a class="btn btn-default edit-btn-cancel">Cancel</a>
+        </div>
+      </div>
+    }
+  }
+  @if (canComment)
+  {
+    @Html.Partial("../Reports/_discuss", new Discussion { ReportGuId = Model.ReportUniqueId, Target = Model.UniqueId, TargetType = DiscussionTargetType.Goal })
+  }
+</div>

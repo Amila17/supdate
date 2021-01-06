@@ -1,0 +1,32 @@
+﻿@model Supdate.Web.App.Models.RecipientImportRowViewModel
+@using System.Data
+@{
+  Layout = null;
+}
+<tr data-index="@Model.Index" @if (Model.Index == 0) { <text> style="display: none;" </text>  }>
+  <td>
+    <i class="fa fa-exclamation-triangle import-error-icon" title="Not a valid Email Address"></i>
+    <input type="hidden" id="Data_@(Model.Index)_Email" name="Data[@Model.Index].Email" data-val="true" data-val-email="Invalid email address." data-val-length="Email address cannot be longer than 200 characters." data-val-length-max="200" data-val-required="Please enter an email address." />
+    <span id="DisplayEmail_@Model.Index"></span>
+  </td>
+  <td>
+    <i class="fa fa-exclamation-triangle import-error-icon" title="First and Last Names must both be less than 200 chars"></i>
+    <span id="DisplayName_@Model.Index"></span>
+    <input type="hidden" name="Data.Index" value="@Model.Index" />
+    <input type="hidden" id="Data_@(Model.Index)_FirstName" name="Data[@Model.Index].FirstName" data-val="true" data-val-length="First Name cannot be longer than 200 characters." data-val-length-max="200" i />
+    <input type="hidden" id="Data_@(Model.Index)_LastName" name="Data[@Model.Index].LastName" data-val="true" data-val-length="Last Name cannot be longer than 200 characters." data-val-length-max="200" i />
+
+    @foreach (DataColumn col in Model.DataTable.Columns)
+    {
+      if (Model.Index == 0)
+      {
+        <input type="hidden" id="Values_@(Model.Index)_@col.Ordinal" value="@col.ColumnName" />
+      }
+      else
+      {
+        <input type="hidden" id="Values_@(Model.Index)_@col.Ordinal" value="@Model.Row[col.ColumnName]" />
+      }
+    }
+  </td>
+</tr>
+

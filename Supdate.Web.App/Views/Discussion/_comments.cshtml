@@ -1,0 +1,25 @@
+﻿@using Supdate.Web.App.Extensions
+@model IList<Supdate.Model.Comment>
+@{
+    Layout = null;
+}
+
+@foreach (var comment in Model.OrderBy(c => c.CreatedDate))
+{
+  <li id="comment-@comment.UniqueId" data-author-email="@comment.AuthorEmail" data-comment-id="@comment.UniqueId">
+    <div class="commentTrash"><a href="#" title="Delete comment"><i class="fa fa-times-circle"></i></a>
+    </div>
+    <div class="commentTrashConfirm">
+      <a href="#" class="btn btn-danger commentTrashConfirmed">Delete Comment</a>
+      <a href="#" class="btn btn-default commentTrashCancel">Cancel</a>
+    </div>
+    <div class="commenterImage">
+      @Html.GravatarWithDefault(comment.AuthorEmail, 30)
+    </div>
+    <div class="commentText">
+
+      <p class="">@comment.Text</p> <span class="date sub-text">@comment.AuthorName on @comment.DisplayDate</span>
+    </div>
+
+  </li>
+}

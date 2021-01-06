@@ -1,0 +1,24 @@
+﻿@using Supdate.Util
+@model Supdate.Model.Metric
+@{
+
+  var chartId = "chart-" + Model.UniqueId;
+  var chartModalId = "chart-" + Model.UniqueId + "-modal";
+  var chartModalTitle = Model.Name;
+  var chartFullId = "chart-" + Model.UniqueId + "-full";
+  var chartTypeId = "chart-type-" + Model.UniqueId;
+  var chartType = Model.GraphType.DisplayName();
+  var dataTarget = (chartType != "No Graph") ? "#" + chartModalId : "#";
+  var panelExtraClass = (chartType == "No Graph") ? "panel-no-graph" : "";
+}
+@if (chartType != "No Graph")
+{
+  <input type="hidden" id="@chartTypeId" value="@chartType">
+  <div class="metric-icon @panelExtraClass" data-target="@dataTarget">
+    <div class="morris-thumb-outer">
+      <div id="@chartId" class="morris-thumb">
+      </div>
+    </div>
+  </div>
+  @Html.Partial("_ReportMetricGraphModal", new ViewDataDictionary { { "chartModalId", chartModalId }, { "chartFullId", chartFullId }, { "modalTitle", chartModalTitle } })
+}

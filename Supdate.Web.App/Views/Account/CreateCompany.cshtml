@@ -1,0 +1,20 @@
+﻿@{
+  Layout = "~/Views/Shared/_PreAuthLayout.cshtml";
+  ViewBag.Title = "Supdate - Create a Compnay?";
+}
+
+@using (Html.BeginForm("CreateCompany", "Account", FormMethod.Post, new { @class = "form-signin", role = "form" }))
+{
+  @Html.AntiForgeryToken()
+
+  <h2 class="form-signin-heading">Create a Company</h2>
+  <div class="login-wrap">
+    <div class="form-group">You don't have access to any companies. Let's create a company for you to produce reports for</div>
+    <input type="text" class="form-control" name="CompanyName" id="CompanyName" placeholder="Company Name"/>
+    <input type="submit" value="Create Company" class="btn btn-login btn-block" />
+  </div>
+}
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+}

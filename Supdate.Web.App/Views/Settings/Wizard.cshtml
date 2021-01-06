@@ -1,0 +1,32 @@
+﻿@using Supdate.Model
+@model IEnumerable<Area>
+@{
+  ViewBag.Title = "Setup Wizard";
+
+}
+<link href="@Url.Content("~/Content/bootstrap-tagsinput.css")" rel="stylesheet" />
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        @ViewBag.Title - <span id="wizard-title">Reporting Areas</span>
+      </header>
+      @Html.Partial("~/Views/Settings/_WizardAreas.cshtml")
+      @Html.Partial("~/Views/Settings/_WizardMetricNames.cshtml")
+      @Html.Partial("~/Views/Settings/_WizardTeamMembers.cshtml")
+      @Html.Partial("~/Views/Settings/_WizardRecipients.cshtml")
+      @Html.Partial("~/Views/Settings/_WizardComplete.cshtml")
+
+    </section>
+  </div>
+</div>
+
+@section footer{
+  @Html.Partial("~/Views/Settings/_WizardProgressBar.cshtml")
+}
+@section scripts
+{
+  <script src="/Scripts/bootstrap-tagsinput.js"></script>
+  <script src="/Scripts/app.wizard.js"></script>
+}
+

@@ -1,0 +1,33 @@
+﻿@model Supdate.Model.ReportAttachment
+@{
+  var attachment = Model;
+}
+<div class="modal fade no-propagation" id="attachment-@attachment.UniqueId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-dark-grey">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">@attachment.FileName</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <img src="@attachment.FilePath" style="max-width: 100%"/>
+          </div>
+        </div>
+        @if (!String.IsNullOrWhiteSpace(attachment.Description)) {
+          <div class="row">
+            <div class="col-lg-12 text-center" style="white-space: normal; margin-top: 12px;">
+              @attachment.Description
+            </div>
+          </div>
+        }
+      </div>
+      <div class="modal-footer">
+        <div class="pull-right">
+          <a class="btn btn-default" href="@attachment.FilePath" target="_blank"><i class="fa fa-download"></i> Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

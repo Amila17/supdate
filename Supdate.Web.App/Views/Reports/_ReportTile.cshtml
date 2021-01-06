@@ -1,0 +1,112 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@model Supdate.Web.App.Models.ReportSummary
+@{
+  var tileBreakPoint = 475;
+
+  var fontIcon = string.Empty;
+  var backgroundClass = string.Empty;
+  var editTooltip = "Edit";
+  var title = string.Empty;
+  var subTitle = string.Empty;
+  var tileContent = string.Empty;
+  // var metrics = string.Empty;
+  // var goals = string.Empty;
+  var report = Model.Report;
+  var editUrl = Url.Action("Edit", "Reports", new { year = report.Date.Year, month = report.Date.Month });
+  var viewUrl = Url.Action("ReportView", "Reports", new { id = report.UniqueId.ToString() });
+  var sendUrl = Url.Action("Send", "Reports", new { year = report.Date.Year, month = report.Date.Month });
+
+  string tileUrl = null;
+  bool isCurrentMonth = report.Date.Month == DateTime.Now.Month && report.Date.Year == DateTime.Now.Year;
+  if (report.Status == ReportStatus.NotStarted)
+  {
+    fontIcon = "fa-bell-o";
+    backgroundClass = "bg-not-started";
+    editTooltip = "Get started";
+    title = "Not started";
+    subTitle = isCurrentMonth ? "Current month, start when you're ready" : "Now due, you should now start this report";
+    tileUrl = editUrl;
+  }
+  else if (report.Status == ReportStatus.InProgress)
+  {
+    fontIcon = "fa-clock-o";
+    backgroundClass = "bg-in-progress";
+    title = "In progress";
+    if (Model.CurrentUser.IsCompanyAdmin)
+    {
+      subTitle = report.RecipientCount != 0 ? string.Format("Emailed to {0} people", report.RecipientCount) : "Not yet emailed";
+    }
+    tileContent = string.Format("{0} out of {1} Reporting Areas completed.<br>{2} out of {3} Metrics completed.",
+      report.AreasCompleted,
+      Model.CompanyMetadata.AreaCount,
+      report.MetricCount,
+      Model.CompanyMetadata.MetricCount);
+
+    tileUrl = editUrl;
+  }
+  else if (report.Status == ReportStatus.Completed)
+  {
+    fontIcon = "fa-check";
+    backgroundClass = "bg-complete";
+    title = "Completed";
+    if (Model.CurrentUser.IsCompanyAdmin)
+    {
+      subTitle = report.RecipientCount != 0 ? "" : "Not yet emailed";
+    }
+    tileContent = string.Format("{0} Reporting Areas", report.AreaCount);
+    // metrics = string.Format("{0} Metrics", report.MetricCount);
+    // goals = string.Format("{0} Goals", report.GoalCount);
+    tileUrl = (Model.CurrentUser.CanViewReports) ? viewUrl : editUrl;
+  }
+
+
+  if (report.Status != ReportStatus.Completed && isCurrentMonth)
+  {
+    backgroundClass = "bg-this-month report-date-box-this-month";
+    fontIcon = "fa-hourglass-1";
+  }
+
+  ViewBag.EditUrl = editUrl;
+  ViewBag.SendUrl = sendUrl;
+  ViewBag.ViewUrl = viewUrl;
+  ViewBag.EditTooltip = editTooltip;
+  ViewBag.Subtitle = subTitle;
+  ViewBag.TileContent = tileContent;
+}
+
+<div class="col-md-6 col-sm-6">
+  <div class="panel" data-match-neighbour-height="true">
+    <div class="panel-heading report-date-box-h @backgroundClass" data-visible-parent-width-max="@tileBreakPoint" data-parent-selector=".panel">
+      <div class="pull-right">
+        @Html.Partial("_ReportTile_Buttons")
+      </div>
+      <a href="@tileUrl" class="report-date-box-h-heading">
+        <i class="fa @fontIcon"></i>
+        @report.Date.ToString("MMM", CultureInfo.InvariantCulture)
+        @report.Date.Year
+      </a>
+    </div>
+    <div class="panel-body">
+      <div class="media">
+        <a class="pull-left" href="@tileUrl" data-visible-parent-width-min="@tileBreakPoint" data-parent-selector=".panel">
+          <div class="report-date-box @backgroundClass">
+            <div class="month">@report.Date.ToString("MMM", CultureInfo.InvariantCulture)</div>
+            @report.Date.Year
+            <div>
+              <i class="fa @fontIcon"></i>
+            </div>
+          </div>
+        </a>
+        <div class="media-body">
+          <div class="pull-right" data-visible-parent-width-min="@tileBreakPoint" data-parent-selector=".panel">
+            @Html.Partial("_ReportTile_Buttons")
+          </div>
+          <h4>@title</h4>
+          <div class="clearfix" data-visible-parent-width-min="@tileBreakPoint" data-parent-selector=".panel"></div>
+          @Html.Partial("_ReportTile_Content")
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

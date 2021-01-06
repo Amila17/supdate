@@ -1,0 +1,19 @@
+﻿CREATE PROCEDURE [dbo].[RecipientDeleteById]
+  @recipientId INT
+AS
+BEGIN
+  BEGIN TRY
+    BEGIN TRANSACTION RECIPIENTDELETE
+
+    DELETE FROM [dbo].[ReportEmail] WHERE RecipientId = @recipientId
+    DELETE FROM [dbo].[Recipient] WHERE Id = @recipientId
+
+    COMMIT TRANSACTION RECIPIENTDELETE 
+    RETURN 1
+  END TRY
+  BEGIN CATCH
+    IF(@@TRANCOUNT > 0)
+      ROLLBACK TRAN
+      RETURN 0
+  END CATCH
+END

@@ -1,0 +1,228 @@
+﻿/* Markers */
+
+.commentable-section {
+  position: relative;
+}
+
+.commentable-section:hover .side-comment .marker {
+  display: block;
+}
+.side-comment {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  min-height: 100%;
+  height: 100%;
+  cursor: default;
+}
+
+.side-comment * {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.side-comment .hide {
+  display: none;
+}
+.side-comment .marker {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: -10px;
+  cursor: pointer;
+}
+.sup-editable-active .side-comment .marker {
+   right: 3px;
+   top: 3px;
+}
+.side-comment .marker span {
+  display: none;
+}
+.side-comment.active .marker,
+.side-comment.has-comments .marker {
+  display: block;
+}
+.side-comment.has-comments .marker:before {
+  content: "";
+}
+.side-comment.has-comments .marker span {
+  display: block;
+}
+.side-comment .comments-wrapper {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 40px;
+}
+.side-comment .marker {
+    width: 20px;
+    height: 18px;
+    background: #d2d2cf;
+    border-radius: 2px;
+  text-decoration: none;
+   -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.side-comment .marker span,.side-comment .marker:before {
+    content: "+";
+    position: absolute;
+    width: 20px;
+    height: 18px;
+    line-height: 16px;
+    font-size: 14px;
+    color: #FFF;
+    text-align: center
+}
+
+.side-comment .marker span {
+    line-height: 20px;
+    font-size: 12px
+}
+
+.side-comment .marker:after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -7px;
+    left: 5px;
+    width: 0;
+    border-width: 7px 8px 0 0;
+    border-style: solid;
+    border-color: #d2d2cf transparent
+}
+
+.side-comment .marker:hover,.side-comment.active .marker {
+    background: #f26622
+}
+
+.side-comment .marker:hover:after,.side-comment.active .marker:after {
+    border-color: #f26622 transparent
+}
+
+/* Comments wrapper */
+
+.side-comment .comments-wrapper {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 40px;
+  z-index: 1;
+}
+
+.side-comment.active .comments-wrapper {
+  display: block;
+}
+@media (max-width: 768px) {
+  .side-comment .comments-wrapper {
+  display: none;
+  position: fixed;
+  top: 10;
+  left: 10px;
+  z-index: 1;
+}
+ .modal-discussion .modal-dialog {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.modal-discussion .modal-content {
+  height: auto;
+  min-height: 100%;
+  border-radius: 0;
+}
+}
+
+/* Discussion Box */
+.commentBox {
+    padding:10px;
+    border-top:1px dotted #bbb;
+}
+.commentBox .form-group:first-child {
+    width:80%;
+}
+.commentBox .form-group:nth-child(2) {
+    width:18%;
+}
+
+.commentList {
+  margin: 0;
+  padding:10px 10px 0 0;
+  list-style:none;
+  position: absolute;
+  bottom: 0px;
+  max-height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+.commentList li {
+    margin:0;
+    padding: 10px 35px 10px 10px;
+}
+.commentList li > div.commenterImage, .commentList li > div.commentText {
+    display:table-cell;
+}
+
+.commentList li { background: #F8F8F8; }
+.commentList li:nth-child(odd) { background: #FFFFFF; }
+
+.commenterImage {
+    width:30px;
+    margin-right:5px;
+    height:100%;
+    float:left;
+}
+.commenterImage img {
+    width:100%;
+    border-radius:50%;
+}
+.commentText {
+  width: 100%;
+}
+.commentText p {
+    margin:0;
+  font-size: 1.2em;
+}
+.commentTrash {
+  float: right;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  visibility: hidden;
+  position: absolute;
+  right: 0;
+}
+.commentList li:hover .commentTrash {
+  visibility: visible;
+  right: 25px;
+}
+.commentTrashConfirm {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  background-color:rgb(221,221,221);
+  background-color:rgba(0,0,0,0.5);
+  margin-top: -10px;
+  padding: 12px 0;
+  display: none;
+}
+
+.commentTrash .fa {
+  color: #CC3300;
+  font-size: 2.2em;
+}
+.sub-text {
+    color:#aaa;
+    font-family:verdana;
+    font-size:11px;
+}
+

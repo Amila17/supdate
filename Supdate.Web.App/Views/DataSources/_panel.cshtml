@@ -1,0 +1,37 @@
+﻿@using Supdate.Model
+@model Supdate.Web.App.Models.DataSourcePanelViewModel
+@{
+  var sectionClass = string.Empty;
+  var authGuid = Guid.Empty;
+  if (Model.ExternalApiAuths.Any(a => a.ExternalApi == Model.ExternalApi))
+  {
+    authGuid = Model.ExternalApiAuths.FirstOrDefault(a => a.ExternalApi.Id == Model.ExternalApi.Id).UniqueId;
+    sectionClass = "configured";
+  }
+}
+<div class="col-xs 12 col-md-6">
+  <section class="panel panel-integration @sectionClass panel-integration-@Model.ExternalApi.Name.ToLower().Replace(" ", "-")" data-auth-id="@authGuid">
+    <header class="panel-heading panel-heading-main">
+      @if (string.IsNullOrWhiteSpace(Model.ExternalApi.Logo))
+      {
+        @Model.ExternalApi.Name
+      }
+      else
+      {
+        <img src="@Model.ExternalApi.Logo" />
+      }
+      <div class="pull-right configured-checkmark">
+        <i class="text-success fa fa-check"></i> Connected
+      </div>
+    </header>
+    <div class="panel-body" data-match-neighbour-height="true">
+      <p>
+        @Html.Raw(Model.ExternalApi.IntroText)
+      </p>
+    </div>
+    <div class="panel-footer text-center">
+      <a class="btn btn-success btn-editconfig" id="api-config-btn-@Model.ExternalApi.Id" data-modal-url="@Url.Action("Connect", new { uniqueid = authGuid, externalApiId = Model.ExternalApi.Id,  })">Configure</a>
+      <a class="btn btn-default btn-setconfig" data-modal-url="@Url.Action("Connect", new { uniqueid = Guid.Empty, externalApiId = Model.ExternalApi.Id })">Connect</a>
+     </div>
+  </section>
+</div>

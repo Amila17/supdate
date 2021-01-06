@@ -1,0 +1,111 @@
+﻿@using System.Globalization
+@model Supdate.Web.App.Models.PermalinkReportViewInfo
+@{
+  Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <link rel="shortcut icon" href="~/img/favicon.png">
+  <title>@Model.Report.CompanyName - @Model.Report.Date.ToString("MMMM \\'yy", CultureInfo.InvariantCulture)</title>
+
+  @Styles.Render("~/Content/css")
+  @Styles.RenderFormat(@"<link href=""{0}"" rel=""stylesheet"" type=""text/css"" media=""print"" />", "~/Content/report-print-css")
+  @Styles.RenderFormat(@"<link href=""{0}"" rel=""stylesheet"" type=""text/css"" />", "~/Content/app.discussion.css")
+
+  <link href="@Url.Content("~/Assets/font-awesome/css/font-awesome.min.css")" rel="stylesheet" />
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltips and media queries -->
+  <!--[if lt IE 9]>
+  @Scripts.Render("~/bundles/media-queries")
+  <![endif]-->
+</head>
+<body>
+<section id="container">
+  <!--header start-->
+  <header class="header white-bg">
+    <!--logo start-->
+    <a href="@Url.Action("Index", "Home")" class="logo">
+      <img src="@Url.Content("~/Assets/logo.png")">
+    </a>
+    <!--logo end-->
+
+          @if (Model.ReportPermalinkList.Any())
+          {
+              <div class="top-nav ">
+                <ul class="nav pull-right top-menu">
+                  <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                      <i class="fa fa-file-text-o"></i>
+                      <span class="username">More Reports</span>
+                      <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <div class="log-arrow-up"></div>
+                      @foreach (var reportPermaLink in Model.ReportPermalinkList)
+              {
+                        <li>
+                          <a href="@Url.Action("ReportView", "Reports", new { id = @reportPermaLink.UniqueId })">
+                            <i class="fa fa-file-text-o"></i>
+                            @reportPermaLink.Date.ToString("MMMM yyyy", CultureInfo.InvariantCulture)
+                          </a>
+                        </li>
+              }
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+    }
+    @if (ViewBag.CanToggleEdit)
+    {
+      <div class="top-nav">
+        <div class="pull-right">
+          @if (ViewBag.CanEdit)
+          {
+            <a class="btn btn-info" href="@Url.Action("ReportView", new { editEnabled = false })"><i class="fa fa-edit"></i> Disable Editing</a>
+          }
+          else
+          {
+            <a class="btn btn-white" href="@Url.Action("ReportView", new { editEnabled = true })"><i class="fa fa-edit"></i> Enable Editing</a>
+          }
+        </div>
+      </div>
+    }
+</header>
+  <!--header end-->
+  <!--main content start-->
+  <section>
+    <section class="wrapper site-min-height">
+      <!-- page start-->
+      <div id="content-holder">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="report-top-buffer"></div>
+            <div class="report-main-content">
+              @Html.Partial("_ReportPreview", Model.Report)
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- page end-->
+    </section>
+  </section>
+  <!--main content end-->
+</section>
+  <input type="hidden" id="DeleteOwnCommentsOnly" value="@ViewBag.DeleteOwnCommentsOnly" />
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/jqueryval")
+  @Scripts.Render("~/bundles/bootstrap-plus")
+  @Scripts.Render("~/bundles/graphs")
+  @Scripts.RenderFormat(@"<script src=""{0}""></script>", "~/signalr/hubs")
+
+  @Html.Partial("_SiteUrls")
+  <script type="text/javascript">
+    graphDataGetUrl = '@Url.Action("MetricGraphData", "Reports", new { reportUniqueId = Model.Report.UniqueId })';
+  </script>
+</body>
+</html>

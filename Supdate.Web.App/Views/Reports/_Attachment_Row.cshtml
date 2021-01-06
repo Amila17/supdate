@@ -1,0 +1,14 @@
+﻿@using Supdate.Web.App.Models
+@model Supdate.Model.ReportAttachment
+@{
+  Layout = null;
+  var attachment = Model;
+}
+<tr data-attachment-id="@attachment.UniqueId">
+  <td class="w16 text-center"><i class="fa fa-auto-mimetype" data-mimetype="@attachment.MimeType"></i></td>
+  <td nowrap><a href="@attachment.FilePath" target="_blank">@attachment.FileName</a></td>
+  <td width="99%"><i>@attachment.Description</i></td>
+  <td class="w16 text-center">
+    <a href="#" title="Delete Attachment" data-delete-entity="attachment" data-delete-entity-id="@attachment.UniqueId" class="tr-hover-reveal"><i class="fa fa-trash-o text-danger"></i></a>
+  </td>
+</tr>

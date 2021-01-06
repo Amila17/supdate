@@ -1,0 +1,76 @@
+﻿@using Supdate.Util
+@using Supdate.Web.App.Models
+@model Supdate.Model.ExternalApiAuth
+@{
+  Layout = null;
+}
+@using (Html.BeginForm("Credentials", "DataSources", FormMethod.Post, new { role = "form", id = "credentialsForm", @class = "ajax-form" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 id="metricDetailsHeader" class="modal-title">@Model.ExternalApi.Name</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-12">
+          @Html.Raw(Model.ExternalApi.SetupText)
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-12">
+          @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+          @Html.HiddenFor(m => m.Id)
+          @Html.HiddenFor(m => m.UniqueId)
+          @Html.HiddenFor(m => m.ExternalApiId)
+          @Html.LabelFor(m => m.Token, "Token")
+          @Html.TextBoxFor(m => m.Token, new { @class = "form-control", placeholder = "Enter your API Token", spellcheck = "false", autocomplete = "off" })
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-12">
+          @Html.LabelFor(m => m.Key, "Key")
+          @Html.TextBoxFor(m => m.Key, new { @class = "form-control", placeholder = "Enter your API Key", spellcheck = "false", autocomplete = "off" })
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right">
+            <span id="credentials-test-result-passed" class="text-success" style="display: none;"><i class="fa fa-check"></i> Test Passed</span>
+            <span id="credentials-test-result-failed" class="text-danger" style="display: none;"><i class="fa fa-times"></i> Test Failed</span>
+            <span id="credentials-test-result-wait" style="display: none;"><i class="fa fa-spinner fa-spin"></i></span>
+            &nbsp;
+            <a class="btn btn-sm btn-white" onclick="TestExternalApiCredentials();">Test These Credentials</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    @if (Model.UniqueId != Guid.Empty)
+    {
+      <div class="pull-left" id="trash-icon">
+        <button class="btn btn-delete" type="button" data-delete-entity="externalapiauth" data-delete-entity-id="@Model.UniqueId" data-delete-entity-cb="deleteExternalApiAuth_cb"><i class="fa fa-trash-o"></i></button>
+      </div>
+    }
+    <button class="btn btn-save ladda-button ajax-submit" data-success-callback="reloadPage" data-style="expand-left" type="button"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+  </div>
+}
+@using (Html.BeginForm("TestCredentials", "DataSources", FormMethod.Post, new { role = "form", id = "credentialsTestForm", @class = "ajax-form" }))
+{
+  <input type="hidden" name="Token" id="TestToken" />
+  <input type="hidden" name="Key" id="TestKey" />
+  <input type="hidden" name="externalApiId" value="@Model.ExternalApiId" class="ajax-submit" data-success-callback="TestExternalApiCredentials_cb" />
+}
+<script>
+  $('#Token').focus();
+</script>
+
+

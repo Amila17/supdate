@@ -1,0 +1,12 @@
+﻿@using Supdate.Model
+<div class="btn-group pull-right">
+  <span id="filter-menu-flash"></span>
+  <button data-toggle="dropdown" class="btn dropdown-toggle btn-white btn-xs" type="button">@ViewBag.filterString <span class="caret"></span></button>
+  <ul role="menu" class="dropdown-menu" id="filter-menu">
+    <li data-option=""><a href="@Url.Action("Index", "Reports")">All Reports</a></li>
+    <li class="divider"></li>
+    <li data-option="@((int) ReportStatus.Completed)"><a href="@Url.Action("Index", "Reports", new { filter = (int) ReportStatus.Completed })">Completed Reports</a></li>
+    <li data-option="@((int) ReportStatus.InProgress)"><a href="@Url.Action("Index", "Reports", new { filter = (int) ReportStatus.InProgress })">Reports In Progress</a></li>
+    <li data-option="@((int) ReportStatus.NotStarted)"><a href="@Url.Action("Index", "Reports", new { filter = (int) ReportStatus.NotStarted })">Reports Not Started</a></li>
+  </ul>
+</div>

@@ -1,0 +1,51 @@
+﻿@using System.Globalization
+@using StackExchange.Exceptional.Extensions
+@using Supdate.Util
+@using Supdate.Web.App.Models
+@model MetricDataViewModel
+@{
+    Layout = null;
+    var dateList = Model.Data.Select(d => d.Date).Distinct().OrderBy(d => d.Date);
+}
+<table id="metricDataList-@Model.Year" class="table table-striped table-metric-data actual" style="display: none;">
+  <thead>
+    <tr>
+      <th>@Model.Year </th>
+      @foreach (var date in dateList)
+      {
+        <th>
+          @date.ToString("MMM", CultureInfo.InvariantCulture)
+        </th>
+      }
+
+    </tr>
+  </thead>
+  <tbody>
+    @{
+      var index = Model.StartIndex;
+    }
+    @foreach (var metric in Model.Metrics.OrderBy(x => x.DisplayOrder))
+    {
+
+      <tr data-metric-uniqueid="@metric.UniqueId" data-metric-name="@metric.Name">
+        <td title="@metric.Name">@metric.Name</td>
+        @foreach (var date in dateList)
+        {
+          var metricDataPoint = Model.Data.FirstOrDefault(m => m.MetricId == metric.Id && m.Date == date);
+          <td class="text-center" data-display-date="@date.ToString("MMM \\'yy", CultureInfo.InvariantCulture)">
+            <input type="hidden" name="Data.Index" value="@index" />
+            <input type="hidden" name="Data[@index].Id" value="@metricDataPoint.Id" />
+            <input type="hidden" name="Data[@index].MetricId" value="@metricDataPoint.MetricId" />
+            <input type="hidden" name="Data[@index].Date" value="@metricDataPoint.Date" />
+            <input type="text" name="Data[@index].Actual" class="actual" value="@metricDataPoint.Actual" autocomplete="off" data-metricdatapoint-locator="@date.ToString("yyyy-MM-dd")-@metric.Id" />
+            <input type="text" name="Data[@index].Target" class="target" value="@metricDataPoint.Target" autocomplete="off" />
+          </td>
+          index++;
+        }
+      </tr>
+    }
+    @{
+      Model.StartIndex = index;
+    }
+  </tbody>
+</table>

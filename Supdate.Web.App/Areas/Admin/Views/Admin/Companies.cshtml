@@ -1,0 +1,79 @@
+﻿@using Supdate.Model.Admin
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@model IEnumerable<CompanyEx>
+@{
+  ViewBag.Title = "Companies";
+  int records = ViewBag.records;
+  int page = ViewBag.page;
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        <div class="pull-right">
+          <select class="input-sm dd-goto-url" id="records_per_page_selector">
+            <option value="10" data-url="@Url.Action("Companies", "Admin", new { page = 1, records = 10 })">10 records / page</option>
+            <option value="20" data-url="@Url.Action("Companies", "Admin", new { page = 1, records = 20 })">20 records / page</option>
+            <option value="40" data-url="@Url.Action("Companies", "Admin", new { page = 1, records = 40 })">40 records / page</option>
+            <option value="60" data-url="@Url.Action("Companies", "Admin", new { page = 1, records = 60 })">50 records / page</option>
+            <option value="80" data-url="@Url.Action("Companies", "Admin", new { page = 1, records = 80 })">80 records / page</option>
+            <option value="100" data-url="@Url.Action("Companies", "Admin", new { page = 1, records = 100 })">100 records / page</option>
+          </select>
+        </div>
+        <a href="@Url.Action("Dashboard", "Admin")" title=" back"><i class="fa fa fa-angle-double-left"></i></a> @ViewBag.Title
+        <div class="clearfix"></div>
+      </header>
+      <div class="panel-body">
+
+        <div class="form-group col-sm-12">
+          <table class="display table table-striped">
+            <thead>
+            <tr>
+              <th class="w24 hidden-xs"></th>
+              <th>Company</th>
+              <th class="w24"></th>
+              <th>Email</th>
+              <th class="hidden-xs">Start Month</th>
+              <th class="hidden-xs">Ar-Go-Me-Rp-Em</th>
+              <th class="hidden-xs">Created Date</th>
+            </tr>
+            </thead>
+            <tbody>
+              @foreach (var c in Model)
+              {
+                <tr>
+                  <td class="hidden-xs"><img class="icon-company-logo" src="@c.LogoPath"></td>
+                  <td><a href="@Url.Action("ViewCompany", "Admin", new { c.UniqueId })">@c.Name</a></td>
+                  <td>@Html.GravatarWithDefault(c.OwnerEmail, 24)</td>
+                  <td><a href="@Url.Action("ViewUser", "Admin", new { uniqueId = c.OwnerUniqueId })">@c.OwnerEmail</a></td>
+                  <td class="hidden-xs">@c.StartMonth.GetValueOrDefault(DateTime.Now).ToString("MMM-yyyy")</td>
+                  <td class="hidden-xs">@c.AreaCount - @c.GoalCount - @c.MetricCount - @c.ReportCount - x</td>
+                  <td class="hidden-xs">@ConversionUtil.DateTimeToFriendly(c.CreatedDate)</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <div class="pull-right">
+        @if (page > 1)
+        {
+          <a href="@Url.Action("Companies", "Admin", new { page = page - 1, records = records })">&lt;&lt; Prev</a>
+          @Html.Raw(" || ")
+        }
+        <a href="@Url.Action("Companies", "Admin", new { page = page + 1, records = records })">Next &gt;&gt;</a></div>
+        <i>Page @page</i>
+        <div class="clearfix"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+@section scripts {
+  <script type="te">
+    $("#records_per_page_selector").val("@records");
+  </script>
+}

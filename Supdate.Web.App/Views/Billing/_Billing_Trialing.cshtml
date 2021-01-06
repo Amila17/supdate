@@ -1,0 +1,39 @@
+﻿@model Supdate.Web.App.Models.BillingViewModel
+@using Supdate.Model
+@using Supdate.Util
+
+
+<p>The core functionality of Supdate is free. To use the Team and Discussion features you need a monthly subscription.</p>
+@if (Model.Subscription.IsActive())
+{
+  <p>
+    You currently have free access to these features. <strong>Your free access will expire in @Model.Subscription.DaysLeft() days.</strong>
+  </p>
+  if (Model.Subscription.StripeSubscriptionId != null)
+  {
+    <p>You will automatically be charged $@ConfigUtil.DefaultMonthlyCost USD per month once your trial period expires.</p>
+  }
+  else
+  {
+    <p>
+      <strong>To ensure uninterrupted use you should start a subscription</strong> - you wont be charged until your trial expires.
+    </p>
+    @Html.Partial("_Billing_SubscribeBox")
+  }
+}
+else
+{
+  <p>
+    @if (Model.Subscription.Status == SubscriptionStatus.Cancelled)
+    {
+      <strong>Your subscription was cancelled.</strong>
+    }
+    else
+    {
+      <strong>Your free trial has expired.</strong>
+    }
+    To use these features you need to set up a monthly subscription.
+  </p>
+  @Html.Partial("_Billing_SubscribeBox")
+}
+

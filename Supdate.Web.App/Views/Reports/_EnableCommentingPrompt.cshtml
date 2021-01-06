@@ -1,0 +1,20 @@
+﻿@model Supdate.Model.ReportEmailBuilder
+
+@if (ViewBag.IsSubscriptionActive && !Model.EnableCommenting)
+{
+  using (Html.BeginForm("EnableDiscussions", "Settings", FormMethod.Post, new { @id = "enable-dicussions-form-form" }))
+  {
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="returnUrl" value="@Request.RawUrl" />
+    <div class="alert alert-block alert-info fade in">
+      <strong>Enable Discussions?</strong><br />
+      Do you want to enable the
+      <a href="http://supdate.com/features/discussion" target="_blank" class="link">Discussions feature</a>
+      so that your recipients can post comments and questions on your report?<br />
+      <div style="margin-top: 12px" class="text-center-xs">
+        <button class="btn btn-save ladda-button" data-style="expand-left" type="submit"><span class="ladda-label"><i class="fa fa-check"></i> Yes<span class="hidden-xs">, enable it</span></span></button>
+        <button class="btn btn-white" data-dismiss="alert">Not Now</button>
+      </div>
+    </div>
+  }
+}

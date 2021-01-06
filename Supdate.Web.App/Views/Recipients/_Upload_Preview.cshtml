@@ -1,0 +1,35 @@
+﻿@model System.Data.DataTable
+@using System.Data
+@using Supdate.Web.App.Models
+@{
+  Layout = null;
+  var index = 0;
+}
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        Recipients Preview
+      </header>
+      <div class="panel-body">
+        <table class=" table table-striped" id="imported_data">
+          <thead>
+            <tr>
+              <th style="width: 30%;">Email</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            @Html.Partial("_Upload_Preview_Row", new RecipientImportRowViewModel { Index = 0, DataTable = Model })
+
+            @foreach (DataRow row in Model.Rows)
+            {
+              index++;
+              @Html.Partial("_Upload_Preview_Row", new RecipientImportRowViewModel { Index = index, DataTable = Model, Row = row })
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0791A196-BD49-471B-AC67-C22FF4A4675B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Supdate.Model</RootNamespace>
+    <AssemblyName>Supdate.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev|AnyCPU'">
+    <OutputPath>bin\Dev\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod|AnyCPU'">
+    <OutputPath>bin\Prod\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Dev-CC|AnyCPU'">
+    <OutputPath>bin\Dev-CC\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod-CC|AnyCPU'">
+    <OutputPath>bin\Prod-CC\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Admin\SearchResults.cs" />
+    <Compile Include="Admin\CompanyEx.cs" />
+    <Compile Include="Admin\MarketingData.cs" />
+    <Compile Include="Admin\RegistrationStatistics.cs" />
+    <Compile Include="Admin\UserEx.cs" />
+    <Compile Include="Admin\UtmInfo.cs" />
+    <Compile Include="ExternalApiAuth.cs" />
+    <Compile Include="MetricDataImport.cs" />
+    <Compile Include="MetricDataSource.cs" />
+    <Compile Include="MetricDataPoint.cs" />
+    <Compile Include="MetricGraph.cs" />
+    <Compile Include="Subscription.cs" />
+    <Compile Include="SubscriptionStatus.cs" />
+    <Compile Include="ExternalApis.cs" />
+    <Compile Include="WebhookPayload.cs" />
+    <Compile Include="Webhook.cs" />
+    <Compile Include="Area.cs" />
+    <Compile Include="Base\GoalBase.cs" />
+    <Compile Include="Base\ModelBase.cs" />
+    <Compile Include="Discussion.cs" />
+    <Compile Include="Comment.cs" />
+    <Compile Include="DiscussionTargetType.cs" />
+    <Compile Include="UserCompany.cs" />
+    <Compile Include="CompanyTeamMemberInvite.cs" />
+    <Compile Include="CompanyMetadata.cs" />
+    <Compile Include="ReportAttachmentList.cs" />
+    <Compile Include="ReportGoal.cs" />
+    <Compile Include="ReportType.cs" />
+    <Compile Include="TextTemplate.cs" />
+    <Compile Include="TextReplacements.cs" />
+    <Compile Include="GenericEmailAddress.cs" />
+    <Compile Include="GenericEmail.cs" />
+    <Compile Include="Company.cs" />
+    <Compile Include="EmailStatus.cs" />
+    <Compile Include="Exceptions\BusinessException.cs" />
+    <Compile Include="Exceptions\MessageConstants.cs" />
+    <Compile Include="Goal.cs" />
+    <Compile Include="Identity\IdentityRole.cs" />
+    <Compile Include="Identity\IdentityUser.cs" />
+    <Compile Include="Identity\UserClaim.cs" />
+    <Compile Include="Identity\UserLogin.cs" />
+    <Compile Include="Identity\UserRole.cs" />
+    <Compile Include="GoalStatus.cs" />
+    <Compile Include="GraphType.cs" />
+    <Compile Include="EntityDisplayOrder.cs" />
+    <Compile Include="ReportEmailBuilder.cs" />
+    <Compile Include="UserConfirmation.cs" />
+    <Compile Include="LiteUser.cs" />
+    <Compile Include="Metric.cs" />
+    <Compile Include="GraphPoint.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report.cs" />
+    <Compile Include="ReportArea.cs" />
+    <Compile Include="ReportAttachment.cs" />
+    <Compile Include="ReportEmailPreview.cs" />
+    <Compile Include="ReportGoalView.cs" />
+    <Compile Include="MetricView.cs" />
+    <Compile Include="ReportEmailDetails.cs" />
+    <Compile Include="ReportPermalink.cs" />
+    <Compile Include="ReportEmail.cs" />
+    <Compile Include="ReportStatus.cs" />
+    <Compile Include="Recipient.cs" />
+    <Compile Include="Tenant.cs" />
+    <Compile Include="WebhookPayloadAttachment.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

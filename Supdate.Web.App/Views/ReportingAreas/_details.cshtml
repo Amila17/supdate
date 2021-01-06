@@ -1,0 +1,36 @@
+﻿@model Supdate.Model.Area
+@{
+  Layout = null;
+  var modalTitle = (Model.UniqueId == Guid.Empty) ? "Add a Reporting Area" : "Edit Reporting Area";
+}
+@using (Html.BeginForm("Details", "ReportingAreas", FormMethod.Post, new { role = "form", @class = "ajax-form" }))
+{
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 id="areaDetailsHeader" class="modal-title">@modalTitle</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-group ">
+      <div class="row">
+        <div class="col-sm-12">
+          @Html.HiddenFor(m => m.Id)
+          @Html.HiddenFor(m => m.UniqueId)
+          @Html.HiddenFor(m => m.DisplayOrder)
+          @Html.LabelFor(m => m.Name, "Reporting Area Name")
+          @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter a name for this Reporting Area" })
+          @Html.ValidationMessageFor(m => m.Name)
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    @if (Model.UniqueId != Guid.Empty)
+    {
+      <div class="pull-left" id="trash-icon">
+        <button class="btn btn-delete" type="button" onclick="return promptDeleteEntity('area', document.getElementById('UniqueId').value, null, deleteAreaPromptMsg)"><i class="fa fa-trash-o"></i></button>
+      </div>
+    }
+    <button class="btn btn-save ladda-button ajax-submit" data-success-callback="reloadPage" data-style="expand-left" type="button" id="saveMetricDetailx"><span class="ladda-label"><i class="fa fa-check"></i> Save</span></button>
+    <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+  </div>
+}

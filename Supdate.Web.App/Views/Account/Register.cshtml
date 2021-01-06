@@ -1,0 +1,107 @@
+﻿@model Supdate.Web.App.Models.RegisterViewModel
+@{
+  Layout = "~/Views/Shared/_PreAuthLayout.cshtml";
+  ViewBag.Title = "Supdate - Register";
+  bool hasInvite = Model != null && Model.Invite != null;
+}
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-signin", role = "form" }))
+{
+  @Html.AntiForgeryToken()
+
+  <h2 class="form-signin-heading">
+    @if (hasInvite)
+    {
+      @("Registration ")
+    }
+    else
+    {
+      @("Create a Free Account")
+    }
+  </h2>
+  <div class="login-wrap">
+    @if (hasInvite)
+    {
+      <div class="form-group">
+        You're one step away from joining @Model.CompanyName. <br /><br />
+        Just choose a password to create your account.
+      </div>
+    }
+    <div class="form-group">
+      @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+      @Html.ValidationMessageFor(m => m.Email)
+    </div>
+    <div class="row">
+      <div class="form-group-inline col-md-6">
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = "First Name" })
+        @Html.ValidationMessageFor(m => m.FirstName)
+      </div>
+      <div class="form-group-inline col-md-6">
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = "Last Name" })
+        @Html.ValidationMessageFor(m => m.LastName)
+      </div>
+    </div>
+    <div class="form-group">
+      @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password" })
+      @Html.ValidationMessageFor(m => m.Password)
+    </div>
+    <div class="form-group">
+      @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Re-type Password" })
+      @Html.ValidationMessageFor(m => m.ConfirmPassword)
+    </div>
+    @if (hasInvite)
+    {
+      @Html.HiddenFor(m => m.CompanyName)
+      @Html.HiddenFor(m => m.Invite.UniqueId)
+    }
+    else
+    {
+      <div class="form-group">
+        @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", placeholder = "Company Name" })
+        @Html.ValidationMessageFor(m => m.CompanyName)
+      </div>
+    }
+    <div class="row tandc">
+      <div class="form-group-inline col-xs-offset-1">
+        <label for="TermsAndConditions">
+          @Html.CheckBoxFor(m => m.TermsAndConditions)
+          &nbsp;&nbsp;I accept the Supdate <a href='http://supdate.com/terms-and-conditions/' target='tandc'>Terms and Conditions</a> and <a href='http://supdate.com/privacy/' target='privacypolicy'>Privacy Policy</a>
+        </label>
+      </div>
+      <div class="form-group-inline col-xs-12">
+        @Html.ValidationMessageFor(m => m.TermsAndConditions)
+      </div>
+    </div>
+    <button type="submit" class="btn btn-login btn-block ladda-button"><span class="ladda-label"> Register</span></button>
+
+    @if (!hasInvite)
+    {
+      <div>
+        Already Registered? @Html.ActionLink("Login", "Login", "Account")
+      </div>
+    }
+  </div>
+}
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+  <script>
+    if ($("#Email").val().length) {
+      $("#FirstName").focus();
+    } else {
+      $("#Email").focus();
+    }
+
+    // extend jquery range validator to work for required checkboxes
+    var defaultRangeValidator = $.validator.methods.range;
+    $.validator.methods.range = function (value, element, param) {
+      if (element.type === 'checkbox') {
+        // if it's a checkbox return true if it is checked
+        return element.checked;
+      } else {
+        // otherwise run the default validation function
+        return defaultRangeValidator.call(this, value, element, param);
+      }
+    }
+  </script>
+}

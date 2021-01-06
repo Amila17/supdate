@@ -1,0 +1,49 @@
+﻿@using Supdate.Web.App.Models
+@model TermsAndConditionsViewModel
+@{
+  Layout = null;
+}
+
+@using (Html.BeginForm("TermsAndConditions", "Account", FormMethod.Post, new { role = "form", @class = "ajax-form" }))
+{
+  <div class="modal-header">
+    <h4 class="modal-title" id="goalDetailsHeader">Supdate</h4>
+  </div>
+  <div class="modal-body modal-tandc">
+    <div class="form-group">
+      <p>
+        To continue using Supdate, you must agree to the <a href="http://supdate.com/terms-and-conditions/" target="tandc">Terms and Conditions</a> and <a href="http://supdate.com/privacy/" target="privacypolicy">Privacy Policy</a>
+      </p>
+      <p>
+        Please contact <a href="mailto:###########################">###########################</a> if you wish to close your account.
+      </p>
+      @Html.HiddenFor(m => m.UserId)
+      <div class="row tandc">
+        <div class="form-group-inline col-xs-offset-1">
+          <label for="termsCheckBox">
+            @Html.CheckBoxFor(m => m.TermsAndConditions, new { id = "termsCheckBox" })
+            &nbsp;&nbsp;I accept the Supdate Terms and Conditions and Privacy Policy
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button id="acceptTAndC" class="btn btn-green ladda-button" data-success-callback="reloadPage" type="button" data-style="expand-left"><span class="ladda-label"><i class="fa fa-check"></i> Accept</span></button>
+  </div>
+}
+
+<script type="text/javascript">
+  $(function () {
+    $('#termsCheckBox').change(function () {
+      if ($(this).is(":checked")) {
+        $('#acceptTAndC').addClass('ajax-submit').prop('disabled', false);
+      } else {
+        $('#acceptTAndC').removeClass('ajax-submit').prop('disabled', true);
+      }
+    });
+
+    $('#termsCheckBox').prop('checked', false);
+    $('#acceptTAndC').removeClass('ajax-submit').prop('disabled', true);
+  });
+</script>

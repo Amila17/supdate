@@ -1,0 +1,103 @@
+﻿.container-fluid {
+  padding-left: 0;
+}
+
+#supdate-menu.navbar-default .navbar-brand {
+}
+.header {
+   background-color: #373737;
+    padding: 0 3%;
+}
+#supdate-menu.navbar-default {
+  font-size: 15px;
+  background-color: #373737;
+  border-width: 0px;
+  font-family: "Lato","Helvetica Neue",Helvetica,sans-serif;
+  max-width: 1200px;
+  min-height: 80px;
+  margin: 0 auto;
+  height: 60px;
+}
+
+  #supdate-menu.navbar-default .navbar-nav > li > a {
+    font-style: normal;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ffffff;
+    padding: 34px 10px 0 10px;
+    background-color: #373737;
+    line-height: 15px;
+  }
+
+    #supdate-menu.navbar-default .navbar-nav > li > a span {
+      padding-bottom: 5px;
+    }
+
+    #supdate-menu.navbar-default .navbar-nav > li > a:hover,
+    #supdate-menu.navbar-default .navbar-nav > li > a:focus,
+    #supdate-menu.navbar-default .navbar-nav > .active > a,
+    #supdate-menu.navbar-default .navbar-nav > .active > a:hover,
+    #supdate-menu.navbar-default .navbar-nav > .active > a:focus {
+      color: #fa6605;
+    }
+
+      #supdate-menu.navbar-default .navbar-nav > li > a:hover span,
+      #supdate-menu.navbar-default .navbar-nav > li > a:focus span,
+      #supdate-menu.navbar-default .navbar-nav > .active > a span,
+      #supdate-menu.navbar-default .navbar-nav > .active > a:hover span,
+      #supdate-menu.navbar-default .navbar-nav > .active > a:focus span {
+        box-shadow: 0 2px 0 0 #fa6605;
+      }
+
+  #supdate-menu.navbar-default .navbar-toggle {
+    border-color: #cccccc;
+  }
+
+    #supdate-menu.navbar-default .navbar-toggle:hover,
+    #supdate-menu.navbar-default .navbar-toggle:focus {
+      background-color: #ddd;
+    }
+
+    #supdate-menu.navbar-default .navbar-toggle .icon-bar {
+      background-color: #cccccc;
+    }
+
+    #supdate-menu.navbar-default .navbar-toggle:hover .icon-bar,
+    #supdate-menu.navbar-default .navbar-toggle:focus .icon-bar {
+      background-color: #ffffff;
+    }
+
+.menu-login {
+  margin-left: 28px;
+}
+
+.menu-register a {
+  display: inline-block;
+  position: relative;
+  border: 1px solid #ac1100;
+  padding: 0.563em 0.663em 0.563em !important;
+  cursor: pointer;
+  line-height: 1.3 !important;
+  text-align: center;
+  text-decoration: none;
+  height: 36px !important;
+  color: #ffffff !important;
+  border-color: #fa6605;
+  background-color: #fa6605 !important;
+  border-radius: 0.25em;
+  top: 22px;
+  margin-left: 8px;
+  -webkit-transition: all 0.15s linear;
+  transition: all 0.15s linear;
+}
+
+  .menu-register a:hover {
+    background: #089de3 !important;
+    border-color: #089de3;
+    color: white !important;
+  }
+
+.navbar-brand img {
+  width: 155px;
+  margin-top: 0px;
+}

@@ -1,0 +1,61 @@
+﻿@using System.Web.Mvc.Html
+@using Supdate.Util
+@model Supdate.Web.App.Models.CompanyAccessViewModel
+@{
+  Layout = "~/Views/Shared/_PreAuthLayout.cshtml";
+  ViewBag.Title = "Supdate - No Access";
+}
+
+@using (Html.BeginForm("CreateCompany", "Account", FormMethod.Post, new { @class = "form-signin", role = "form" }))
+{
+  @Html.AntiForgeryToken()
+
+  <h2 class="form-signin-heading">No Access</h2>
+  <div class="login-wrap">
+    <div class="form-group">You no longer have access to the following companies as they do not have a subscription that allows Team Members to log in.</div>
+    <div class="form-group">Contact the company administrator for them to arrange a subscription.</div>
+    <table class="table table-striped">
+      <tbody>
+      @foreach (var c in Model.LapsedCompanies)
+      {
+        if (string.IsNullOrEmpty(c.LogoPath))
+        {
+          c.LogoPath = ConfigUtil.DefaultLogoUrl;
+        }
+        <tr>
+          <td style="width: 26px;"><img class="icon-company-logo" src="@c.LogoPath"/></td>
+          <td>@c.Name</td>
+        </tr>
+      }
+      </tbody>
+    </table>
+    @if (Model.OtherCompanies.Any())
+    {
+      <div class="form-group">Select another company to access:</div>
+      <table class="table table-striped table-hover">
+        <tbody>
+        @foreach (var c in Model.OtherCompanies)
+        {
+          if (string.IsNullOrEmpty(c.LogoPath))
+          {
+            c.LogoPath = ConfigUtil.DefaultLogoUrl;
+          }
+          <tr class="row-clickable">
+            <td style="width: 26px;" onclick="return changeCompany('@c.UniqueId')"><img class="icon-company-logo" src="@c.LogoPath"/></td>
+            <td onclick="return changeCompany('@c.UniqueId')">@c.Name</td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    }
+    else
+    {
+      <div class="form-group">You're also able to <a href="@Url.Action("CreateCompany")" class="link">create your own company</a>.</div>
+    }
+
+  </div>
+}
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+}

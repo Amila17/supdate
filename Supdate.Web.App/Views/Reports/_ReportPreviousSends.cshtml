@@ -1,0 +1,47 @@
+﻿@using System.Globalization
+@using Supdate.Web.App.Extensions
+@model IList<Supdate.Model.Recipient>
+
+<div class="modal fade" id="previousSends" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 id="recipDetailsHeader" class="modal-title">Previous Emails of This Report</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="width: 24px;"></th>
+              <th>Name</th>
+              <th class="hidden-xs">Email</th>
+              <th>Sent Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (var recipient in Model)
+            {
+              <tr>
+                <td>@Html.GravatarWithDefault(recipient.Email, 24)</td>
+                <td>
+                  @recipient.FirstName @recipient.LastName
+                </td>
+                <td class="hidden-xs">
+                  @recipient.Email
+                </td>
+                <td>
+                  @((recipient.ReportEmailSentDate == default(DateTime)) ? "" : recipient.ReportEmailSentDate.ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture))
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

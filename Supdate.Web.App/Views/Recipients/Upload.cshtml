@@ -1,0 +1,81 @@
+﻿@model System.Data.DataTable
+@{
+  ViewBag.Title = (Model == null) ? "Error Processing File" : "Review Imported CSV Data";
+}
+@section footer{
+  <div class="pull-right">
+    <a class="btn btn-white" href="@Url.Action("Index")">Cancel</a>
+    @if (Model != null)
+    {
+      <a id="import-now" class="btn btn-save ladda-button" data-style="expand-left"><span class="ladda-label"><i class="fa fa-check"></i> Import Now</span></a>
+    }
+  </div>
+}
+@if (Model == null)
+{
+  @Html.Partial("_Upload_Error")
+}
+else
+{
+
+  using (Html.BeginForm("AddMultiple", "Recipients", FormMethod.Post, new { role = "form", id = "form-import" }))
+  {
+    @Html.AntiForgeryToken()
+    @Html.Partial("_Upload_Options")
+    @Html.Partial("_Upload_Preview")
+  }
+}
+
+@if (Model != null)
+{
+  @section scripts{
+    <script>
+      updatePreviewData();
+      $(".toggleValues").change(function () {
+        updatePreviewData();
+      });
+      $("#toggleHeader").change(function () {
+        if ($(this).is(":checked")) {
+          setDDLOptionsTextToDataValue(".toggleValues", "value-header");
+          $("#imported_data tr[data-index=0]").fadeOut();
+        } else {
+          setDDLOptionsTextToDataValue(".toggleValues", "value-noheader");
+          $("#imported_data tr[data-index=0]").fadeIn();
+        }
+      });
+
+      $(function () {
+        $("#form-import").data("validator").settings.ignore = "";
+        $("#form-import").data("validator").settings.highlight = function (element, errorClass) {
+          $(element).closest("td").addClass("import-error");
+        };
+      });
+
+      $("#import-now").click(function () {
+        if ($("#toggleHeader").is(":checked")) {
+          $("#imported_data tr[data-index=0]").remove();
+        }
+        if ($("#form-import").valid()) {
+          $("#form-import").submit();
+        } else {
+          Ladda.stopAll();
+          displayError("Your data is not valid. Please correct the errors and try again.");
+        }
+      });
+
+      $("#deleteExisting").click(function (e) {
+        if ($(this).is(":checked")) {
+          e.preventDefault();
+          var template = getConfirmNotificationTemplate("confirmDeleteExisting()", "Delete ALL Recipients", "All pre-existing recipients will be deleted leaving you with just those listed below.\n\nAre you sure this is what you want?");
+          displayError(template);
+          centerToast();
+          return;
+        }
+      });
+
+      function confirmDeleteExisting() {
+        $('#deleteExisting').prop('checked', true);
+      }
+    </script>
+  }
+}

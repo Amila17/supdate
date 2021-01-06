@@ -1,0 +1,26 @@
+﻿@using Supdate.Util
+@using Supdate.Web.App.Models
+@model OAuthStartAuthorisation
+@{
+  Layout = null;
+}
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 id="metricDetailsHeader" class="modal-title">@Model.ExternalApi.Name</h4>
+  </div>
+<div class="modal-body">
+  <div class="form-group">
+    <div class="row">
+      <div class="col-md-12">
+        @Model.ExternalApi.SetupText
+      </div>
+      <div class="col-md-12 text-center">
+        <p></p>
+        <a class="btn btn-lg btn-success" href="@Model.StartUrl">Continue</a>
+        <p></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,111 @@
+﻿@using Supdate.Web.App.Extensions
+@model Supdate.Web.App.Models.ProfileViewModel
+@{
+  ViewBag.Title = "Your Profile";
+}
+
+<div class="row">
+  <div class="col-md-6">
+    @using (Html.BeginForm("EditProfile", "Manage", FormMethod.Post, new { role = "form", id = "form-profile" }))
+    {
+      <section class="panel" >
+        <header class="panel-heading panel-heading-main">
+          Your Profile
+        </header>
+        <div class="panel-body" data-match-neighbour-height="true">
+          @Html.AntiForgeryToken()
+          <div class="form-group">
+            @Html.Label("Avatar")
+            <div class="clearfix"></div>
+            <div class="pull-left gravatar-profile">
+              @Html.GravatarWithDefault(Model.User.Email, 48)
+            </div>
+            Your avatar is powered by Gravatar.<br/>
+            Create an account or log in at <a href="http://gravatar.com/" target="blank" class="link">gravatar.com</a>.
+            <div class="clearfix"></div>
+          </div>
+          <div class="row">
+            <div class="form-group-inline col-md-12">
+              @Html.LabelFor(m => m.User.Email)
+              <p class="help-block"> @Model.User.Email [<a href="#" data-modal-url="@Url.Action("ChangeEmail")" class="modal-url link">change</a>]</p>
+            </div>
+          </div>
+          <div id="comment-name-prompt-wrapper">
+            <div class="alert alert-block alert-info fade in" id="comment-name-prompt" style="display: none;">
+              <strong>Add Your Name</strong> This will appear next to any comments you post to reports.
+            </div>
+            <div class="row">
+              <div class="form-group-inline col-md-6">
+                @Html.LabelFor(m => m.User.FirstName)
+                @Html.TextBoxFor(m => m.User.FirstName, new { @class = "form-control", @autofocus = "autofocus" })
+                @Html.ValidationMessageFor(m => m.User.FirstName)
+              </div>
+
+              <div class="form-group-inline col-md-6">
+                @Html.LabelFor(m => m.User.LastName)
+                @Html.TextBoxFor(m => m.User.LastName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.User.LastName)
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="panel-footer">
+            <div class="pull-right">
+              <button type="submit" class="btn btn-save ladda-button" data-style="expand-left"><span class="ladda-label"><i class="fa fa-check"></i> Save Profile</span></button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </section>
+    }
+  </div>
+  <div class="col-md-6">
+    @using (Html.BeginForm("ChangePassword", "Manage", FormMethod.Post, new { role = "form", id = "form-password" }))
+    {
+      <section class="panel" >
+        <header class="panel-heading panel-heading-main">
+          Change Password
+        </header>
+        <div class="panel-body" data-match-neighbour-height="true">
+          @Html.AntiForgeryToken()
+
+          <div class="form-group">
+            @Html.LabelFor(m => m.Passwords.OldPassword, "Current Password")
+            @Html.PasswordFor(m => m.Passwords.OldPassword, new { @class = "form-control", @autofocus = "autofocus" })
+            @Html.ValidationMessageFor(m => m.Passwords.OldPassword)
+          </div>
+
+          <div class="form-group">
+            @Html.LabelFor(m => m.Passwords.NewPassword, "New Password")
+            @Html.PasswordFor(m => m.Passwords.NewPassword, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Passwords.NewPassword)
+          </div>
+
+          <div class="form-group">
+            @Html.LabelFor(m => m.Passwords.ConfirmPassword, "Confirm New Password")
+            @Html.PasswordFor(m => m.Passwords.ConfirmPassword, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Passwords.ConfirmPassword)
+          </div>
+        </div>
+        <div class="panel-footer">
+          <div class="pull-right">
+            <button type="submit" class="btn btn-save ladda-button" data-style="expand-left"><span class="ladda-label"><i class="fa fa-check"></i> Change Password</span></button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </section>
+    }
+  </div>
+</div>
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+  <script>
+    if (getUrlVars()["comments-enabled"] === "1") {
+      $("#comment-name-prompt").show(0, function () {
+        setTimeout(function () { $("#comment-name-prompt-wrapper").highlight(); }, 1000);
+      });
+
+    }
+  </script>
+
+}

@@ -1,0 +1,109 @@
+﻿@using Supdate.Web.App.Models
+@model TeamViewModel
+@{
+  ViewBag.Title = "Team";
+}
+
+<div class="row">
+  <div class="col-lg-12">
+    <section class="panel">
+      <header class="panel-heading panel-heading-main">
+        Team Collaboration
+      </header>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-8" data-match-neighbour-height="true">
+            <h2 class="text-heading">Why Collaborate?</h2>
+            <p>
+              Let's forget your shareholders or report recipients for a moment. Let's look at you.
+            </p>
+            <p>
+              As the leader, you need to know what's going on in your company or team.<br/>
+              Unless you're a mind-reader then you need to receive updates from your team members to keep you informed.
+            </p>
+            <p>
+              Supdate let's you collaborate with your Team Members so that they can provide their monthly update - text and numbers - to you via the software.
+            </p>
+            <p>
+              So now you already have the latest info from Marketing, Development, etc. All you need to do is write a summary and send it to your recipients and they're kept up-to-date too.
+            </p>
+            <p>
+              That sure beats you spending time to write a complete report from scratch every month!
+            </p>
+          </div>
+          <div class="hidden-xs hidden-sm col-md-4 text-center" data-match-neighbour-height="true">
+            <img src="/Assets/feature-team.png" class="max-w-98pc" data-vertical-center="true">
+          </div>
+        </div>
+        <div class="row">
+          <div class="hidden-xs hidden-sm col-md-4 text-center" data-match-neighbour-height="true">
+            <img src="/Assets/add-team-member.png" class="max-w-98pc" data-vertical-center="true">
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-8" data-match-neighbour-height="true">
+            <h2 class="text-heading">How It Works</h2>
+            <p>
+              Click the 'Team' menu item and Add a Team Member.
+            </p>
+            <p>
+            You get to choose which of your Reporting Areas they're allowed to edit and update.
+            <p>
+            <p>
+              So if you give your Marketing Manager access to just the Marketing Reporting Area then that's all she'll be able to see.
+            </p>
+            <p>
+              She can add and update Goals and Metrics for Marketing, but not view or change anything else.
+            </p>
+            <p>
+              She receives an email invite to register and set her password.
+            </p>
+            <p>
+              She sees a list of monthly reports, just like you do. But she can only update her areas of the business.
+            </p>
+            <p>
+              Once she's updated all of her areas she will see the report listed as 'Complete'. However, it'll still show as 'In Progress' to you until all of the areas have been updated and you've added your summary.
+            </p>
+            <p>
+              You see her updates, along with updates from other Team Members you've provided with access to your account.
+            </p>
+            <p>
+              You can read them and edit them if need be.
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-8" data-match-neighbour-height="true">
+            <h2 class="text-heading">Bringing it All Together</h2>
+            <p>
+              Ideally all of your Team Members will update their respective areas of the business for you. If not, you can add the update yourself to get the report completed.
+            </p>
+            <p>
+              You can view a preview of the report in all it's glory with the charts automatically generated from the values you and your team have provided for their metrics.
+            </p>
+            <p>
+              All you have to do now is write a quick summary for the top of the report and you can send it out to your recipients. </p>
+            <p>
+              You'll be notified when your recipients view the report, and if you've enabled the <a href="http://supdate.com/features/discussion" class="link" target="_blank">Discussions feature</a> then you'll also be notified when they add comments or questions.
+            </p>
+
+          </div>
+          <div class="hidden-xs hidden-sm col-md-4 text-center" data-match-neighbour-height="true">
+            <img src="/Assets/catapult-email.png" class="max-w-98pc" data-vertical-center="true">
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer text-center">
+        <a class="btn btn-save" href="@Url.Action("Index","Team")">Get Started<span class="hidden-xs"> with Team Members</span></a>
+      </div>
+    </section>
+  </div>
+</div>
+@section scripts{
+  <script>
+    $('#teamMemberInvitation').on('shown.bs.modal', function () {
+      $('#EmailAddress').val("");
+      $('#EmailAddress').focus();
+    });
+
+
+  </script>
+}

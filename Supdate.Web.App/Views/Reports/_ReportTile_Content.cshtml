@@ -1,0 +1,33 @@
+﻿@using System.Globalization
+@using Supdate.Model
+@using Supdate.Util
+@using Supdate.Web.App.Extensions
+@model Supdate.Web.App.Models.ReportSummary
+<div>
+  <strong>@ViewBag.Subtitle</strong>
+  @if (Model.Report.Status == ReportStatus.InProgress)
+  {
+    <br>@Html.Raw(ViewBag.TileContent)
+  }
+  else if (Model.Report.Status == ReportStatus.Completed)
+  {
+    if (Model.CurrentUser.IsCompanyAdmin)
+    {
+      if (Model.Report.RecipientCount == 0)
+      {
+        <p>
+          You should now <a href="@ViewBag.SendUrl" class="link">email this report</a>.
+        </p>
+      }
+      else
+      {
+        @Html.Partial("_ReportTile_Recipients")
+      }
+    }
+    else
+    {
+      <p>This report is completed</p>
+    }
+  }
+</div>
+
